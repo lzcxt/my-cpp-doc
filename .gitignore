@@ -33,4 +33,5 @@
 
 # Directory
 Debug
-myCppDoc/Debug
+myCppDoc\Debug
+!myCppDoc\Debug\qmake\qtvars_Win32_Debug.props
