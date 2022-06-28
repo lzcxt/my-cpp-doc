@@ -30,8 +30,3 @@
 *.exe
 *.out
 *.app
-
-# Directory
-Debug
-myCppDoc\Debug
-!myCppDoc\Debug\qmake\qtvars_Win32_Debug.props

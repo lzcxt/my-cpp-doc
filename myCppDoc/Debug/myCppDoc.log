@@ -1,0 +1,10 @@
+﻿  uic myCppDoc.ui
+  rcc myCppDoc.qrc
+  moc header files\myCppDoc.h
+   RCC: Warning: No resources in 'D:\my-cpp-doc\myCppDoc\myCppDoc.qrc'.
+  main.cpp
+  myCppDoc.cpp
+  runtimeEvents.cpp
+  qrc_myCppDoc.cpp
+  moc_myCppDoc.cpp
+  myCppDoc.vcxproj -> D:\my-cpp-doc\Debug\myCppDoc.exe
