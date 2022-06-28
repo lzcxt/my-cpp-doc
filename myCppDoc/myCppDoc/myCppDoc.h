@@ -13,4 +13,18 @@ public:
 
 private:
     Ui::myCppDocClass ui;
+
+	QMenuBar* MenuBar;
+	QToolBar* ToolBar;
+
+	QMenu* FileMenu;
+	QMenu* OperationMenu;
+	QMenu* HelpMenu;
+
+	QAction* FileLoad;
+	QAction* HelpInfo;
+
+public slots:
+	bool FileLoadManagement();
+	bool HelpInfoManagement();
 };

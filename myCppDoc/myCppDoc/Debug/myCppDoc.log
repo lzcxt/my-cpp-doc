@@ -1,5 +1,5 @@
-﻿  myCppDoc.cpp
-  main.cpp
-  qrc_myCppDoc.cpp
+﻿  main.cpp
+  myCppDoc.cpp
+  runtimeEvents.cpp
   moc_myCppDoc.cpp
   myCppDoc.vcxproj -> D:\my-cpp-doc\myCppDoc\Debug\myCppDoc.exe
