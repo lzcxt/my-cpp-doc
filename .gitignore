@@ -34,11 +34,8 @@
 # Directory
 /.vs/
 /Debug/
-/myCppDoc/Debug/*.res
-/myCppDoc/Debug/*.pdb
-/myCppDoc/Debug/*.log
-/myCppDoc/Debug/*.natvis
-/myCppDoc/Debug/moc
-/myCppDoc/Debug/myCppDoc.tlog
-/myCppDoc/Debug/qmake
-/myCppDoc/Debug/rcc
+/myCppDoc/Debug/*.*
+/myCppDoc/Debug/moc/
+/myCppDoc/Debug/myCppDoc.tlog/
+/myCppDoc/Debug/qmake/
+/myCppDoc/Debug/rcc/
