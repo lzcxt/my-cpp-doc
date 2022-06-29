@@ -13,9 +13,13 @@ bool myCppDoc::FileLoadManagement() {
 		filelist.push_back(i->toStdString());
 	}
 	//todo
+	drawArea* x=new drawArea(0);
+	x->resize(600, 400);
+	x->show();
 	return 1;
 }
 
 bool myCppDoc::HelpInfoManagement() {
+	//todo
 	return 1;
 }

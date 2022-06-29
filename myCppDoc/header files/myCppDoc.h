@@ -1,5 +1,7 @@
 #pragma once
 
+#include "drawArea.h"
+
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
@@ -8,8 +10,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
-class myCppDoc : public QMainWindow
-{
+class myCppDoc : public QMainWindow {
     Q_OBJECT
 
 public:
