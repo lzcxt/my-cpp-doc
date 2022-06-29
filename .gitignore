@@ -34,8 +34,4 @@
 # Directory
 /.vs/
 /Debug/
-/myCppDoc/Debug/*.*
-/myCppDoc/Debug/moc/
-/myCppDoc/Debug/myCppDoc.tlog/
-/myCppDoc/Debug/qmake/
-/myCppDoc/Debug/rcc/
+/myCppDoc/Debug/

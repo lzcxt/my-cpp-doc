@@ -1,9 +1,10 @@
 #include "myCppDoc.h"
 
 myCppDoc::myCppDoc(QWidget *parent)
-    : QMainWindow(parent){
-    ui.setupUi(this);
+    : QMainWindow(parent) {
 
+	resize(600, 400);
+	
 	MenuBar = menuBar();
 	ToolBar = addToolBar("Standard");
 
@@ -25,5 +26,5 @@ myCppDoc::myCppDoc(QWidget *parent)
 	ToolBar->addAction(HelpInfo);
 }
 
-myCppDoc::~myCppDoc(){
+myCppDoc::~myCppDoc() {
 }

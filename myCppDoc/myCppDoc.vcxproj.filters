@@ -26,9 +26,6 @@
     <QtRcc Include="myCppDoc.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="myCppDoc.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <None Include="myCppDoc.ico">
       <Filter>Resource Files</Filter>
     </None>

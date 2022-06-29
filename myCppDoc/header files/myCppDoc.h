@@ -1,7 +1,12 @@
 #pragma once
 
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
-#include "ui_myCppDoc.h"
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWidget>
 
 class myCppDoc : public QMainWindow
 {
@@ -12,8 +17,6 @@ public:
     ~myCppDoc();
 
 private:
-    Ui::myCppDocClass ui;
-
 	QMenuBar* MenuBar;
 	QToolBar* ToolBar;
 

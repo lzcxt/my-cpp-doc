@@ -1,16 +1,21 @@
 #include "myCppDoc.h"
+
+#include <list>
+
 #include <QMessageBox>
 #include <QFileDialog>
-
-#include <gl/glut.h>
+using namespace std;
 
 bool myCppDoc::FileLoadManagement() {
 	QStringList path = QFileDialog::getOpenFileNames();
-	//TODO
+	list<string> filelist;
+	for (auto i = path.begin();i != path.end();++i) {
+		filelist.push_back(i->toStdString());
+	}
+	//todo
 	return 1;
 }
 
 bool myCppDoc::HelpInfoManagement() {
-	//TODO
 	return 1;
 }

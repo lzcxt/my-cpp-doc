@@ -91,7 +91,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="myCppDoc.qrc" />
-    <QtUic Include="myCppDoc.ui" />
     <None Include="myCppDoc.ico" />
     <ResourceCompile Include="myCppDoc.rc" />
   </ItemGroup>
