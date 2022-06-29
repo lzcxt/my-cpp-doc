@@ -98,13 +98,16 @@
     <QtMoc Include="header files\myCppDoc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\main.cpp" />
-    <ClCompile Include="code\myCppDoc.cpp" />
-    <ClCompile Include="code\runtimeEvents.cpp" />
-    <ClCompile Include="header files\drawArea.cpp" />
+    <QtMoc Include="header files\drawArea.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="header files\drawArea.h" />
+    <ClInclude Include="common.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\view\drawArea.cpp" />
+    <ClCompile Include="code\view\myCppDoc.cpp" />
+    <ClCompile Include="code\view\runtimeEvents.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

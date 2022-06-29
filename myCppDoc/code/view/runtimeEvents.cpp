@@ -12,9 +12,8 @@ bool myCppDoc::FileLoadManagement() {
 	for (auto i = path.begin();i != path.end();++i) {
 		filelist.push_back(i->toStdString());
 	}
-	//todo
 	drawArea* x=new drawArea(0);
-	x->resize(600, 400);
+	x->resize(1080, 960);
 	x->show();
 	return 1;
 }

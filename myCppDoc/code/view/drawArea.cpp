@@ -12,6 +12,7 @@ void drawArea::initializeGL() {
 }
 
 void drawArea::resizeGL(int width, int height) {
+
 }
 
 void drawArea::paintGL() {

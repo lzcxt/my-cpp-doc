@@ -42,16 +42,21 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="code\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\myCppDoc.cpp">
+    <ClCompile Include="code\view\drawArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\runtimeEvents.cpp">
+    <ClCompile Include="code\view\myCppDoc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="header files\drawArea.cpp">
+    <ClCompile Include="code\view\runtimeEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
