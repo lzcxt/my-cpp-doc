@@ -1,6 +1,6 @@
 #include "drawArea.h"
 
-#include<QPainter>
+#include <QPainter>
 #include <gl/glut.h>
 
 drawArea::drawArea(QWidget *parent)

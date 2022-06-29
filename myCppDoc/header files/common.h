@@ -4,24 +4,24 @@
 #include<iostream>
 using namespace std;
 
-enum Relation{
+enum Relation_enum{
 	inherit, conclude
 };
 
-class Node;
+class Class;
 
-class Edge {
-	Node* another_class;
-	Relation r;
+class Relation {
+	Class* target;
+	Relation_enum r;
 };
 
-class Node {
-	string this_class;
+class Class {
+	string name;
 	vector<string> attributes;
-	list<Edge> list_edges;
+	list<Relation> list_edges;
 };
 
 class Block {
 	int width, height;
-	Node this_class;
+	Class this_class;
 };
