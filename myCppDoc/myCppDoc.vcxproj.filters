@@ -50,6 +50,9 @@
     <ClCompile Include="code\view_model\runtimeEvents.cpp">
       <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
+    <ClCompile Include="code\model\parser.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc">
@@ -68,7 +71,16 @@
     <ClInclude Include="code\header files\translator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\header files\parser.h">
+    <ClInclude Include="code\header files\model\parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\model\cppFileContent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\model\classRelationGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\model\macroExpander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
