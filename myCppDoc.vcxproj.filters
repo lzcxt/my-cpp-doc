@@ -23,10 +23,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="header files\myCppDoc.h">
+    <QtMoc Include="code\header files\drawArea.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="header files\drawArea.h">
+    <QtMoc Include="code\header files\myCppDoc.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -51,10 +51,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header files\common.h">
+    <ClInclude Include="code\header files\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header files\translator.h">
+    <ClInclude Include="code\header files\translator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,5 +33,5 @@
 
 # Directory
 /.vs/
+/.vscode/
 /Debug/
-/myCppDoc/Debug/
