@@ -21,25 +21,34 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{a67205fc-2947-4b80-b33e-b264e07ae80a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ViewModel">
+      <UniqueIdentifier>{08a49ec2-8d00-47be-9c2a-6ce8d7ad6052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\View">
+      <UniqueIdentifier>{d8964061-4819-430b-af2a-c1480f338b45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="code\view\drawArea.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\view\myCppDoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\view\runtimeEvents.cpp">
+    <ClCompile Include="code\common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\view_model\translator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
-    <ClCompile Include="code\common.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="code\view\runtimeEvents.cpp">
+      <Filter>Source Files\ViewModel</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\myCppDoc.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\drawArea.cpp">
+      <Filter>Source Files\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
