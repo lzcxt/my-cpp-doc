@@ -92,6 +92,9 @@
   <ItemGroup>
     <ClCompile Include="code\common.cpp" />
     <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\model\classRelationGenerator.cpp" />
+    <ClCompile Include="code\model\cppFileContent.cpp" />
+    <ClCompile Include="code\model\macroExpander.cpp" />
     <ClCompile Include="code\model\parser.cpp" />
     <ClCompile Include="code\view\drawArea.cpp" />
     <ClCompile Include="code\view\myCppDoc.cpp" />
