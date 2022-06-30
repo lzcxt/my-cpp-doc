@@ -90,9 +90,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="myCppDoc.qrc" />
-    <None Include="myCppDoc.ico" />
-    <ResourceCompile Include="myCppDoc.rc" />
+    <QtRcc Include="textures\myCppDoc.qrc" />
+    <None Include="textures\myCppDoc.ico" />
+    <ResourceCompile Include="textures\myCppDoc.rc" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="header files\myCppDoc.h" />
