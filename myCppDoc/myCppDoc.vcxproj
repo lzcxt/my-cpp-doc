@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./code/header files</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./header files</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -90,15 +90,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="textures\myCppDoc.qrc" />
-    <None Include="textures\myCppDoc.ico" />
-    <ResourceCompile Include="textures\myCppDoc.rc" />
+    <QtRcc Include="myCppDoc.qrc" />
+    <None Include="myCppDoc.ico" />
+    <ResourceCompile Include="myCppDoc.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="code\header files\myCppDoc.h" />
+    <QtMoc Include="header files\myCppDoc.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="code\header files\drawArea.h" />
+    <QtMoc Include="header files\drawArea.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\common.cpp" />
@@ -109,8 +109,8 @@
     <ClCompile Include="code\view_model\translator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\header files\common.h" />
-    <ClInclude Include="code\header files\translator.h" />
+    <ClInclude Include="header files\common.h" />
+    <ClInclude Include="header files\translator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
