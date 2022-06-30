@@ -16,7 +16,7 @@ Block translator::classToBlock(const Class& c) {
 		width = max(width, Metrics.width(Qstr));
 		height += Metrics.height();
 	}
-	return Block{ width,height,c };
+	return Block(width, height, c);
 }
 
 set<Block> translator::toBlockSet(const list<Class>& lis) {

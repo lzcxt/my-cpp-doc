@@ -26,9 +26,11 @@ private:
 	QMenu* HelpMenu;
 
 	QAction* FileLoad;
+	QAction* FileLoadFolder;
 	QAction* HelpInfo;
 
 public slots:
 	bool FileLoadManagement();
+	bool FileLoadFolderManagement();
 	bool HelpInfoManagement();
 };

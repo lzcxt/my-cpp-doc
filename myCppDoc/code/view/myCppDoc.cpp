@@ -17,6 +17,11 @@ myCppDoc::myCppDoc(QWidget *parent)
 	FileMenu->addAction(FileLoad);
 	connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
 
+	FileLoadFloder = new QAction(QIcon("textures/open.png"), "LoadFloder", this);
+	FileLoad->setShortcut(Qt::CTRL + Qt::Key_O);
+	FileMenu->addAction(FileLoadFloder);
+	connect(FileLoadFloder, SIGNAL(triggered()), this, SLOT(FileLoadFloderManagement()));
+
 	HelpInfo = new QAction(QIcon("textures/info.png"), "Information", this);
 	HelpInfo->setShortcut(Qt::CTRL + Qt::Key_H);
 	HelpMenu->addAction(HelpInfo);

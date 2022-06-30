@@ -18,6 +18,16 @@ bool myCppDoc::FileLoadManagement() {
 	return 1;
 }
 
+
+bool myCppDoc::FileLoadFolderManagement() {
+	QString path = QFileDialog::getExistingDirectory();
+
+	drawArea* x = new drawArea(0);
+	x->resize(400, 600);
+	x->show();
+	return 1;
+}
+
 bool myCppDoc::HelpInfoManagement() {
 	//todo
 	return 1;
