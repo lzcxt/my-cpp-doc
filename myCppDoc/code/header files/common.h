@@ -20,14 +20,23 @@ class Class {
 	string name;
 	vector<string> attributes;
 	list<Relation> list_edges;
+
+public:
+	string getName() const;
+	vector<string> getAttributes() const;
+	list<Relation> getListOfEdges() const;
 };
 
 class Block {
 	int width, height;
 	Class this_class;
 
+public:
 	Block(const int& w, const int& h, const Class& c);
 	bool operator<(const Block& np) const;
+	int getWidth() const;
+	int getHeight() const;
+	Class getThisClass() const;
 };
 
 

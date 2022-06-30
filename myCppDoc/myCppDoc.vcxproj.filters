@@ -41,14 +41,14 @@
     <ClCompile Include="code\view_model\translator.cpp">
       <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
-    <ClCompile Include="code\view\runtimeEvents.cpp">
-      <Filter>Source Files\ViewModel</Filter>
-    </ClCompile>
     <ClCompile Include="code\view\myCppDoc.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
     <ClCompile Include="code\view\drawArea.cpp">
       <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view_model\runtimeEvents.cpp">
+      <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\header files\translator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
