@@ -9,11 +9,11 @@ using namespace std;
 class drawArea : public QOpenGLWidget {
 	Q_OBJECT
 public:
-	drawArea(QWidget* parent);
+	drawArea(QWidget* parent, const set<Block>& setOfBlocks);
 protected:
 	void initializeGL();
 	void resizeGL(int width, int height);
 	void paintGL();
 private:
-	set<Class> blocks;
+	set<Block> blocks;
 };

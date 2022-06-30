@@ -104,6 +104,7 @@
     <ResourceCompile Include="textures\myCppDoc.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\header files\cmFunctions.h" />
     <ClInclude Include="code\header files\common.h" />
     <ClInclude Include="code\header files\parser.h" />
     <ClInclude Include="code\header files\translator.h" />

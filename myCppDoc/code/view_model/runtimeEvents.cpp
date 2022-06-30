@@ -1,4 +1,7 @@
 #include "myCppDoc.h"
+#include "parser.h"
+#include "cmFunctions.h"
+#include "translator.h"
 
 #include <list>
 
@@ -10,21 +13,26 @@ bool myCppDoc::FileLoadManagement() {
 	QStringList path = QFileDialog::getOpenFileNames();
 	list<string> filelist;
 	for (auto i = path.begin();i != path.end();++i) {
+		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea* x=new drawArea(0);
-	x->resize(400, 600);
-	x->show();
+	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	draw.resize(800, 1200);
+	draw.show();
 	return 1;
 }
 
-
 bool myCppDoc::FileLoadFolderManagement() {
-	QString path = QFileDialog::getExistingDirectory();
-
-	drawArea* x = new drawArea(0);
-	x->resize(400, 600);
-	x->show();
+	QDir directory(QFileDialog::getExistingDirectory());
+	QStringList path = directory.entryList();
+	list<string> filelist;
+	for (auto i = path.begin();i != path.end();++i) {
+		if (!isProjectFileName(*i)) continue;
+		filelist.push_back(i->toStdString());
+	}
+	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	draw.resize(800, 1200);
+	draw.show();
 	return 1;
 }
 
