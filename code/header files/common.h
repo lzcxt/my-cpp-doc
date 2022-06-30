@@ -10,21 +10,18 @@ enum Relation_enum{
 
 class Class;
 
-class Relation {
-public:
+struct Relation {
 	Class* target;
 	Relation_enum r;
 };
 
-class Class {
-public:
+struct Class {
 	string name;
 	vector<string> attributes;
 	list<Relation> list_edges;
 };
 
-class Block {
-public:
+struct Block {
 	int width, height;
 	Class this_class;
 
