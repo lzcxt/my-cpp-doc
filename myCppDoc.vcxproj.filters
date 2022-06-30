@@ -23,21 +23,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="myCppDoc.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
-    <None Include="myCppDoc.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-    <ResourceCompile Include="myCppDoc.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="header files\myCppDoc.h">
+    <QtMoc Include="code\header files\drawArea.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="header files\drawArea.h">
+    <QtMoc Include="code\header files\myCppDoc.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -62,11 +51,26 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header files\common.h">
+    <ClInclude Include="code\header files\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header files\translator.h">
+    <ClInclude Include="code\header files\translator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="textures\myCppDoc.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="textures\myCppDoc.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="textures\myCppDoc.ico">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
