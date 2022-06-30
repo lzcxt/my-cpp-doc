@@ -5,23 +5,26 @@
 using namespace std;
 
 enum Relation_enum{
-	inherit, conclude
+	inherit, include
 };
 
 class Class;
 
-class Relation {
+struct Relation {
 	Class* target;
 	Relation_enum r;
 };
 
-class Class {
+struct Class {
 	string name;
 	vector<string> attributes;
 	list<Relation> list_edges;
 };
 
-class Block {
+struct Block {
 	int width, height;
 	Class this_class;
+
+	Block(const int& w, const int& h, const Class& c);
+	bool operator<(const Block& np) const;
 };
