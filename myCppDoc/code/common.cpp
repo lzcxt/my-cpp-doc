@@ -1,7 +1,7 @@
 #include "common.h"
 #include "cmFunctions.h"
 #include <QString>
-
+#include <QMessageBox>
 
 Block::Block(const int& w, const int& h, const Class& c)
 	:width(w),height(h),this_class(c){
@@ -49,4 +49,16 @@ void Class::addAttributes(string attr) {
 }
 void Class::addRelation(Relation rela) {
 	list_edges.push_back(rela);
+}
+
+int SendMsg(string x) {
+	QMessageBox msg;
+	msg.setWindowTitle("Message");
+	msg.setText(QString::fromStdString(x));
+	msg.setIcon(QMessageBox::Information);
+	msg.setStandardButtons(QMessageBox::Ok);
+	if (msg.exec() == QMessageBox::Ok) {
+		return 1;
+	}
+	return 0;
 }
