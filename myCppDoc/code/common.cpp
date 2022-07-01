@@ -3,6 +3,10 @@
 #include <QString>
 #include <QMessageBox>
 
+Class::Class(string name)
+	:name(name) {
+}
+
 Block::Block(const int& w, const int& h, const Class& c)
 	:width(w),height(h),this_class(c){
 }

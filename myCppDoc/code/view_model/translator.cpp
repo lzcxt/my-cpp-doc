@@ -9,12 +9,10 @@ Translator::Translator(const QFont& font)
 
 Block Translator::classToBlock(const Class& c) {
 	QFontMetrics Metrics(font);
-	QString Qstr = QString::fromStdString(c.getName());
-	int width = Metrics.width(Qstr), height = Metrics.height();
+	int width = Metrics.width(QString::fromStdString(c.getName())), height = Metrics.height();
 	vector<string> attr = c.getAttributes();
 	for (int i = 0;i < attr.size();++i) {
-		Qstr = QString::fromStdString(attr[i]);
-		width = max(width, Metrics.width(Qstr));
+		width = max(width, Metrics.width(QString::fromStdString(attr[i])));
 		height += Metrics.height();
 	}
 	return Block(width, height, c);

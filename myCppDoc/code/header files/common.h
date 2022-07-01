@@ -24,6 +24,7 @@ class Class {
 	list<Relation> list_edges;
 
 public:
+	Class(string name);
 	void setName(string name_);
 	void addAttributes(string attr);
 	void addRelation(Relation rela);
