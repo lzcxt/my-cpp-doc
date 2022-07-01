@@ -15,7 +15,7 @@ void drawArea::resizeGL(int width, int height) {
 }
 
 void drawArea::paintGL() {
-	QPainter paint;
+	QPainter paint(this);
 	paint.setPen(Qt::white);
 	paint.drawLine(0, 0, 100, 100);
 }
