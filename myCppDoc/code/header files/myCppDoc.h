@@ -2,13 +2,14 @@
 
 #include "drawArea.h"
 
-#include <QtCore/QVariant>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QWidget>
+#include <QVariant>
+#include <QApplication>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QToolBar>
+#include <QWidget>
+#include <QLabel>
 
 class myCppDoc : public QMainWindow {
     Q_OBJECT
@@ -28,6 +29,8 @@ private:
 	QAction* FileLoad;
 	QAction* FileLoadFolder;
 	QAction* HelpInfo;
+
+	QLabel* Label;
 
 public slots:
 	bool FileLoadManagement();

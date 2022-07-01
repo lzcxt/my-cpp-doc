@@ -16,9 +16,9 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	draw.resize(800, 1200);
-	draw.show();
+	drawArea* draw= new drawArea(this, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	draw->setGeometry(0,65,this->rect().width(),this->rect().height()-100);
+	draw->show();
 	return 1;
 }
 
@@ -30,9 +30,9 @@ bool myCppDoc::FileLoadFolderManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	draw.resize(800, 1200);
-	draw.show();
+	drawArea* draw = new drawArea(this, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	draw->resize(800, 1200);
+	draw->show();
 	return 1;
 }
 

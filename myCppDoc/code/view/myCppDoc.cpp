@@ -17,7 +17,7 @@ myCppDoc::myCppDoc(QWidget *parent)
 	FileMenu->addAction(FileLoad);
 	connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
 
-	FileLoadFolder = new QAction(QIcon("textures/open.png"), "LoadFloder", this);
+	FileLoadFolder = new QAction(QIcon("textures/open.png"), "Load Folder", this);
 	FileLoadFolder->setShortcut(Qt::CTRL + Qt::Key_O);
 	FileMenu->addAction(FileLoadFolder);
 	connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
@@ -29,6 +29,9 @@ myCppDoc::myCppDoc(QWidget *parent)
 
 	ToolBar->addAction(FileLoad);
 	ToolBar->addAction(HelpInfo);
+
+	Label = new QLabel(this);
+	Label->setGeometry(0,this->rect().height()-35,this->rect().width(),35);
 }
 
 myCppDoc::~myCppDoc() {
