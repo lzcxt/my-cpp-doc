@@ -54,13 +54,10 @@
       <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="code\model\cppFileContent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="code\model\macroExpander.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\model\classRelationGenerator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\header files\model\cppFileContent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\model\classRelationGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\header files\model\macroExpander.h">

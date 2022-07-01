@@ -35,9 +35,9 @@ list<Relation> Class::getListOfEdges() const {
 }
 
 bool isProjectFileName(QString s) {
-	if (s.contains("*.cpp")) return 1;
-	if (s.contains("*.h")) return 1;
-	if (s.contains("*.c")) return 1;
+	if (s.contains(".cpp")) return 1;
+	if (s.contains(".h")) return 1;
+	if (s.contains(".c")) return 1;
 	return 0;
 }
 
