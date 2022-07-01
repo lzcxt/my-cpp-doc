@@ -114,6 +114,7 @@
     <ClInclude Include="code\header files\model\cppFileContent.h" />
     <ClInclude Include="code\header files\model\macroExpander.h" />
     <ClInclude Include="code\header files\model\parser.h" />
+    <ClInclude Include="code\header files\parser.h" />
     <ClInclude Include="code\header files\translator.h" />
     <QtMoc Include="code\header files\myCppDoc.h" />
     <QtMoc Include="code\header files\drawArea.h" />
