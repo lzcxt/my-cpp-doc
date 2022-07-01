@@ -37,13 +37,15 @@ private:
     double B_double;
 };
 
-class C {
+class C{
 
 };
 
-class D {
+class D: public A, private B{
 
 };
+
+class E{}
 
 void f() {
     
