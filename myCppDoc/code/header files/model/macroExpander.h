@@ -3,7 +3,9 @@
 #include <fstream>
 
 /**
- * this class used to expand the macro
+ * this class used to expand the macro.
+ * all the inline comment will be exclude here.
+ * all the line start with # will be exclude here.
  */
 class MacroExpander {
 public:

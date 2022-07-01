@@ -12,12 +12,12 @@ myCppDoc::myCppDoc(QWidget *parent)
 	OperationMenu = MenuBar->addMenu("Operation");
 	HelpMenu = MenuBar->addMenu("Help");
 
-	FileLoad = new QAction(QIcon("textures/open.png"), "Load", this);
+	FileLoad = new QAction(QIcon("textures/open.png"), "Load File", this);
 	FileLoad->setShortcut(Qt::CTRL + Qt::Key_I);
 	FileMenu->addAction(FileLoad);
 	connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
 
-	FileLoadFolder = new QAction(QIcon("textures/open.png"), "LoadFloder", this);
+	FileLoadFolder = new QAction(QIcon("textures/open.png"), "Load Folder", this);
 	FileLoadFolder->setShortcut(Qt::CTRL + Qt::Key_O);
 	FileMenu->addAction(FileLoadFolder);
 	connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
@@ -28,7 +28,13 @@ myCppDoc::myCppDoc(QWidget *parent)
 	connect(HelpInfo, SIGNAL(triggered()), this, SLOT(HelpInfoManagement()));
 
 	ToolBar->addAction(FileLoad);
+	connect(FileLoad, SIGNAL(hovered()), this, SLOT(FileLoadHovered()));
 	ToolBar->addAction(HelpInfo);
+
+	Status = new QStatusBar();
+	Status->setSizeGripEnabled(1);
+	Status->showMessage("Hello, this is your cute status bar.");
+	setStatusBar(Status);
 }
 
 myCppDoc::~myCppDoc() {

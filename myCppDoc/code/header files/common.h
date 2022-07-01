@@ -11,9 +11,11 @@ enum Relation_enum{
 
 class Class;
 
-class Relation {
+struct Relation {
 	Class* target;
 	Relation_enum r;
+	Relation() = delete;
+	Relation(Class* t, Relation_enum r) : target(t), r(r) {}
 };
 
 class Class {
@@ -22,6 +24,10 @@ class Class {
 	list<Relation> list_edges;
 
 public:
+	Class(string name);
+	void setName(string name_);
+	void addAttributes(string attr);
+	void addRelation(Relation rela);
 	string getName() const;
 	vector<string> getAttributes() const;
 	list<Relation> getListOfEdges() const;

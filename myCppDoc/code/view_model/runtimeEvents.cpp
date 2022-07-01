@@ -9,6 +9,11 @@
 #include <QFileDialog>
 using namespace std;
 
+bool myCppDoc::FileLoadHovered() {
+	Status->showMessage("Load File(s)");
+	return 1;
+}
+
 bool myCppDoc::FileLoadManagement() {
 	QStringList path = QFileDialog::getOpenFileNames();
 	list<string> filelist;
@@ -16,10 +21,9 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	set<Block> emp;
-	drawArea* draw= new drawArea(0, emp);
-	draw->resize(800, 1200);
-	draw->show();
+	//drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	//draw->resize(800, 1200);
+	//draw->show();
 	return 1;
 }
 
