@@ -20,9 +20,13 @@ list<Class> Parser::parse(list<string> file_names) {
 		for (auto name : bad_file_names) info += name + " ";
 		throw m_Exception("Could not open { " + info + "}");
 	}
+	/*
 	ClassRelationGenerator crg;
-	while (!cfc.eof()) {
-		crg.pushBack(cfc.getWord());
+	TOKEN cur = cfc.getToken();
+	while (cur != EOF_) {
+		crg.pushBack(cur);
+		cur = cfc.getToken();
 	}
-	return crg.getClasses();
+	*/
+	return cfc.getClasses();
 }

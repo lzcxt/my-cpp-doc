@@ -40,3 +40,13 @@ bool isProjectFileName(QString s) {
 	if (s.contains("*.c")) return 1;
 	return 0;
 }
+
+void Class::setName(string name_) {
+	name = name_;
+}
+void Class::addAttributes(string attr) {
+	attributes.push_back(attr);
+}
+void Class::addRelation(Relation rela) {
+	list_edges.push_back(rela);
+}
