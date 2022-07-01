@@ -30,7 +30,7 @@ private:
 	QAction* FileLoadFolder;
 	QAction* HelpInfo;
 
-	QLabel* Label;
+	QStatusBar* Status;
 
 public slots:
 	bool FileLoadManagement();

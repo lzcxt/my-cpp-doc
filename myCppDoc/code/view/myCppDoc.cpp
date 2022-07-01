@@ -12,7 +12,7 @@ myCppDoc::myCppDoc(QWidget *parent)
 	OperationMenu = MenuBar->addMenu("Operation");
 	HelpMenu = MenuBar->addMenu("Help");
 
-	FileLoad = new QAction(QIcon("textures/open.png"), "Load", this);
+	FileLoad = new QAction(QIcon("textures/open.png"), "Load File", this);
 	FileLoad->setShortcut(Qt::CTRL + Qt::Key_I);
 	FileMenu->addAction(FileLoad);
 	connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
@@ -30,8 +30,10 @@ myCppDoc::myCppDoc(QWidget *parent)
 	ToolBar->addAction(FileLoad);
 	ToolBar->addAction(HelpInfo);
 
-	Label = new QLabel(this);
-	Label->setGeometry(0,this->rect().height()-35,this->rect().width(),35);
+	Status = new QStatusBar();
+	Status->setSizeGripEnabled(1);
+	Status->showMessage("Hello, this is your cute status bar.");
+	setStatusBar(Status);
 }
 
 myCppDoc::~myCppDoc() {
