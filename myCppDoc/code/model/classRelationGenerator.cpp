@@ -1,7 +1,7 @@
 #include "model/classRelationGenerator.h"
 using namespace std;
 
-void ClassRelationGenerator::pushBack(string str) {
+void ClassRelationGenerator::pushBack(TOKEN t) {
 	/* not implemented yet */
 }
 
