@@ -3,6 +3,10 @@
 #include <QString>
 #include <QMessageBox>
 
+Class::Class(string name)
+	:name(name) {
+}
+
 Block::Block(const int& w, const int& h, const Class& c)
 	:width(w),height(h),this_class(c){
 }
@@ -35,9 +39,9 @@ list<Relation> Class::getListOfEdges() const {
 }
 
 bool isProjectFileName(QString s) {
-	if (s.contains("*.cpp")) return 1;
-	if (s.contains("*.h")) return 1;
-	if (s.contains("*.c")) return 1;
+	if (s.contains(".cpp")) return 1;
+	if (s.contains(".h")) return 1;
+	if (s.contains(".c")) return 1;
 	return 0;
 }
 

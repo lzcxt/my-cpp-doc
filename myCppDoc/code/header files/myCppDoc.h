@@ -33,6 +33,8 @@ private:
 	QStatusBar* Status;
 
 public slots:
+	bool FileLoadHovered();
+
 	bool FileLoadManagement();
 	bool FileLoadFolderManagement();
 	bool HelpInfoManagement();

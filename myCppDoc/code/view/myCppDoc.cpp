@@ -28,6 +28,7 @@ myCppDoc::myCppDoc(QWidget *parent)
 	connect(HelpInfo, SIGNAL(triggered()), this, SLOT(HelpInfoManagement()));
 
 	ToolBar->addAction(FileLoad);
+	connect(FileLoad, SIGNAL(hovered()), this, SLOT(FileLoadHovered()));
 	ToolBar->addAction(HelpInfo);
 
 	Status = new QStatusBar();
