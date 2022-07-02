@@ -9,28 +9,38 @@ enum Relation_enum{
 	inherit, include
 };
 
-class Class;
-
-struct Relation {
-	Class* target;
-	Relation_enum r;
-	Relation() = delete;
-	Relation(Class* t, Relation_enum r) : target(t), r(r) {}
-};
-
 class Class {
 	string name;
 	vector<string> attributes;
-	list<Relation> list_edges;
+	vector<string> superclasses;
+	vector<string> components;
 
 public:
-	Class(string name="Not_Defined");
-	void setName(string name_);
-	void addAttributes(string attr);
-	void addRelation(Relation rela);
-	string getName() const;
-	vector<string> getAttributes() const;
-	list<Relation> getListOfEdges() const;
+	Class(string name = "Not_Defined") : name(name) {}
+	void setName(string name_) {
+		name = name_;
+	}
+	void addAttributes(string attr) {
+		attributes.push_back(attr);
+	}
+	void addSuperclasses(string sup) {
+		superclasses.push_back(sup);
+	}
+	void addComponents(string com) {
+		components.push_back(com);
+	}
+	const string& getName() const {
+		return name;
+	}
+	const vector<string>& getSuperclasses() const {
+		return superclasses;
+	}
+	const vector<string>& getComponents() const {
+		return components;
+	}
+	const vector<string>& getAttributes() const {
+		return attributes;
+	}
 };
 
 class Block {

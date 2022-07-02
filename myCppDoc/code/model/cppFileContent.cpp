@@ -60,7 +60,7 @@ void CppFileContent::Trans(TOKEN t, string word) {
 	else if (cur_state == CLASS_STATE_3) {
 		if (t == UNKNOWN_) {
 			if (!name2class.count(word)) name2class[word].setName(word);
-			cur_class->addRelation(Relation(&name2class[word], inherit));
+			cur_class->addSuperclasses(word);
 		}
 		if (t == PUBLIC_ || t == PRIVATE_ || t == PROTECTED_) cur_state = CLASS_STATE_3;
 		else if (t == UNKNOWN_) cur_state = CLASS_STATE_4;
@@ -169,8 +169,8 @@ list<Class> CppFileContent::getClasses() {
 	db_out << cls.size() << endl;
 	for (auto item : cls) {
 		db_out << item.getName() << ": ";
-		for (auto r : item.getListOfEdges())
-			db_out << "(" << r.r << ", " << r.target->getName() << ") ";
+		for (auto sup : item.getSuperclasses())
+			db_out << sup << ", ";
 		db_out << endl;
 	}
 	return cls;
