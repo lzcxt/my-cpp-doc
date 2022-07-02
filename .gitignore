@@ -31,6 +31,10 @@
 *.out
 *.app
 
+# Debug file
+*Model_ErrorLog.txt
+*Model_Output.txt
+
 # Directory
 /.vs/
 /Debug/
