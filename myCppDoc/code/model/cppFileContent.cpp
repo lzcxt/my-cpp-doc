@@ -15,7 +15,7 @@ TOKEN getReserved(string s) {
 fstream db_err("Model_ErrorLog.txt", fstream::out);
 fstream db_out("Model_Output.txt", fstream::out);
 
-void CppFileContent::Trans(TOKEN t) {
+void CppFileContent::Trans(TOKEN t, string word) {
 	if (cur_state == START_STATE) {
 		if (t == SINGLE_QUOTE_) cur_state = SINGLE_QUOTE_STATE;
 		else if (t == DOUBLE_QUOTE_) cur_state = DOUBLE_QUOTE_STATE;
@@ -49,7 +49,7 @@ void CppFileContent::Trans(TOKEN t) {
 		else cur_state = START_STATE;
 	}
 	else assert("invalid state");
-	db_err << "by token " << t << " go to " << cur_state << endl;
+	db_err << "by token " << t << ", " << word << " go to " << cur_state << endl;
 }
 
 void CppFileContent::pushBack(string s) {
@@ -61,30 +61,51 @@ void CppFileContent::pushBack(string s) {
 	while (1) {
 		while (isspace(ch)) s_in.get(ch);
 		db_err << ch << endl;
-		if (ch == ':') Trans(COLON_), s_in.get(ch);
-		else if (ch == '\'') Trans(SINGLE_QUOTE_), s_in.get(ch);
-		else if (ch == '"') Trans(DOUBLE_QUOTE_), s_in.get(ch);
-		else if (ch == '{') Trans(LEFT_BRACE_), s_in.get(ch);
-		else if (ch == '}') Trans(RIGHT_BRACE_), s_in.get(ch);
-		else if (ch == ',') Trans(COMMA_), s_in.get(ch);
-		else if (ch == '/') {
+		if (ch == ':') Trans(COLON_, ":"), s_in.get(ch);
+		else if (ch == '\'') Trans(SINGLE_QUOTE_, "'"), s_in.get(ch);
+		else if (ch == '"') Trans(DOUBLE_QUOTE_, "\""), s_in.get(ch);
+		else if (ch == '{') Trans(LEFT_BRACE_, "{"), s_in.get(ch);
+		else if (ch == '}') Trans(RIGHT_BRACE_, "}"), s_in.get(ch);
+		else if (ch == ',') Trans(COMMA_, ","), s_in.get(ch);
+		else if (ch == '?') Trans(QUESTION_MARK_, "?"), s_in.get(ch);
+		else if (ch == '&') {
 			s_in.get(ch);
-			if (ch == '*') {
-				Trans(LEFT_COMMENT_);
+			if (ch == '&') {
+				Trans(LOGICAL_AND_, "&&");
 				s_in.get(ch);
 			}
 			else {
-				Trans(DIVIDE_);
+				Trans(ARITHMATIC_AND_, "&");
+			}
+		}
+		else if (ch == '|') {
+			s_in.get(ch);
+			if (ch == '|') {
+				Trans(LOGICAL_OR_, "||");
+				s_in.get(ch);
+			}
+			else {
+				Trans(ARITHMATIC_OR_, "|");
+			}
+		}
+		else if (ch == '/') {
+			s_in.get(ch);
+			if (ch == '*') {
+				Trans(LEFT_COMMENT_, "/*");
+				s_in.get(ch);
+			}
+			else {
+				Trans(DIVIDE_, "/");
 			}
 		}
 		else if (ch == '*') {
 			s_in.get(ch);
 			if (ch == '/') {
-				Trans(RIGHT_COMMENT_);
+				Trans(RIGHT_COMMENT_, "*/");
 				s_in.get(ch);
 			} 
 			else {
-				Trans(MULTIPLY_);
+				Trans(MULTIPLY_, "*");
 			}
 		}
 		else if (isdigit(ch)) {
@@ -93,7 +114,7 @@ void CppFileContent::pushBack(string s) {
 				s_in.get(ch);
 				while (isdigit(ch)) s_in.get(ch);
 			}
-			Trans(NUMBER_);
+			Trans(NUMBER_, "number");
 		}
 		else if (isalpha(ch) || ch == '_') {
 			string symbo;
@@ -111,11 +132,11 @@ void CppFileContent::pushBack(string s) {
 					cur_class->addRelation(Relation(&name2class[symbo], inherit));
 				}
 			}
-			Trans(tmp);
+			Trans(tmp, symbo);
 		}
 		else if (ch == EOF) break;
 		else {
-			db_err << "unknown symbol" << endl;
+			db_err << "unknown char of " << ch << endl;
 			s_in.get(ch);
 		}
 	}
