@@ -1,7 +1,10 @@
 #include "drawArea.h"
-
+#include <fstream>
 #include <vector>
 #include <QPainter>
+
+using namespace std;
+fstream db_err_v("View_ErrorLog.txt", fstream::out);
 
 //some used only in this file
 struct PointXY
@@ -97,32 +100,33 @@ void drawArea::paintGL() {
 	b = blocks.begin(); s = strategy.begin();
 	while (b != blocks.end() && s != strategy.end())
 	{
-		//paint.drawLine(0, 0, 100, 100);
 		list<Relation> tmp_r = b->getThisClass().getListOfEdges();
 		list<Relation>::iterator r = tmp_r.begin();
 		while (r != tmp_r.end())
 		{
 			Class *tmp_c = r->target;
+			db_err_v << tmp_c->getName();
 			vector<PointXY>::iterator s2 = strategy.begin();
 			set<Block>::iterator b2 = blocks.begin();
 			while (b2 != blocks.end() && s2 != strategy.end())
 			{
-				if (b2->getThisClass().getName().compare(tmp_c->getName()))break;
+				db_err_v << " "<<b2->getThisClass().getName();
+				
+				string tmp_name = b2->getThisClass().getName();
+				if (tmp_name.compare(tmp_c->getName()))break;
 				b2++; s2++;
 			}
 			//0 inherit
 			if (r->r == inherit)
 			{
-				//paint.setPen(Qt::darkGreen);
-				paint.setPen(Qt::white);
+				paint.setPen(QPen(Qt::darkGreen,0.3));
 			}
 			else//1 include
 			{
-				//paint.setPen(Qt::darkBlue);
-				paint.setPen(Qt::white);
-
+				paint.setPen(QPen(Qt::darkBlue,0.3));
 			}
-			paint.drawLine(s->x, s->y, s2->x, s2->y);
+			db_err_v << endl;
+			paint.drawLine(s->x, s->y, s2->x+b2->getWidth(), s2->y + b2->getHeight());
 			r++;
 		}
 		b++; s++;
