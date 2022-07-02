@@ -24,22 +24,25 @@
     <Filter Include="Source Files\Model">
       <UniqueIdentifier>{a67205fc-2947-4b80-b33e-b264e07ae80a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ViewModel">
-      <UniqueIdentifier>{08a49ec2-8d00-47be-9c2a-6ce8d7ad6052}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\View">
       <UniqueIdentifier>{d8964061-4819-430b-af2a-c1480f338b45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{1ebaa07a-99c4-4365-9df3-a446f6841433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\View">
+      <UniqueIdentifier>{f0e126aa-12d2-47e8-a0ed-11f67821c1dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ViewModel">
+      <UniqueIdentifier>{75474060-7d75-4d44-89f8-01787ee7d036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ViewModel">
+      <UniqueIdentifier>{72db0ad0-13e0-48c5-91b6-c6251a7134cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="code\common.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\view_model\translator.cpp">
-      <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
     <ClCompile Include="code\view\myCppDoc.cpp">
       <Filter>Source Files\View</Filter>
@@ -47,17 +50,23 @@
     <ClCompile Include="code\view\drawArea.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
-    <ClCompile Include="code\view_model\runtimeEvents.cpp">
-      <Filter>Source Files\ViewModel</Filter>
-    </ClCompile>
-    <ClCompile Include="code\model\parser.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
     <ClCompile Include="code\model\cppFileContent.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="code\model\macroExpander.cpp">
       <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\runtimeEvents.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view_model\parser.cpp">
+      <Filter>Source Files\ViewModel</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\translator.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\main.cpp">
+      <Filter>Source Files\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,31 +83,28 @@
     <ClInclude Include="code\header files\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\header files\translator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\model\parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\model\cppFileContent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\model\macroExpander.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\header files\cmFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\header files\parser.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="code\header files\model\cppFileContent.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\model\macroExpander.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view\translator.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view_model\parser.h">
+      <Filter>Header Files\ViewModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="code\header files\drawArea.h">
-      <Filter>Header Files</Filter>
+    <QtMoc Include="code\header files\view\myCppDoc.h">
+      <Filter>Header Files\View</Filter>
     </QtMoc>
-    <QtMoc Include="code\header files\myCppDoc.h">
-      <Filter>Header Files</Filter>
+    <QtMoc Include="code\header files\view\drawArea.h">
+      <Filter>Header Files\View</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

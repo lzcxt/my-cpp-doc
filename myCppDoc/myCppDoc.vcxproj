@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C86B7CD0-8C3B-4695-9D70-CBC67EAA16A6}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
-    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">10.0.17763.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">10.0.17763.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./code/header files</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./code/header files./code/header files;./code/header files/model;./code/header files/view;./code/header files/view_model;./code/header files</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -91,14 +91,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code\common.cpp" />
-    <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\model\cppFileContent.cpp" />
     <ClCompile Include="code\model\macroExpander.cpp" />
-    <ClCompile Include="code\model\parser.cpp" />
     <ClCompile Include="code\view\drawArea.cpp" />
+    <ClCompile Include="code\view\main.cpp" />
     <ClCompile Include="code\view\myCppDoc.cpp" />
-    <ClCompile Include="code\view_model\runtimeEvents.cpp" />
-    <ClCompile Include="code\view_model\translator.cpp" />
+    <ClCompile Include="code\view\runtimeEvents.cpp" />
+    <ClCompile Include="code\view\translator.cpp" />
+    <ClCompile Include="code\view_model\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc" />
@@ -111,11 +111,10 @@
     <ClInclude Include="code\header files\common.h" />
     <ClInclude Include="code\header files\model\cppFileContent.h" />
     <ClInclude Include="code\header files\model\macroExpander.h" />
-    <ClInclude Include="code\header files\model\parser.h" />
-    <ClInclude Include="code\header files\parser.h" />
-    <ClInclude Include="code\header files\translator.h" />
-    <QtMoc Include="code\header files\myCppDoc.h" />
-    <QtMoc Include="code\header files\drawArea.h" />
+    <ClInclude Include="code\header files\view\translator.h" />
+    <ClInclude Include="code\header files\view_model\parser.h" />
+    <QtMoc Include="code\header files\view\drawArea.h" />
+    <QtMoc Include="code\header files\view\myCppDoc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
