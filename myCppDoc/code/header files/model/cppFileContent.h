@@ -15,8 +15,13 @@ enum TOKEN {
 	DOUBLE_QUOTE_,
 	LEFT_BRACE_,
 	RIGHT_BRACE_,
+	QUESTION_MARK_,
 	LEFT_COMMENT_,
 	RIGHT_COMMENT_,
+	LOGICAL_AND_,
+	ARITHMATIC_AND_,
+	LOGICAL_OR_,
+	ARITHMATIC_OR_,
 	NUMBER_,
 	CLASS_,
 	STRUCT_,
@@ -47,7 +52,7 @@ public:
 	void pushBack(std::string s);
 	std::list<Class> getClasses();
 private:
-	void Trans(TOKEN t);
+	void Trans(TOKEN t, std::string word);
 	std::map<std::string, Class> name2class;
 	STATE cur_state;
 };
