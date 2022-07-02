@@ -21,9 +21,11 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
+	
 	//drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	//draw->resize(800, 1200);
-	//draw->show();
+	drawArea* draw = new drawArea(0, set<Block>());
+	draw->resize(800, 1200);
+	draw->show();
 	return 1;
 }
 
