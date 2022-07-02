@@ -7,11 +7,12 @@
 using namespace std;
 
 list<Class> Parser::parse(list<string> file_names) {
+	//SendMsg("Parse::parse start");
 	vector<string> bad_file_names;
 	MacroExpander me;
 	CppFileContent cfc;
 	for (auto name : file_names) {
-		SendMsg(name);
+		//SendMsg(name);
 		fstream f(name, fstream::in);
 		if (!f.is_open()) { bad_file_names.push_back(name); continue; }
 		cfc.pushBack(me.process(f));

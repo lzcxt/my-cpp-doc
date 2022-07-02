@@ -22,8 +22,8 @@ bool myCppDoc::FileLoadManagement() {
 		filelist.push_back(i->toStdString());
 	}
 	
-	//drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	drawArea* draw = new drawArea(0, set<Block>());
+	drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	//drawArea* draw = new drawArea(0, set<Block>());
 	draw->resize(800, 1200);
 	draw->show();
 	return 1;

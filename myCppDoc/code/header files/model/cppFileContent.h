@@ -8,7 +8,10 @@
 
 enum TOKEN {
 	COLON_,
+	SEMICOLON_,
 	COMMA_,
+	BACKWARD_SLASH_,
+	BACKWARD_SLASH_WITH_CHARACTOR_,
 	DIVIDE_,
 	MULTIPLY_,
 	SINGLE_QUOTE_,
@@ -55,4 +58,5 @@ private:
 	void Trans(TOKEN t, std::string word);
 	std::map<std::string, Class> name2class;
 	STATE cur_state;
+	Class* cur_class;
 };

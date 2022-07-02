@@ -3,12 +3,13 @@ using namespace std;
 
 /**
  * @brief A's discription
- * 
+ * class A : B {}  <- this is a defination in comment
  */
 class A {
 public:
-    void A_method_1() {
-
+    string A_method_1() {
+        string s = "\"";  // This is a \" test
+        return "class F : E {}";  // This is a defination in string
     }
     void A_method_2() {
 
@@ -46,6 +47,8 @@ class D: public A, private B{
 };
 
 class E{}
+
+class F;
 
 void f() {
     

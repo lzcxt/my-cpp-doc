@@ -3,6 +3,19 @@
 #include <assert.h>
 #include "cmFunctions.h"
 using namespace std;
+string getState(STATE s) {
+	switch (s){
+	case START_STATE: return "START_STATE";
+	case SINGLE_QUOTE_STATE: return "SINGLE_QUOTE_STATE";
+	case DOUBLE_QUOTE_STATE: return "DOUBLE_QUOTE_STATE";
+	case COMMENT_STATE: return "COMMENT_STATE";
+	case CLASS_STATE_1: return "CLASS_STATE_1";
+	case CLASS_STATE_2: return "CLASS_STATE_2";
+	case CLASS_STATE_3: return "CLASS_STATE_3";
+	case CLASS_STATE_4: return "CLASS_STATE_4";
+	default: assert(0 && "Invalid State");
+	}
+}
 TOKEN getReserved(string s) {
 	if (s == "class") return CLASS_;
 	else if (s == "struct") return STRUCT_;
@@ -32,6 +45,11 @@ void CppFileContent::Trans(TOKEN t, string word) {
 		if (t == RIGHT_COMMENT_) cur_state = START_STATE;
 	}
 	else if (cur_state == CLASS_STATE_1) {
+		if (t == UNKNOWN_) {
+			Class &nd = name2class[word];
+			nd.setName(word);
+			cur_class = &nd;
+		}
 		if (t == UNKNOWN_) cur_state = CLASS_STATE_2;
 		else cur_state = START_STATE;
 	}
@@ -40,6 +58,10 @@ void CppFileContent::Trans(TOKEN t, string word) {
 		else cur_state = START_STATE;
 	}
 	else if (cur_state == CLASS_STATE_3) {
+		if (t == UNKNOWN_) {
+			if (!name2class.count(word)) name2class[word].setName(word);
+			cur_class->addRelation(Relation(&name2class[word], inherit));
+		}
 		if (t == PUBLIC_ || t == PRIVATE_ || t == PROTECTED_) cur_state = CLASS_STATE_3;
 		else if (t == UNKNOWN_) cur_state = CLASS_STATE_4;
 		else cur_state = START_STATE;
@@ -49,7 +71,7 @@ void CppFileContent::Trans(TOKEN t, string word) {
 		else cur_state = START_STATE;
 	}
 	else assert("invalid state");
-	db_err << "by token " << t << ", " << word << " go to " << cur_state << endl;
+	db_err << "[ " << word << " ] by token " << t << " go to " << getState(cur_state) << endl;
 }
 
 void CppFileContent::pushBack(string s) {
@@ -57,10 +79,10 @@ void CppFileContent::pushBack(string s) {
 	char ch;
 	s_in.get(ch);
 	cur_state = START_STATE;
-	Class* cur_class = nullptr;
+	cur_class = nullptr;
+	db_err << "---- Init CppFileContent::pushBack ----" << endl;
 	while (1) {
 		while (isspace(ch)) s_in.get(ch);
-		db_err << ch << endl;
 		if (ch == ':') Trans(COLON_, ":"), s_in.get(ch);
 		else if (ch == '\'') Trans(SINGLE_QUOTE_, "'"), s_in.get(ch);
 		else if (ch == '"') Trans(DOUBLE_QUOTE_, "\""), s_in.get(ch);
@@ -68,6 +90,17 @@ void CppFileContent::pushBack(string s) {
 		else if (ch == '}') Trans(RIGHT_BRACE_, "}"), s_in.get(ch);
 		else if (ch == ',') Trans(COMMA_, ","), s_in.get(ch);
 		else if (ch == '?') Trans(QUESTION_MARK_, "?"), s_in.get(ch);
+		else if (ch == ';') Trans(SEMICOLON_, ";"), s_in.get(ch);
+		else if (ch == '\\') {
+			s_in.get(ch);
+			if (isalpha(ch) || ch == '\'' || ch == '"') {
+				Trans(BACKWARD_SLASH_WITH_CHARACTOR_, string({ '\\', ch }));
+				s_in.get(ch);
+			}
+			else {
+				Trans(BACKWARD_SLASH_, "\\");
+			}
+ 		}
 		else if (ch == '&') {
 			s_in.get(ch);
 			if (ch == '&') {
@@ -118,25 +151,13 @@ void CppFileContent::pushBack(string s) {
 		}
 		else if (isalpha(ch) || ch == '_') {
 			string symbo;
-			while (isalpha(ch) || ch == '_') symbo.push_back(ch), s_in.get(ch);
+			while (isalpha(ch) || ch == '_' || isdigit(ch)) symbo.push_back(ch), s_in.get(ch);
 			TOKEN tmp = getReserved(symbo);
-			if (tmp == UNKNOWN_) {
-				if (cur_state == CLASS_STATE_1) {
-					db_err << "find class: " << symbo << endl;
-					Class &nd = name2class[symbo];
-					nd.setName(symbo);
-					cur_class = &nd;
-				}
-				else if (cur_state == CLASS_STATE_3) {
-					if (!name2class.count(symbo)) name2class[symbo].setName(symbo);
-					cur_class->addRelation(Relation(&name2class[symbo], inherit));
-				}
-			}
 			Trans(tmp, symbo);
 		}
 		else if (ch == EOF) break;
 		else {
-			db_err << "unknown char of " << ch << endl;
+			db_err << "< " << ch << " > unknown char" << endl;
 			s_in.get(ch);
 		}
 	}
@@ -147,9 +168,10 @@ list<Class> CppFileContent::getClasses() {
 	for (auto item : name2class) cls.push_back(item.second);
 	db_out << cls.size() << endl;
 	for (auto item : cls) {
-		db_out << item.getName() << ": " << endl;
+		db_out << item.getName() << ": ";
 		for (auto r : item.getListOfEdges())
-			db_out << r.r << ' ' << r.target->getName() << endl;
+			db_out << "(" << r.r << ", " << r.target->getName() << ") ";
+		db_out << endl;
 	}
 	return cls;
 }
