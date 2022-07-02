@@ -28,9 +28,24 @@ void drawArea::paintGL() {
 	
 	//test case
 	blocks.clear();//set empty
-	Class a,b,c;
-	
-
+	Class A("A");
+	Class B("B");
+	Class C("C");
+	Relation r1(&B, inherit);
+	Relation r2(&C, inherit);
+	Relation r3(&B, include);
+	A.addAttributes("int x");
+	A.addAttributes("int y");
+	B.addRelation(r1);
+	C.addRelation(r2);
+	C.addRelation(r3);
+	C.addAttributes("B b");
+	Block b1(100,100,A);
+	Block b2(50, 200, B);
+	Block b3(100, 100, C);
+	blocks.insert(b1);
+	blocks.insert(b2);
+	blocks.insert(b3);
 
 	//initialize
 	QPainter paint(this);
@@ -41,41 +56,75 @@ void drawArea::paintGL() {
 
 	//Paint the blocks
 	paint.setPen(Qt::white); 	
+
 	while(b!=blocks.end()&&s!=strategy.end())
 	{
 		//Paint the Rectangle
 
 		paint.drawRect(s->x,s->y,b->getWidth(), b->getHeight());
+		int tmp_x = s->x;
+		int tmp_y = s->y;
+
 		//Text the names
 		font.setFamily("Microsoft YaHei");
-		font.setPointSize(50);
+		font.setPointSize(5);
 		font.setItalic(true);
 		paint.setFont(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(100,100,tmp_name);
+		paint.drawText(s->x+10,s->y+20,tmp_name);
+		tmp_x += 10;
+		tmp_y += 20;
 		//Text the attributes
 		font.setFamily("Microsoft YaHei");
-		font.setPointSize(40);
+		font.setPointSize(4);
 		font.setItalic(false);
 		paint.setFont(font);
-		vector<string>::iterator a = b->getThisClass().getAttributes().begin();
-		for (; a != b->getThisClass().getAttributes().end(); a++)
+		vector<string> tmp_v = b->getThisClass().getAttributes();
+		vector<string>::iterator a = tmp_v.begin();
+		for (; a != tmp_v.end(); a++)
 		{
+			tmp_y += 20;
 			QString tmp_attribute(a->c_str());
-			paint.drawText(0, 0, tmp_attribute);
+			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
 		//next one
 		b++; s++;
 	}
 
 	//Paint the relations
-	paint.setPen(Qt::black);
 	
-	//0 inherit
+	b = blocks.begin(); s = strategy.begin();
+	while (b != blocks.end() && s != strategy.end())
+	{
+		paint.drawLine(0, 0, 100, 100);
+		/*list<Relation> tmp_r = b->getThisClass().getListOfEdges();
+		list<Relation>::iterator r = tmp_r.begin();
+		while (r != tmp_r.end())
+		{
+			Class *tmp_c = r->target;
+			vector<PointXY>::iterator s2 = strategy.begin();
+			set<Block>::iterator b2 = blocks.begin();
+			while (b2 != blocks.end() && s2 != strategy.end())
+			{
+				if (b2->getThisClass().getName().compare(tmp_c->getName()))break;
+				b2++; s2++;
+			}
+			//0 inherit
+			if (r->r == inherit)
+			{
+				//paint.setPen(Qt::darkGreen);
+				paint.setPen(Qt::white);
+			}
+			else//1 include
+			{
+				//paint.setPen(Qt::darkBlue);
+				paint.setPen(Qt::white);
 
-	//1 include
-	
-	
+			}
+			paint.drawLine(s->x, s->y, s2->x, s2->y);
+		}*/
+		b++; s++;
+	}
 }
 
 
@@ -99,7 +148,13 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 		p.push_back(tmp);
 		tmp = { 2*width_intervel + width,max_height };
 		p.push_back(tmp);
-		b++;
+		b++; 
+		if (b == blocks.end())
+		{
+			max_width = max_width > width ? max_width : width;
+			max_height += (height + height_intervel);
+			break;
+		}
 		width+= b->getWidth();
 		height = height > b->getHeight() ? height : b->getHeight();
 		max_width = max_width > width ? max_width : width;
