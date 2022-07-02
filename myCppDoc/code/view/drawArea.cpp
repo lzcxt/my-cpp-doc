@@ -27,6 +27,7 @@ void drawArea::resizeGL(int width, int height) {
 void drawArea::paintGL() {
 	
 	//test case
+	/*
 	blocks.clear();//set empty
 	Class A("A");
 	Class B("B");
@@ -46,6 +47,7 @@ void drawArea::paintGL() {
 	blocks.insert(b1);
 	blocks.insert(b2);
 	blocks.insert(b3);
+	*/
 
 	//initialize
 	QPainter paint(this);
