@@ -57,8 +57,7 @@ void drawArea::paintGL() {
 	set<Block>::iterator b = blocks.begin();
 
 	//Paint the blocks
-	paint.setPen(Qt::white); 	
-
+	paint.setPen(QPen(Qt::white, 0.5));
 	while(b!=blocks.end()&&s!=strategy.end())
 	{
 		//Paint the Rectangle
@@ -69,23 +68,23 @@ void drawArea::paintGL() {
 
 		//Text the names
 		font.setFamily("Microsoft YaHei");
-		font.setPointSize(5);
+		font.setPointSize(b->getWidth() / 8);
 		font.setItalic(true);
 		paint.setFont(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+10,s->y+20,tmp_name);
-		tmp_x += 10;
-		tmp_y += 20;
+		paint.drawText(s->x+ b->getWidth()/8,s->y+ b->getHeight()/10+1,tmp_name);
+		tmp_x += b->getWidth() / 8;
+		tmp_y += b->getHeight() / 10+1;
 		//Text the attributes
 		font.setFamily("Microsoft YaHei");
-		font.setPointSize(4);
+		font.setPointSize(b->getWidth() / 8 -1);
 		font.setItalic(false);
 		paint.setFont(font);
 		vector<string> tmp_v = b->getThisClass().getAttributes();
 		vector<string>::iterator a = tmp_v.begin();
 		for (; a != tmp_v.end(); a++)
 		{
-			tmp_y += 20;
+			tmp_y += b->getHeight() / 10;
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
@@ -98,8 +97,8 @@ void drawArea::paintGL() {
 	b = blocks.begin(); s = strategy.begin();
 	while (b != blocks.end() && s != strategy.end())
 	{
-		paint.drawLine(0, 0, 100, 100);
-		/*list<Relation> tmp_r = b->getThisClass().getListOfEdges();
+		//paint.drawLine(0, 0, 100, 100);
+		list<Relation> tmp_r = b->getThisClass().getListOfEdges();
 		list<Relation>::iterator r = tmp_r.begin();
 		while (r != tmp_r.end())
 		{
@@ -124,7 +123,8 @@ void drawArea::paintGL() {
 
 			}
 			paint.drawLine(s->x, s->y, s2->x, s2->y);
-		}*/
+			r++;
+		}
 		b++; s++;
 	}
 }

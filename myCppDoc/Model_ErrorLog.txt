@@ -1,0 +1,254 @@
+u
+by token 22, using go to 0
+n
+by token 22, namespace go to 0
+s
+by token 22, std go to 0
+;
+unknown char of ;
+/
+by token 9, /* go to 3
+*
+by token 3, * go to 3
+*
+by token 3, * go to 3
+@
+unknown char of @
+b
+by token 22, brief go to 3
+A
+by token 22, A go to 3
+'
+by token 4, ' go to 3
+s
+by token 22, s go to 3
+d
+by token 22, discription go to 3
+*
+by token 3, * go to 3
+*
+by token 10, */ go to 0
+c
+by token 16, class go to 4
+A
+find class: A
+by token 22, A go to 5
+{
+by token 6, { go to 0
+p
+by token 18, public go to 0
+:
+by token 0, : go to 0
+v
+by token 22, void go to 0
+A
+by token 22, A_method_ go to 0
+1
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+v
+by token 22, void go to 0
+A
+by token 22, A_method_ go to 0
+2
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+v
+by token 22, void go to 0
+A
+by token 22, A_function_ go to 0
+1
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+p
+by token 19, private go to 0
+:
+by token 0, : go to 0
+i
+by token 22, int go to 0
+A
+by token 22, A_int go to 0
+;
+unknown char of ;
+d
+by token 22, double go to 0
+A
+by token 22, A_double go to 0
+;
+unknown char of ;
+}
+by token 7, } go to 0
+;
+unknown char of ;
+c
+by token 16, class go to 4
+B
+find class: B
+by token 22, B go to 5
+:
+by token 0, : go to 6
+A
+by token 22, A go to 7
+{
+by token 6, { go to 0
+p
+by token 18, public go to 0
+:
+by token 0, : go to 0
+v
+by token 22, void go to 0
+B
+by token 22, B_method_ go to 0
+1
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+v
+by token 22, void go to 0
+B
+by token 22, B_method_ go to 0
+2
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+v
+by token 22, void go to 0
+B
+by token 22, B_function_ go to 0
+1
+by token 15, number go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+p
+by token 19, private go to 0
+:
+by token 0, : go to 0
+i
+by token 22, int go to 0
+B
+by token 22, B_int go to 0
+;
+unknown char of ;
+d
+by token 22, double go to 0
+B
+by token 22, B_double go to 0
+;
+unknown char of ;
+}
+by token 7, } go to 0
+;
+unknown char of ;
+c
+by token 16, class go to 4
+C
+find class: C
+by token 22, C go to 5
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+;
+unknown char of ;
+c
+by token 16, class go to 4
+D
+find class: D
+by token 22, D go to 5
+:
+by token 0, : go to 6
+p
+by token 18, public go to 6
+A
+by token 22, A go to 7
+,
+by token 1, , go to 6
+p
+by token 19, private go to 6
+B
+by token 22, B go to 7
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+;
+unknown char of ;
+c
+by token 16, class go to 4
+E
+find class: E
+by token 22, E go to 5
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+v
+by token 22, void go to 0
+f
+by token 22, f go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+}
+by token 7, } go to 0
+i
+by token 22, int go to 0
+m
+by token 22, main go to 0
+(
+unknown char of (
+)
+unknown char of )
+{
+by token 6, { go to 0
+r
+by token 22, return go to 0
+0
+by token 15, number go to 0
+;
+unknown char of ;
+}
+by token 7, } go to 0
+ÿ
