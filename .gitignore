@@ -32,8 +32,8 @@
 *.app
 
 # Debug file
-*Model_ErrorLog.txt
-*Model_Output.txt
+myCppDoc/Model_ErrorLog.txt
+myCppDoc/Model_Output.txt
 
 # Directory
 /.vs/
