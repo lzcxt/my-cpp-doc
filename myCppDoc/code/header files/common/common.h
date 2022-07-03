@@ -5,20 +5,26 @@
 #include <exception>
 using namespace std;
 
-enum Relation_enum{
-	inherit, include
-};
-
+/**
+ * name : class's name
+ * attributes : discription of the function
+ * components : class's member variable
+ * functions : class's memeber function
+ */
 class Class {
 	string name;
 	vector<string> attributes;
 	vector<string> superclasses;
 	vector<string> components;
+	vector<string> functions;
 
 public:
 	Class(string name = "Not_Defined") : name(name) {}
 	void setName(string name_) {
 		name = name_;
+	}
+	void addFucntions(string func) {
+		functions.push_back(func);
 	}
 	void addAttributes(string attr) {
 		attributes.push_back(attr);
@@ -40,6 +46,9 @@ public:
 	}
 	const vector<string>& getAttributes() const {
 		return attributes;
+	}
+	const vector<string>& getFunctions() const {
+		return functions;
 	}
 };
 
