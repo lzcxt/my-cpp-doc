@@ -21,7 +21,7 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	drawArea* draw=new drawArea(0, Translator().toBlockSet(Parser::parse(filelist)));
 	draw->resize(800, 1200);
 	draw->show();
 	return 1;
@@ -35,7 +35,7 @@ bool myCppDoc::FileLoadFolderManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
+	drawArea draw(0, Translator().toBlockSet(Parser::parse(filelist)));
 	draw.resize(800, 1200);
 	draw.show();
 	return 1;
