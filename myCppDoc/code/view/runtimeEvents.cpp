@@ -21,8 +21,10 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea* draw=new drawArea(0, Translator().toBlockSet(Parser::parse(filelist)));
-	draw->resize(800, 1200);
+	//drawArea* draw=new drawArea(0, Translator().toBlockSet(Parser::parse(filelist)));
+	//draw->resize(800, 1200);
+	drawArea* draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
+	draw->setGeometry(0, 65, 1200, 710);
 	draw->show();
 	return 1;
 }

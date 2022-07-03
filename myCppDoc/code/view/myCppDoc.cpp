@@ -3,7 +3,7 @@
 myCppDoc::myCppDoc(QWidget *parent)
     : QMainWindow(parent) {
 
-	resize(600, 400);
+	resize(1200, 800);
 	
 	MenuBar = menuBar();
 	ToolBar = addToolBar("Standard");
