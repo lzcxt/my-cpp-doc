@@ -27,6 +27,7 @@
 *.lib
 
 # Executables
+*.txt
 *.exe
 *.out
 *.app
@@ -39,4 +40,5 @@ myCppDoc/Model_Output.txt
 /.vs/
 /Debug/
 /myCppDoc/Debug/
-.vscode
+/.vscode/
+/x64/
