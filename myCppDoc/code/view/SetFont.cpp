@@ -4,7 +4,7 @@ void SetNameFont(QFont &font)
 	font.setFamily("Microsoft YaHei");
 	font.setUnderline(true);
 	font.setPointSize(10);
-	font.setItalic(true);
+	font.setItalic(false);
 }
 void SetAttributeFont(QFont &font)
 {

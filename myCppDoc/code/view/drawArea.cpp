@@ -4,6 +4,7 @@
 #include <vector>
 #include <QPainter>
 #include <cmath>
+//#include <gl/glut.h>
 
 using namespace std;
 fstream db_err_v("View_ErrorLog.txt", fstream::out);
@@ -23,7 +24,7 @@ drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
 }
 
 void drawArea::initializeGL() {
-	
+	//glClearColor(1, 1, 1, 1);
 }
 
 void drawArea::resizeGL(int width, int height) {
@@ -40,32 +41,35 @@ void drawArea::paintGL() {
 
 	//initialize
 	QPainter paint(this);
+	paint.setPen(Qt::NoPen);
+	paint.setBrush(Qt::white);
+	paint.drawRect(rect());
 	QFont font;
 	vector<PointXY> strategy = paint_strategy(blocks, paint);
 	vector<PointXY>::iterator s = strategy.begin();
 	set<Block>::iterator b = blocks.begin();
 
 	//Paint the blocks
-	paint.setPen(QPen(Qt::white, 0.5));
 	while(b!=blocks.end()&&s!=strategy.end())
 	{
 		//Paint the Rectangle
-
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
 		paint.drawRect(s->x,s->y,b->getWidth(), b->getHeight());
 		int tmp_x = s->x;
 		int tmp_y = s->y;
-
 		//Text the names
 		SetNameFont(font);
 		paint.setFont(font); 
+		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+ b->getWidth()/1.3*0.15,s->y+ b->getHeight() / 1.3*0.15+Metrics.height(),tmp_name);
+		paint.drawText(s->x+ b->getWidth()/1.3*0.15,s->y+ b->getHeight() / 1.3*0.05+Metrics.height(),tmp_name);
 		tmp_x += b->getWidth() / 1.3*0.15;
-		tmp_y += b->getHeight() / 1.3*0.15 + Metrics.height();
+		tmp_y += b->getHeight() / 1.3*0.05 + Metrics.height();
 		//Text the attributes
 		SetAttributeFont(font);
 		paint.setFont(font);
+		paint.setPen(QPen(QColor(0x0, 0x0, 0x0), 0.5));
 		vector<string> tmp_v = b->getThisClass().getAttributes();
 		vector<string>::iterator a = tmp_v.begin();
 		Metrics = QFontMetrics(font);
@@ -77,6 +81,7 @@ void drawArea::paintGL() {
 		}
 		//next one
 		b++; s++;
+		
 	}
 
 	//Paint the relations
