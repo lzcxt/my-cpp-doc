@@ -41,9 +41,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="code\view\myCppDoc.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
@@ -71,6 +68,9 @@
     <ClCompile Include="code\view\SetFont.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
+    <ClCompile Include="code\common\common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc">
@@ -83,12 +83,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\header files\common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\cmFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\header files\model\cppFileContent.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
@@ -103,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="code\header files\view\SetFont.h">
       <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\common\cmFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\common\common.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

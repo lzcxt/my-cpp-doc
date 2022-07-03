@@ -1,7 +1,7 @@
 #include "model/cppFileContent.h"
 #include <sstream>
 #include <assert.h>
-#include "cmFunctions.h"
+#include "common/cmFunctions.h"
 using namespace std;
 string getState(STATE s) {
 	switch (s){

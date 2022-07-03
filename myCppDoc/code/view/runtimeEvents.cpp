@@ -1,6 +1,6 @@
 #include "myCppDoc.h"
 #include "parser.h"
-#include "cmFunctions.h"
+#include "common/cmFunctions.h"
 #include "translator.h"
 
 #include <list>

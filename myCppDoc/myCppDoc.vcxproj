@@ -90,7 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="code\common.cpp" />
+    <ClCompile Include="code\common\common.cpp" />
     <ClCompile Include="code\model\cppFileContent.cpp" />
     <ClCompile Include="code\model\macroExpander.cpp" />
     <ClCompile Include="code\view\drawArea.cpp" />
@@ -108,8 +108,8 @@
     <ResourceCompile Include="textures\myCppDoc.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\header files\cmFunctions.h" />
-    <ClInclude Include="code\header files\common.h" />
+    <ClInclude Include="code\header files\common\cmFunctions.h" />
+    <ClInclude Include="code\header files\common\common.h" />
     <ClInclude Include="code\header files\model\cppFileContent.h" />
     <ClInclude Include="code\header files\model\macroExpander.h" />
     <ClInclude Include="code\header files\view\SetFont.h" />
