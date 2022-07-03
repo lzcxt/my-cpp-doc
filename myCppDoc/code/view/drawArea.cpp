@@ -1,7 +1,9 @@
 #include "drawArea.h"
+#include "SetFont.h"
 #include <fstream>
 #include <vector>
 #include <QPainter>
+#include <cmath>
 
 using namespace std;
 fstream db_err_v("View_ErrorLog.txt", fstream::out);
@@ -14,6 +16,7 @@ struct PointXY
 };
 
 vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
+void DrawArrow(QPainter &painter,struct PointXY sp, struct PointXY ep);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
 	: QOpenGLWidget(parent), blocks(setOfBlocks) {
@@ -28,29 +31,12 @@ void drawArea::resizeGL(int width, int height) {
 }
 
 void drawArea::paintGL() {
-	
-	//test case
+
 	/*
-	blocks.clear();//set empty
-	Class A("A");
-	Class B("B");
-	Class C("C");
-	Relation r1(&B, inherit);
-	Relation r2(&C, inherit);
-	Relation r3(&B, include);
-	A.addAttributes("int x");
-	A.addAttributes("int y");
-	B.addRelation(r1);
-	C.addRelation(r2);
-	C.addRelation(r3);
-	C.addAttributes("B b");
-	Block b1(100,100,A);
-	Block b2(50, 200, B);
-	Block b3(100, 100, C);
-	blocks.insert(b1);
-	blocks.insert(b2);
-	blocks.insert(b3);
+	test case:
+	
 	*/
+
 
 	//initialize
 	QPainter paint(this);
@@ -70,24 +56,22 @@ void drawArea::paintGL() {
 		int tmp_y = s->y;
 
 		//Text the names
-		font.setFamily("Microsoft YaHei");
-		font.setPointSize(b->getWidth() / 8);
-		font.setItalic(true);
-		paint.setFont(font);
+		SetNameFont(font);
+		paint.setFont(font); 
+		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+ b->getWidth()/8,s->y+ b->getHeight()/10+1,tmp_name);
-		tmp_x += b->getWidth() / 8;
-		tmp_y += b->getHeight() / 10+1;
+		paint.drawText(s->x+ b->getWidth()/1.3*0.15,s->y+ b->getHeight() / 1.3*0.15+Metrics.height(),tmp_name);
+		tmp_x += b->getWidth() / 1.3*0.15;
+		tmp_y += b->getHeight() / 1.3*0.15 + Metrics.height();
 		//Text the attributes
-		font.setFamily("Microsoft YaHei");
-		font.setPointSize(b->getWidth() / 8 -1);
-		font.setItalic(false);
+		SetAttributeFont(font);
 		paint.setFont(font);
 		vector<string> tmp_v = b->getThisClass().getAttributes();
 		vector<string>::iterator a = tmp_v.begin();
+		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
 		{
-			tmp_y += b->getHeight() / 10;
+			tmp_y += Metrics.height()+2;
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
@@ -96,41 +80,33 @@ void drawArea::paintGL() {
 	}
 
 	//Paint the relations
-	
+	//Paint the SuperClasses
 	b = blocks.begin(); s = strategy.begin();
 	while (b != blocks.end() && s != strategy.end())
 	{
-		list<Relation> tmp_r = b->getThisClass().getListOfEdges();
-		list<Relation>::iterator r = tmp_r.begin();
-		while (r != tmp_r.end())
+		vector<string> SuperClass = b->getThisClass().getSuperclasses();
+		vector<string>::iterator sc = SuperClass.begin();
+		db_err_v << b->getThisClass().getName()<<":"<<endl;
+		while (sc != SuperClass.end())
 		{
-			Class *tmp_c = r->target;
-			db_err_v << tmp_c->getName();
+			db_err_v <<*sc<<endl;
 			vector<PointXY>::iterator s2 = strategy.begin();
 			set<Block>::iterator b2 = blocks.begin();
 			while (b2 != blocks.end() && s2 != strategy.end())
 			{
-				db_err_v << " "<<b2->getThisClass().getName();
-				
 				string tmp_name = b2->getThisClass().getName();
-				if (tmp_name.compare(tmp_c->getName()))break;
+				if (tmp_name.compare(*sc)==0)break;
 				b2++; s2++;
 			}
-			//0 inherit
-			if (r->r == inherit)
-			{
-				paint.setPen(QPen(Qt::darkGreen,0.3));
-			}
-			else//1 include
-			{
-				paint.setPen(QPen(Qt::darkBlue,0.3));
-			}
-			db_err_v << endl;
-			paint.drawLine(s->x, s->y, s2->x+b2->getWidth(), s2->y + b2->getHeight());
-			r++;
+			paint.setPen(QPen(Qt::darkGreen,0.3));
+			struct PointXY tmp = { s2->x + b2->getWidth(),s2->y + b2->getHeight()};
+			DrawArrow(paint, *s, tmp);
+			sc++;
 		}
 		b++; s++;
 	}
+	//Paint the Components
+	
 }
 
 
@@ -170,4 +146,101 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 	painter.setWindow(0,0,max_width,max_height);
 	return p;
 	//the optimized strategy
+}
+
+void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep)
+{
+	double length = sqrt(pow(sp.x-ep.x,2)+pow(sp.y-ep.y,2));
+	double arrow_length = min(length / 10,2.0);
+	double angle;
+	double angle1;
+	double angle2;
+	QVector<QLineF> lines;
+	lines.append(QLineF(sp.x, sp.y, ep.x, ep.y));
+	if (ep.x > sp.x)
+	{
+		if (ep.y < sp.y)
+		{
+			angle = acos((ep.x - sp.x) / length);
+			
+			if (angle > 45)
+			{
+				angle1 = angle - 45;
+				angle2 = angle + 45;
+				angle2 = 180 - angle2;
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+			}
+			else
+			{
+				angle1 = -angle + 45;
+				angle2 = angle + 45;
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+			}
+		}
+		else
+		{
+			angle = acos((ep.x - sp.x) / length);
+			if (angle > 45)
+			{
+				angle1 = angle - 45;
+				angle2 = angle + 45;
+				angle2 = 180 - angle2;
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+			}
+			else
+			{
+				angle1 = -angle + 45;
+				angle2 = angle + 45;
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+			}
+		}
+	}
+	else
+	{
+		if (ep.y < sp.y)
+		{
+			angle = acos((sp.x - ep.x) / length);
+			if (angle > 45)
+			{
+				angle1 = angle - 45;
+				angle2 = angle + 45;
+				angle2 = 180 - angle2;
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+			}
+			else
+			{
+				angle1 = -angle + 45;
+				angle2 = angle + 45;
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+			}
+		}
+		else
+		{
+			angle = acos((sp.x - ep.x) / length);
+			if (angle > 45)
+			{
+				angle1 = angle - 45;
+				angle2 = angle + 45;
+				angle2 = 180 - angle2;
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+			}
+			else
+			{
+				angle1 = -angle + 45;
+				angle2 = angle + 45;
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
+				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+			}
+		}
+	}
+	
+	
+	painter.drawLines(lines);
 }

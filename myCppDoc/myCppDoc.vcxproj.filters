@@ -68,6 +68,9 @@
     <ClCompile Include="code\view\main.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
+    <ClCompile Include="code\view\SetFont.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="code\header files\view_model\parser.h">
       <Filter>Header Files\ViewModel</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view\SetFont.h">
+      <Filter>Header Files\View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
