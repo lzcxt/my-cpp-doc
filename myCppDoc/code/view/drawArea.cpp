@@ -14,10 +14,20 @@ struct PointXY
 {
 	int x;
 	int y;
+	int w;
+	int h;
+};
+
+struct line
+{
+	double x1;
+	double y1;
+	double x2;
+	double y2;
 };
 
 vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
-void DrawArrow(QPainter &painter,struct PointXY sp, struct PointXY ep);
+void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
 	: QOpenGLWidget(parent), blocks(setOfBlocks) {
@@ -56,22 +66,26 @@ void drawArea::paintGL() {
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
 		paint.drawRect(s->x,s->y,b->getWidth(), b->getHeight());
 		int tmp_x = s->x;
-		int tmp_y = s->y;
+		int tmp_y = s->y+2;
+		//paint.drawLine(s->x, tmp_y, s->x + b->getWidth(), tmp_y);
 		//Text the names
 		SetNameFont(font);
 		paint.setFont(font); 
 		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+ b->getWidth()/1.3*0.15,s->y+ b->getHeight() / 1.3*0.05+Metrics.height(),tmp_name);
+		paint.drawText(s->x+ b->getWidth()/2-Metrics.width(tmp_name)/2,tmp_y+Metrics.height(),tmp_name);
 		tmp_x += b->getWidth() / 1.3*0.15;
-		tmp_y += b->getHeight() / 1.3*0.05 + Metrics.height();
+		tmp_y +=  Metrics.height()+2;
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
+		paint.drawLine(s->x,tmp_y,s->x+b->getWidth(),tmp_y);
 		//Text the attributes
 		SetAttributeFont(font);
 		paint.setFont(font);
-		paint.setPen(QPen(QColor(0x0, 0x0, 0x0), 0.5));
+		paint.setPen(QPen(Qt::black, 0.5));
 		vector<string> tmp_v = b->getThisClass().getAttributes();
 		vector<string>::iterator a = tmp_v.begin();
+		if (a == tmp_v.end())tmp_y += 5;
 		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
 		{
@@ -79,13 +93,31 @@ void drawArea::paintGL() {
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
+		tmp_y += 2;
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
+		paint.drawLine(s->x, tmp_y, s->x + b->getWidth(), tmp_y);
+		//Text the functions
+		SetAttributeFont(font);
+		paint.setFont(font);
+		paint.setPen(QPen(Qt::black, 0.5));
+		tmp_v = b->getThisClass().getFunctions();
+		a = tmp_v.begin();
+		if (a == tmp_v.end())tmp_y += 5;
+		Metrics = QFontMetrics(font);
+		for (; a != tmp_v.end(); a++)
+		{
+			tmp_y += Metrics.height() + 2;
+			QString tmp_attribute(a->c_str());
+			paint.drawText(tmp_x, tmp_y, tmp_attribute);
+		}
+		
 		//next one
 		b++; s++;
-		
 	}
 
 	//Paint the relations
 	//Paint the SuperClasses
+	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
 	b = blocks.begin(); s = strategy.begin();
 	while (b != blocks.end() && s != strategy.end())
 	{
@@ -104,8 +136,7 @@ void drawArea::paintGL() {
 				b2++; s2++;
 			}
 			paint.setPen(QPen(Qt::darkGreen,0.3));
-			struct PointXY tmp = { s2->x + b2->getWidth(),s2->y + b2->getHeight()};
-			DrawArrow(paint, *s, tmp);
+			DrawArrow(paint, *s, *s2,strategy);
 			sc++;
 		}
 		b++; s++;
@@ -131,9 +162,7 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 		struct PointXY tmp;
 		int width = b->getWidth();
 		int height = b->getHeight();
-		tmp = {width_intervel,max_height};
-		p.push_back(tmp);
-		tmp = { 2*width_intervel + width,max_height };
+		tmp = {width_intervel,max_height,width,height};
 		p.push_back(tmp);
 		b++; 
 		if (b == blocks.end())
@@ -142,6 +171,8 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 			max_height += (height + height_intervel);
 			break;
 		}
+		tmp = { 2 * width_intervel + width,max_height,b->getWidth(),b->getHeight() };
+		p.push_back(tmp);
 		width+= b->getWidth();
 		height = height > b->getHeight() ? height : b->getHeight();
 		max_width = max_width > width ? max_width : width;
@@ -153,99 +184,214 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 	//the optimized strategy
 }
 
-void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep)
+void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<struct PointXY>&distribution)
 {
-	double length = sqrt(pow(sp.x-ep.x,2)+pow(sp.y-ep.y,2));
-	double arrow_length = min(length / 10,2.0);
-	double angle;
-	double angle1;
-	double angle2;
 	QVector<QLineF> lines;
-	lines.append(QLineF(sp.x, sp.y, ep.x, ep.y));
-	if (ep.x > sp.x)
+	double x1 = sp.x + sp.w / 2.0;
+	double y1 = sp.y + sp.h / 2.0;
+	double x2 = ep.x + ep.w / 2.0;
+	double y2 = ep.y + ep.h / 2.0;
+	int flag1,flag2;//used to identify the direction
+	if (x1 < x2)
 	{
-		if (ep.y < sp.y)
+		if (y1 < y2)
 		{
-			angle = acos((ep.x - sp.x) / length);
-			
-			if (angle > 45)
+			if(y1 + sp.h / 2.0< y2 - ep.h /2.0)
 			{
-				angle1 = angle - 45;
-				angle2 = angle + 45;
-				angle2 = 180 - angle2;
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+				y1 = sp.y + sp.h;
+				y2 = ep.y;
+				flag1 = 2;
+				flag2 = 1;
 			}
 			else
 			{
-				angle1 = -angle + 45;
-				angle2 = angle + 45;
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+				x1 = sp.x + sp.w;
+				x2 = ep.x;
+				flag1 = 4;
+				flag2 = 3;
 			}
 		}
 		else
 		{
-			angle = acos((ep.x - sp.x) / length);
-			if (angle > 45)
+			if (y1 - sp.h / 2.0 > y2 + ep.h / 2.0)
 			{
-				angle1 = angle - 45;
-				angle2 = angle + 45;
-				angle2 = 180 - angle2;
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+				y1 = sp.y;
+				y2 = ep.y+ep.h;
+				flag1 = 1;
+				flag2 = 2;
 			}
 			else
 			{
-				angle1 = -angle + 45;
-				angle2 = angle + 45;
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+				x1 = sp.x + sp.w;
+				x2 = ep.x;
+				flag1 = 4;
+				flag2 = 3;
 			}
 		}
 	}
 	else
 	{
-		if (ep.y < sp.y)
+		if (y1 < y2)
 		{
-			angle = acos((sp.x - ep.x) / length);
-			if (angle > 45)
+			if (y1 + sp.h / 2.0 < y2 - ep.h / 2.0)
 			{
-				angle1 = angle - 45;
-				angle2 = angle + 45;
-				angle2 = 180 - angle2;
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+				y1 = sp.y + sp.h;
+				y2 = ep.y;
+				flag1 = 2;
+				flag2 = 1;
 			}
 			else
 			{
-				angle1 = -angle + 45;
-				angle2 = angle + 45;
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y + arrow_length * sin(angle2)));
+				x1 = sp.x;
+				x2 = ep.x+ep.w;
+				flag1 = 3;
+				flag2 = 4;
 			}
 		}
 		else
 		{
-			angle = acos((sp.x - ep.x) / length);
-			if (angle > 45)
+			if (y1 - sp.h / 2.0 > y2 + ep.h / 2.0)
 			{
-				angle1 = angle - 45;
-				angle2 = angle + 45;
-				angle2 = 180 - angle2;
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y - arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x - arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+				y1 = sp.y;
+				y2 = ep.y + ep.h;
+				flag1 = 1;
+				flag2 = 2;
 			}
 			else
 			{
-				angle1 = -angle + 45;
-				angle2 = angle + 45;
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle1), ep.y + arrow_length * sin(angle1)));
-				lines.append(QLineF(ep.x, ep.y, ep.x + arrow_length * cos(angle2), ep.y - arrow_length * sin(angle2)));
+				x1 = sp.x;
+				x2 = ep.x+ep.w;
+				flag1 = 3;
+				flag2 = 4;
 			}
 		}
 	}
 	
+	vector<struct line> tmplines;
 	
+	struct line tmpl;
+	if ((flag1 == 1 && flag2 == 2)||(flag1 == 2 && flag2 == 1))
+	{
+		if (x1==x2)
+		{
+			tmpl = { x1,y1,x2,y2 };
+			tmplines.push_back(tmpl);
+		}
+		else
+		{
+			tmpl = { x1,y1,x1,(y1 + y2) / 2 };
+			tmplines.push_back(tmpl);
+			tmpl = { x2,y2,x2,(y1 + y2) / 2 };
+			tmplines.push_back(tmpl);
+			tmpl = { x1,(y1 + y2) / 2,x2,(y1 + y2) / 2 };
+			tmplines.push_back(tmpl);
+		}
+	}
+	if ((flag1 == 3 && flag2 == 4) || (flag1 == 4 && flag2 == 3))
+	{
+		if (y1 == y2)
+		{
+			tmpl = { x1,y1,x2,y2 };
+			tmplines.push_back(tmpl);
+		}
+		else
+		{
+			tmpl = { x1,y1,(x1 + x2) / 2,y1};
+			tmplines.push_back(tmpl);
+			tmpl = { x2,y2,(x1 + x2) / 2,y2 };
+			tmplines.push_back(tmpl);
+			tmpl = { (x1 + x2) / 2,y1,(x1 + x2) / 2,y2 };
+			tmplines.push_back(tmpl);
+		}
+	}
+	/*
+	bool judge = true;
+	while(judge)
+	{
+		judge = false;
+		for (vector<struct line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
+		{
+			if (i->x1 == i->x2)
+			{
+				vector<struct PointXY>::iterator d;
+				int c=0;
+				for (d = distribution.begin(); d != distribution.end(); d++)
+				{
+					if (i->x1 > d->x&&i->x1 < d->x + d->w)
+					{
+						double miny = min(y1, y2);
+						double maxy = max(y1, y2);
+						if (miny<d->y&&maxy>d->y + d->h)
+						{
+							c = 1;
+							break;
+						}
+						if (miny < d->y&&maxy<d->y + d->h&&maxy>d->y)
+						{
+							c = 2;
+							break;
+						}
+					}
+				}
+				if (c != 0)
+				{
+					if (c == 1)
+					{
+						if (i->y1 < i->y2)
+						{
+							i->y1 = d->y - 2.0;
+							tmplines.push_back({ i->x2,i->y2,i->x2,d->y + d->h + 2.0});
+							tmplines.push_back({ i->x2,d->y + d->h + 2.0,d->x + d->w + 2.0,d->y + d->h + 2.0 });
+							tmplines.push_back({ i->x1,d->y - 2.0,d->x + d->w + 2.0,d->y - 2.0 });
+							tmplines.push_back({ d->x + d->w + 2.0,d->y + d->h + 2.0,d->x + d->w + 2.0,d->y - 2.0 });
+						}
+						else
+						{
+							i->y2 = d->y - 2.0;
+							tmplines.push_back({ i->x1,i->y1,i->x1,d->y + d->h + 2.0 });
+							tmplines.push_back({ i->x1,d->y + d->h + 2.0,d->x + d->w + 2.0,d->y + d->h + 2.0 });
+							tmplines.push_back({ i->x2,d->y - 2.0,d->x + d->w + 2.0,d->y - 2.0 });
+							tmplines.push_back({ d->x + d->w + 2.0,d->y + d->h + 2.0,d->x + d->w + 2.0,d->y - 2.0 });
+						}
+					}
+					judge = true; break;
+				}
+			}
+			if (i->y1 == i->y2)
+			{
+
+
+			}
+		}
+	}
+	*/
+	//add the lines
+	for (vector<struct line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
+	{
+		lines.append(QLineF(i->x1, i->y1, i->x2, i->y2));
+	}
+	//add the arrow
+	const int length1 = 1;
+	const int length2 = 2;
+	switch (flag2)
+	{
+		case 1:
+			lines.append(QLineF(x2, y2, x2 + length1, y2 - length2));
+			lines.append(QLineF(x2, y2, x2 - length1, y2 - length2));
+			break;
+		case 2:
+			lines.append(QLineF(x2, y2, x2 + length1, y2 + length2));
+			lines.append(QLineF(x2, y2, x2 - length1, y2 + length2));
+			break;
+		case 3:
+			lines.append(QLineF(x2, y2, x2 - length2, y2 + length1));
+			lines.append(QLineF(x2, y2, x2 - length2, y2 - length1));
+			break;
+		case 4:
+			lines.append(QLineF(x2, y2, x2 + length2, y2 + length1));
+			lines.append(QLineF(x2, y2, x2 + length2, y2 - length1));
+			break;
+
+	}
 	painter.drawLines(lines);
 }

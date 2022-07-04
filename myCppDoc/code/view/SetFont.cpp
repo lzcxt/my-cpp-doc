@@ -1,14 +1,14 @@
 #include "SetFont.h"
 void SetNameFont(QFont &font)
 {
-	font.setFamily("Microsoft YaHei");
-	font.setUnderline(true);
+	font.setFamily("·ÂËÎ");
+	font.setUnderline(false);
 	font.setPointSize(10);
 	font.setItalic(false);
 }
 void SetAttributeFont(QFont &font)
 {
-	font.setFamily("Microsoft YaHei");
+	font.setFamily("·ÂËÎ");
 	font.setUnderline(false);
 	font.setPointSize(8);
 	font.setItalic(false);
