@@ -2,8 +2,9 @@
 #include "common/common.h"
 #include <list>
 #include <string>
+#include <memory>
 class Parser {
 public:
-    static std::list<Class> parse(std::list<std::string> file_names);
+    static const std::list<shared_ptr<Class>>& parse(std::list<std::string> file_names);
 private:
 };

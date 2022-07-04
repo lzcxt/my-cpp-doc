@@ -6,7 +6,7 @@
 #include <fstream>
 using namespace std;
 
-list<Class> Parser::parse(list<string> file_names) {
+const list<shared_ptr<Class>>& Parser::parse(list<string> file_names) {
 	//SendMsg("Parse::parse start");
 	vector<string> bad_file_names;
 	MacroExpander me;
