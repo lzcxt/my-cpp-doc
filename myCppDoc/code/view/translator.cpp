@@ -5,13 +5,13 @@
 #include <QPainter>
 #include <QFontMetrics>
 
-Block Translator::classToBlock(const Class& c) {
+Block Translator::classToBlock(const shared_ptr<Class> c) {
 	QFont font;
 	SetNameFont(font);
 	QFontMetrics Metrics(font);
-	int width = Metrics.width(QString::fromStdString(c.getName())), height = Metrics.height();
-	vector<string> attr = c.getAttributes();
-	vector<string> func = c.getFunctions();
+	int width = Metrics.width(QString::fromStdString(c->getName())), height = Metrics.height();
+	vector<string> attr = c->getAttributes();
+	vector<string> func = c->getFunctions();
 	SetAttributeFont(font);
 	Metrics = QFontMetrics(font);
 	height += 4;
@@ -28,10 +28,10 @@ Block Translator::classToBlock(const Class& c) {
 		width = max(width, Metrics.width(QString::fromStdString(func[i])));
 		height += Metrics.height() + 2;
 	}
-	return Block(width*1.3, height, c);
+	return Block(width*1.3, height, *c);
 }
 
-set<Block> Translator::toBlockSet(const list<Class>& lis) {
+set<Block> Translator::toBlockSet(const list<shared_ptr <Class>>& lis) {
 	set<Block> res;
 	for (auto i = lis.begin();i != lis.end();++i) {
 		res.insert(classToBlock(*i));

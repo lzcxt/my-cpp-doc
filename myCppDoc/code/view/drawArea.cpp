@@ -4,6 +4,9 @@
 #include <vector>
 #include <QPainter>
 #include <cmath>
+
+#include <QWheelEvent>
+#include <QApplication>
 //#include <gl/glut.h>
 
 using namespace std;
@@ -30,7 +33,19 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
 void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
-	: QOpenGLWidget(parent), blocks(setOfBlocks) {
+	: QOpenGLWidget(parent), blocks(setOfBlocks), zoom(45) {
+}
+const int drawArea::base_width = 30;
+const int drawArea::base_height = 20;
+void drawArea::mouseMoveEvent(QMouseEvent* event) {
+
+}
+
+void drawArea::wheelEvent(QWheelEvent* event) {
+	zoom += event->delta() / 120;
+	if (zoom < 35) zoom = 35;
+	resize(base_width*zoom, base_height*zoom);
+	update();
 }
 
 void drawArea::initializeGL() {
@@ -79,11 +94,11 @@ void drawArea::paintGL() {
 		tmp_y +=  Metrics.height()+2;
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
 		paint.drawLine(s->x,tmp_y,s->x+b->getWidth(),tmp_y);
-		//Text the attributes
+		//Text the components
 		SetAttributeFont(font);
 		paint.setFont(font);
 		paint.setPen(QPen(Qt::black, 0.5));
-		vector<string> tmp_v = b->getThisClass().getAttributes();
+		vector<string> tmp_v = b->getThisClass().getComponents();
 		vector<string>::iterator a = tmp_v.begin();
 		if (a == tmp_v.end())tmp_y += 5;
 		Metrics = QFontMetrics(font);
