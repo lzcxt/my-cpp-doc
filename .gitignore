@@ -37,8 +37,8 @@ myCppDoc/Model_ErrorLog.txt
 myCppDoc/Model_Output.txt
 
 # Directory
-*.vs/
+/.vs/
 /Debug/
 /myCppDoc/Debug/
-*.vscode/
+/.vscode/
 /x64/
