@@ -2,6 +2,7 @@
 
 #include "drawArea.h"
 
+#include <QDir>
 #include <QVariant>
 #include <QApplication>
 #include <QMainWindow>
@@ -37,11 +38,14 @@ private:
 	QScrollArea* scroll;
 	drawArea* draw;
 
+	QStringList getAllFiles(const QDir& dir);
+
 protected:
 	void mouseMoveEvent();
 
 public slots:
 	bool FileLoadHovered();
+	bool FileSaveAsHovered();
 
 	bool FileLoadManagement();
 	bool FileLoadFolderManagement();
