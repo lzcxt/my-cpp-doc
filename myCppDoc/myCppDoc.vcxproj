@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./code/header files</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);./code/header files./code/header files;./code/header files/model;./code/header files/view;./code/header files/view_model;./code/header files/common;./code/header files</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -90,16 +90,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="code\common.cpp" />
-    <ClCompile Include="code\main.cpp" />
-    <ClCompile Include="code\model\classRelationGenerator.cpp" />
+    <ClCompile Include="code\common\common.cpp" />
     <ClCompile Include="code\model\cppFileContent.cpp" />
     <ClCompile Include="code\model\macroExpander.cpp" />
-    <ClCompile Include="code\model\parser.cpp" />
     <ClCompile Include="code\view\drawArea.cpp" />
+    <ClCompile Include="code\view\main.cpp" />
     <ClCompile Include="code\view\myCppDoc.cpp" />
-    <ClCompile Include="code\view_model\runtimeEvents.cpp" />
-    <ClCompile Include="code\view_model\translator.cpp" />
+    <ClCompile Include="code\view\runtimeEvents.cpp" />
+    <ClCompile Include="code\view\SetFont.cpp" />
+    <ClCompile Include="code\view\translator.cpp" />
+    <ClCompile Include="code\view_model\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc" />
@@ -108,16 +108,15 @@
     <ResourceCompile Include="textures\myCppDoc.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\header files\cmFunctions.h" />
-    <ClInclude Include="code\header files\common.h" />
-    <ClInclude Include="code\header files\model\classRelationGenerator.h" />
+    <ClInclude Include="code\header files\common\cmFunctions.h" />
+    <ClInclude Include="code\header files\common\common.h" />
     <ClInclude Include="code\header files\model\cppFileContent.h" />
     <ClInclude Include="code\header files\model\macroExpander.h" />
-    <ClInclude Include="code\header files\model\parser.h" />
-    <ClInclude Include="code\header files\parser.h" />
-    <ClInclude Include="code\header files\translator.h" />
-    <QtMoc Include="code\header files\myCppDoc.h" />
-    <QtMoc Include="code\header files\drawArea.h" />
+    <ClInclude Include="code\header files\view\SetFont.h" />
+    <ClInclude Include="code\header files\view\translator.h" />
+    <ClInclude Include="code\header files\view_model\parser.h" />
+    <QtMoc Include="code\header files\view\drawArea.h" />
+    <QtMoc Include="code\header files\view\myCppDoc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
