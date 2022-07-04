@@ -3,6 +3,6 @@
 #include <fstream>
 using namespace std;
 
-bool isProjectFileName(QString s);
+bool isProjectFileName(const QString& s);
 
-int SendMsg(string x);
+int SendMsg(const string& x);

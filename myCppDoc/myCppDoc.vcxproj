@@ -97,6 +97,7 @@
     <ClCompile Include="code\view\main.cpp" />
     <ClCompile Include="code\view\myCppDoc.cpp" />
     <ClCompile Include="code\view\runtimeEvents.cpp" />
+    <ClCompile Include="code\view\scrollArea.cpp" />
     <ClCompile Include="code\view\SetFont.cpp" />
     <ClCompile Include="code\view\translator.cpp" />
     <ClCompile Include="code\view_model\parser.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="code\header files\common\common.h" />
     <ClInclude Include="code\header files\model\cppFileContent.h" />
     <ClInclude Include="code\header files\model\macroExpander.h" />
+    <ClInclude Include="code\header files\scrollArea.h" />
     <ClInclude Include="code\header files\view\SetFont.h" />
     <ClInclude Include="code\header files\view\translator.h" />
     <ClInclude Include="code\header files\view_model\parser.h" />

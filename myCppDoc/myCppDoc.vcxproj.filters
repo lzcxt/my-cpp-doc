@@ -71,6 +71,9 @@
     <ClCompile Include="code\common\common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\view\scrollArea.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="textures\myCppDoc.qrc">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="code\header files\common\common.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\scrollArea.h">
+      <Filter>Header Files\View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
