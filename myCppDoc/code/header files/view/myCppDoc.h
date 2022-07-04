@@ -2,6 +2,7 @@
 
 #include "drawArea.h"
 
+#include <QDir>
 #include <QVariant>
 #include <QApplication>
 #include <QMainWindow>
@@ -10,6 +11,7 @@
 #include <QToolBar>
 #include <QWidget>
 #include <QLabel>
+#include <QScrollArea>
 
 class myCppDoc : public QMainWindow {
     Q_OBJECT
@@ -28,14 +30,25 @@ private:
 
 	QAction* FileLoad;
 	QAction* FileLoadFolder;
+	QAction* FileSaveAs;
 	QAction* HelpInfo;
 
 	QStatusBar* Status;
 
+	QScrollArea* scroll;
+	drawArea* draw;
+
+	QStringList getAllFiles(const QDir& dir);
+
+protected:
+	void mouseMoveEvent();
+
 public slots:
 	bool FileLoadHovered();
+	bool FileSaveAsHovered();
 
 	bool FileLoadManagement();
 	bool FileLoadFolderManagement();
+	bool FileSaveAsManagement();
 	bool HelpInfoManagement();
 };

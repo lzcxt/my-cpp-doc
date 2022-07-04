@@ -17,7 +17,7 @@ struct PointXY
 };
 
 vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
-void DrawArrow(QPainter &painter,struct PointXY sp, struct PointXY ep);
+void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
 	: QOpenGLWidget(parent), blocks(setOfBlocks) {
@@ -35,7 +35,7 @@ void drawArea::paintGL() {
 
 	/*
 	test case:
-	
+
 	*/
 
 
@@ -50,20 +50,20 @@ void drawArea::paintGL() {
 	set<Block>::iterator b = blocks.begin();
 
 	//Paint the blocks
-	while(b!=blocks.end()&&s!=strategy.end())
+	while (b != blocks.end() && s != strategy.end())
 	{
 		//Paint the Rectangle
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
-		paint.drawRect(s->x,s->y,b->getWidth(), b->getHeight());
+		paint.drawRect(s->x, s->y, b->getWidth(), b->getHeight());
 		int tmp_x = s->x;
 		int tmp_y = s->y;
 		//Text the names
 		SetNameFont(font);
-		paint.setFont(font); 
+		paint.setFont(font);
 		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+ b->getWidth()/1.3*0.15,s->y+ b->getHeight() / 1.3*0.05+Metrics.height(),tmp_name);
+		paint.drawText(s->x + b->getWidth() / 1.3*0.15, s->y + b->getHeight() / 1.3*0.05 + Metrics.height(), tmp_name);
 		tmp_x += b->getWidth() / 1.3*0.15;
 		tmp_y += b->getHeight() / 1.3*0.05 + Metrics.height();
 		//Text the attributes
@@ -75,13 +75,13 @@ void drawArea::paintGL() {
 		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
 		{
-			tmp_y += Metrics.height()+2;
+			tmp_y += Metrics.height() + 2;
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
 		//next one
 		b++; s++;
-		
+
 	}
 
 	//Paint the relations
@@ -91,27 +91,27 @@ void drawArea::paintGL() {
 	{
 		vector<string> SuperClass = b->getThisClass().getSuperclasses();
 		vector<string>::iterator sc = SuperClass.begin();
-		db_err_v << b->getThisClass().getName()<<":"<<endl;
+		db_err_v << b->getThisClass().getName() << ":" << endl;
 		while (sc != SuperClass.end())
 		{
-			db_err_v <<*sc<<endl;
+			db_err_v << *sc << endl;
 			vector<PointXY>::iterator s2 = strategy.begin();
 			set<Block>::iterator b2 = blocks.begin();
 			while (b2 != blocks.end() && s2 != strategy.end())
 			{
 				string tmp_name = b2->getThisClass().getName();
-				if (tmp_name.compare(*sc)==0)break;
+				if (tmp_name.compare(*sc) == 0)break;
 				b2++; s2++;
 			}
-			paint.setPen(QPen(Qt::darkGreen,0.3));
-			struct PointXY tmp = { s2->x + b2->getWidth(),s2->y + b2->getHeight()};
+			paint.setPen(QPen(Qt::darkGreen, 0.3));
+			struct PointXY tmp = { s2->x + b2->getWidth(),s2->y + b2->getHeight() };
 			DrawArrow(paint, *s, tmp);
 			sc++;
 		}
 		b++; s++;
 	}
 	//Paint the Components
-	
+
 }
 
 
@@ -131,32 +131,32 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 		struct PointXY tmp;
 		int width = b->getWidth();
 		int height = b->getHeight();
-		tmp = {width_intervel,max_height};
+		tmp = { width_intervel,max_height };
 		p.push_back(tmp);
-		tmp = { 2*width_intervel + width,max_height };
+		tmp = { 2 * width_intervel + width,max_height };
 		p.push_back(tmp);
-		b++; 
+		b++;
 		if (b == blocks.end())
 		{
 			max_width = max_width > width ? max_width : width;
 			max_height += (height + height_intervel);
 			break;
 		}
-		width+= b->getWidth();
+		width += b->getWidth();
 		height = height > b->getHeight() ? height : b->getHeight();
 		max_width = max_width > width ? max_width : width;
 		max_height += (height + height_intervel);
 	}
-	max_width += 3*width_intervel;
-	painter.setWindow(0,0,max_width,max_height);
+	max_width += 3 * width_intervel;
+	painter.setWindow(0, 0, max_width, max_height);
 	return p;
 	//the optimized strategy
 }
 
 void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep)
 {
-	double length = sqrt(pow(sp.x-ep.x,2)+pow(sp.y-ep.y,2));
-	double arrow_length = min(length / 10,2.0);
+	double length = sqrt(pow(sp.x - ep.x, 2) + pow(sp.y - ep.y, 2));
+	double arrow_length = min(length / 10, 2.0);
 	double angle;
 	double angle1;
 	double angle2;
@@ -167,7 +167,7 @@ void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep)
 		if (ep.y < sp.y)
 		{
 			angle = acos((ep.x - sp.x) / length);
-			
+
 			if (angle > 45)
 			{
 				angle1 = angle - 45;
@@ -245,7 +245,7 @@ void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep)
 			}
 		}
 	}
-	
-	
+
+
 	painter.drawLines(lines);
 }
