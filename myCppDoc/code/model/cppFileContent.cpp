@@ -21,15 +21,15 @@ using vts_cit = vts::const_iterator;
 
 namespace Automan {
 	void SingleQuote(vts_cit &cur) {
-		while ((cur++)->first != DOUBLE_QUOTE_);
+		while ((cur++)->first != SINGLE_QUOTE_);
 	}
 	void DoubleQuote(vts_cit &cur) {
-		while ((cur++)->first != SINGLE_QUOTE_);
+		while ((cur++)->first != DOUBLE_QUOTE_);
 	}
 	inline void Comment_PushAfterTrim(vector<string> &vec, string &st) {
 		while (st.size() && st.back() == ' ') st.pop_back();
 		if (st.size()) vec.emplace_back(st);
-		else st.clear();
+		st.clear();
 	}
 	vector<string>& Comment(vts_cit &cur) {
 		static vector<string> vec; vec.clear();
@@ -37,7 +37,9 @@ namespace Automan {
 		while (cur->first != RIGHT_COMMENT_) {
 			if (cur->first == MULTIPLY_) Comment_PushAfterTrim(vec, st);
 			else st += cur->second + " ";
+			++cur;
 		}
+		Comment_PushAfterTrim(vec, st);
 		++cur;
 		return vec;
 	}
@@ -71,22 +73,26 @@ namespace Automan {
 		string last_name;
 		int last_name_fid = -2;
 		int fid = 0;
-		while (1) {
+		while (cur->first != RIGHT_BRACE_) {
 			++fid;
 			if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
 			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
-				if (last_name_fid + 1 == fid) class_ptr->addAttributes(last_name);
+				if (last_name_fid + 1 == fid) class_ptr->addComponents(last_name);
+				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
 				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name);
+				++cur;
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
 			else if (cur->first == UNKNOWN_WORD_) {
 				last_name = cur->second;
 				last_name_fid = fid;
+				++cur;
 			}
 			else ++cur;
 		}
+		++cur;
 	}
 	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class) {
 		/*
@@ -169,6 +175,9 @@ void CppFileContent::pushBack(string s) {
 		else if (ch == ';') items.emplace_back(SEMICOLON_, ";"), s_in.get(ch);
 		else if (ch == '(') items.emplace_back(LEFT_PARENTHESES_, "("), s_in.get(ch);
 		else if (ch == ')') items.emplace_back(RIGHT_PARENTHESES_, ")"), s_in.get(ch);
+		else if (ch == '+') items.emplace_back(ADD_SIGN_, "+"), s_in.get(ch);
+		else if (ch == '-') items.emplace_back(ADD_SIGN_, "-"), s_in.get(ch);
+		else if (ch == '@') items.emplace_back(AT_SIGN_, "@"), s_in.get(ch);
 		else if (ch == '=') {
 			s_in.get(ch);
 			if (ch == '=') {
