@@ -2,12 +2,13 @@
 #include "parser.h"
 #include "cmFunctions.h"
 #include "translator.h"
+#include "scrollArea.h"
 
 #include <list>
 
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QScrollArea>
+#include <QScrollBar>
 using namespace std;
 
 bool myCppDoc::FileLoadHovered() {
@@ -20,8 +21,14 @@ bool myCppDoc::FileSaveAsHovered() {
 	return 1;
 }
 
-void myCppDoc::mouseMoveEvent() {
-	//todo
+void myCppDoc::showGraph(const list<string>& filelist) {
+	scroll = new scrollArea(this);
+	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
+	draw->setGeometry(0, 0, 1200, 800);
+	draw->setMinimumSize(1050, 700);
+	scroll->setWidget(draw);
+	scroll->setGeometry(0, 65, 1000, 710);
+	scroll->show();
 }
 
 bool myCppDoc::FileLoadManagement() {
@@ -36,12 +43,7 @@ bool myCppDoc::FileLoadManagement() {
 		SendMsg("No valid file selected.");
 		return 1;
 	}
-	scroll = new QScrollArea(this);
-	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
-	draw->setGeometry(0, 0, 1200, 800);
-	scroll->setWidget(draw);
-	scroll->setGeometry(0, 65, 1000, 710);
-	scroll->show();
+	showGraph(filelist);
 	return 1;
 }
 
@@ -73,12 +75,7 @@ bool myCppDoc::FileLoadFolderManagement() {
 		SendMsg("No valid file found.");
 		return 1;
 	}
-	scroll = new QScrollArea(this);
-	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
-	draw->setGeometry(0, 0, 1200, 800);
-	scroll->setWidget(draw);
-	scroll->setGeometry(0, 65, 1000, 710);
-	scroll->show();
+	showGraph(filelist);
 	return 1;
 }
 
@@ -94,6 +91,6 @@ bool myCppDoc::FileSaveAsManagement() {
 }
 
 bool myCppDoc::HelpInfoManagement() {
-	//todo
+	SendMsg("MyCppDoc v0.1");
 	return 1;
 }

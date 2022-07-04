@@ -4,7 +4,8 @@
 #include <vector>
 #include <QPainter>
 #include <cmath>
-//#include <gl/glut.h>
+#include <QWheelEvent>
+#include <QApplication>
 
 using namespace std;
 fstream db_err_v("View_ErrorLog.txt", fstream::out);
@@ -19,12 +20,26 @@ struct PointXY
 vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
 void DrawArrow(QPainter &painter, struct PointXY sp, struct PointXY ep);
 
+const int drawArea::base_width = 30;
+const int drawArea::base_height = 20;
+
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
-	: QOpenGLWidget(parent), blocks(setOfBlocks) {
+	: QOpenGLWidget(parent), blocks(setOfBlocks), zoom(45) {
+}
+
+void drawArea::mouseMoveEvent(QMouseEvent* event) {
+
+}
+
+void drawArea::wheelEvent(QWheelEvent* event) {
+	zoom += event->delta() / 120;
+	if (zoom < 35) zoom = 35;
+	resize(base_width*zoom, base_height*zoom);
+	update();
 }
 
 void drawArea::initializeGL() {
-	//glClearColor(1, 1, 1, 1);
+
 }
 
 void drawArea::resizeGL(int width, int height) {

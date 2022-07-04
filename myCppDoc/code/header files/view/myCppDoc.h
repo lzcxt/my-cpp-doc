@@ -40,8 +40,7 @@ private:
 
 	QStringList getAllFiles(const QDir& dir);
 
-protected:
-	void mouseMoveEvent();
+	void showGraph(const list<string>& lis);
 
 public slots:
 	bool FileLoadHovered();
