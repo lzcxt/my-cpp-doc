@@ -1,144 +1,252 @@
 #include "model/cppFileContent.h"
 #include <sstream>
 #include <assert.h>
+#include <vector>
 #include "common/cmFunctions.h"
 using namespace std;
-string getState(STATE s) {
-	switch (s){
-	case START_STATE: return "START_STATE";
-	case SINGLE_QUOTE_STATE: return "SINGLE_QUOTE_STATE";
-	case DOUBLE_QUOTE_STATE: return "DOUBLE_QUOTE_STATE";
-	case COMMENT_STATE: return "COMMENT_STATE";
-	case CLASS_STATE_1: return "CLASS_STATE_1";
-	case CLASS_STATE_2: return "CLASS_STATE_2";
-	case CLASS_STATE_3: return "CLASS_STATE_3";
-	case CLASS_STATE_4: return "CLASS_STATE_4";
-	default: assert(0 && "Invalid State");
-	}
-}
 TOKEN getReserved(string s) {
-	if (s == "class") return CLASS_;
-	else if (s == "struct") return STRUCT_;
+	if (s == "class" || s == "struct") return CLASS_;  // templory
 	else if (s == "public") return PUBLIC_;
 	else if (s == "private") return PRIVATE_;
 	else if (s == "protected") return PROTECTED_;
-	else return UNKNOWN_;
+	else if (s == "template") return TEMPLATE_;
+	else return UNKNOWN_WORD_;
 }
 
 fstream db_err("Model_ErrorLog.txt", fstream::out);
 fstream db_out("Model_Output.txt", fstream::out);
 
-void CppFileContent::Trans(TOKEN t, string word) {
-	if (cur_state == START_STATE) {
-		if (t == SINGLE_QUOTE_) cur_state = SINGLE_QUOTE_STATE;
-		else if (t == DOUBLE_QUOTE_) cur_state = DOUBLE_QUOTE_STATE;
-		else if (t == CLASS_ || t == STRUCT_) cur_state = CLASS_STATE_1;
-		else if (t == LEFT_COMMENT_) cur_state = COMMENT_STATE;
+using vts = vector<pair<TOKEN, string> >;
+using vts_cit = vts::const_iterator;
+
+namespace Automan {
+	void SingleQuote(vts_cit &cur) {
+		while ((cur++)->first != DOUBLE_QUOTE_);
 	}
-	else if (cur_state == SINGLE_QUOTE_STATE) {
-		if (t == SINGLE_QUOTE_) cur_state = START_STATE;
+	void DoubleQuote(vts_cit &cur) {
+		while ((cur++)->first != SINGLE_QUOTE_);
 	}
-	else if (cur_state == DOUBLE_QUOTE_STATE) {
-		if (t == DOUBLE_QUOTE_) cur_state = START_STATE;
+	inline void Comment_PushAfterTrim(vector<string> &vec, string &st) {
+		while (st.size() && st.back() == ' ') st.pop_back();
+		if (st.size()) vec.emplace_back(st);
+		else st.clear();
 	}
-	else if (cur_state == COMMENT_STATE) {
-		if (t == RIGHT_COMMENT_) cur_state = START_STATE;
-	}
-	else if (cur_state == CLASS_STATE_1) {
-		if (t == UNKNOWN_) {
-			Class &nd = name2class[word];
-			nd.setName(word);
-			cur_class = &nd;
+	vector<string>& Comment(vts_cit &cur) {
+		static vector<string> vec; vec.clear();
+		string st;
+		while (cur->first != RIGHT_COMMENT_) {
+			if (cur->first == MULTIPLY_) Comment_PushAfterTrim(vec, st);
+			else st += cur->second + " ";
 		}
-		if (t == UNKNOWN_) cur_state = CLASS_STATE_2;
-		else cur_state = START_STATE;
+		++cur;
+		return vec;
 	}
-	else if (cur_state == CLASS_STATE_2) {
-		if (t == COLON_) cur_state = CLASS_STATE_3;
-		else cur_state = START_STATE;
-	}
-	else if (cur_state == CLASS_STATE_3) {
-		if (t == UNKNOWN_) {
-			if (!name2class.count(word)) name2class[word].setName(word);
-			cur_class->addSuperclasses(word);
+	string& TemplateDiscription(vts_cit &cur) {
+		static string st; st = "< ";
+		while (cur->first != GREATER_) {
+			if (cur->first == COMMA_) st += cur->second + " ";
+			else st += (++cur)->second, ++cur;
 		}
-		if (t == PUBLIC_ || t == PRIVATE_ || t == PROTECTED_) cur_state = CLASS_STATE_3;
-		else if (t == UNKNOWN_) cur_state = CLASS_STATE_4;
-		else cur_state = START_STATE;
+		++cur;
+		st += " >";
+		return st;
 	}
-	else if (cur_state == CLASS_STATE_4) {
-		if (t == COMMA_) cur_state = CLASS_STATE_3;
-		else cur_state = START_STATE;
+	/* read < ... > */
+	void ReadAngleBrackets(vts_cit &cur) {
+		while ((cur++)->first != GREATER_);
 	}
-	else assert("invalid state");
-	db_err << "[ " << word << " ] by token " << t << " go to " << getState(cur_state) << endl;
+
+	/* read { ... } */
+	void ReadBraceBody(vts_cit &cur) {
+		while (cur->first != RIGHT_BRACE_) {
+			if (cur->first == SINGLE_QUOTE_) SingleQuote(++cur);
+			else if (cur->first == DOUBLE_QUOTE_) DoubleQuote(++cur);
+			else if (cur->first == LEFT_COMMENT_) Comment(++cur);
+			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
+			else ++cur;
+		}
+		++cur;
+	}
+	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr) {
+		string last_name;
+		int last_name_fid = -2;
+		int fid = 0;
+		while (1) {
+			++fid;
+			if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
+			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
+				if (last_name_fid + 1 == fid) class_ptr->addAttributes(last_name);
+			}
+			else if (cur->first == LEFT_PARENTHESES_) {
+				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name);
+			}
+			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
+			else if (cur->first == UNKNOWN_WORD_) {
+				last_name = cur->second;
+				last_name_fid = fid;
+			}
+			else ++cur;
+		}
+	}
+	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class) {
+		/*
+		template <class T>
+		class UCPointer : public A {
+			
+		};
+		*/
+		assert(cur->first == UNKNOWN_WORD_);
+		string class_name = cur->second;
+		if (!name2class.count(class_name)) name2class.emplace(class_name, make_shared<Class>(class_name));
+		shared_ptr<Class> class_ptr = name2class[class_name];
+		++cur;
+		if (cur->first == SEMICOLON_) return class_ptr;
+		if (cur->first == LEFT_BRACE_) {
+			ClassBody(++cur, class_ptr);
+			return class_ptr;
+		}
+		assert(cur->first == COLON_);
+		++cur;
+		while (1) {
+			if (cur->first == LEFT_BRACE_) {
+				ClassBody(++cur, class_ptr); 
+				return class_ptr;
+			}
+			else if (cur->first == LESS_) ReadAngleBrackets(++cur);
+			else if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
+			else if (cur->first == COMMA_) ++cur;
+			else if (cur->first == UNKNOWN_WORD_) {
+				string supp_name = cur->second;
+				if (!name2class.count(supp_name)) name2class.emplace(supp_name, make_shared<Class>(supp_name));
+				class_ptr->addSuperclasses(supp_name);
+				++cur;
+			}
+			else assert(0);
+		}
+	}
+	void File(vts_cit &cur, vts_cit ed, map<string, shared_ptr<Class> > &name2class) {
+		vector<string> last_comment;
+		int last_comment_id = -2;
+		string template_disc;
+		int template_disc_id = -2;
+		int fid = 0;
+		shared_ptr<Class> class_ptr;
+		while (cur != ed) {
+			++fid;
+			switch (cur->first) {
+			case SINGLE_QUOTE_: SingleQuote(++cur); break;
+			case DOUBLE_QUOTE_: DoubleQuote(++cur); break;
+			case LEFT_COMMENT_: last_comment = move(Comment(++cur)); last_comment_id = fid; break;
+			case TEMPLATE_: template_disc = move(TemplateDiscription(++(++cur))); template_disc_id = fid; break;
+			case CLASS_: 
+				class_ptr = ClassAll(++cur, name2class);
+				if (template_disc_id == fid - 1) class_ptr->addAttributes(template_disc);
+				if (last_comment_id + (template_disc_id == fid - 1) == fid - 1)
+					for (auto &str : last_comment) class_ptr->addAttributes(str);
+				break;
+			default:
+				++cur;
+			}
+		}
+	}
 }
 
 void CppFileContent::pushBack(string s) {
 	stringstream s_in(s + string(1, EOF), ios_base::in);
 	char ch;
 	s_in.get(ch);
-	cur_state = START_STATE;
-	cur_class = nullptr;
 	db_err << "---- Init CppFileContent::pushBack ----" << endl;
+	vts items;
 	while (1) {
 		while (isspace(ch)) s_in.get(ch);
-		if (ch == ':') Trans(COLON_, ":"), s_in.get(ch);
-		else if (ch == '\'') Trans(SINGLE_QUOTE_, "'"), s_in.get(ch);
-		else if (ch == '"') Trans(DOUBLE_QUOTE_, "\""), s_in.get(ch);
-		else if (ch == '{') Trans(LEFT_BRACE_, "{"), s_in.get(ch);
-		else if (ch == '}') Trans(RIGHT_BRACE_, "}"), s_in.get(ch);
-		else if (ch == ',') Trans(COMMA_, ","), s_in.get(ch);
-		else if (ch == '?') Trans(QUESTION_MARK_, "?"), s_in.get(ch);
-		else if (ch == ';') Trans(SEMICOLON_, ";"), s_in.get(ch);
-		else if (ch == '\\') {
+		if (ch == ':') items.emplace_back(COLON_, ":"), s_in.get(ch);
+		else if (ch == '\'') items.emplace_back(SINGLE_QUOTE_, "'"), s_in.get(ch);
+		else if (ch == '"') items.emplace_back(DOUBLE_QUOTE_, "\""), s_in.get(ch);
+		else if (ch == '{') items.emplace_back(LEFT_BRACE_, "{"), s_in.get(ch);
+		else if (ch == '}') items.emplace_back(RIGHT_BRACE_, "}"), s_in.get(ch);
+		else if (ch == ',') items.emplace_back(COMMA_, ","), s_in.get(ch);
+		else if (ch == '?') items.emplace_back(QUESTION_MARK_, "?"), s_in.get(ch);
+		else if (ch == ';') items.emplace_back(SEMICOLON_, ";"), s_in.get(ch);
+		else if (ch == '(') items.emplace_back(LEFT_PARENTHESES_, "("), s_in.get(ch);
+		else if (ch == ')') items.emplace_back(RIGHT_PARENTHESES_, ")"), s_in.get(ch);
+		else if (ch == '=') {
 			s_in.get(ch);
-			if (isalpha(ch) || ch == '\'' || ch == '"') {
-				Trans(BACKWARD_SLASH_WITH_CHARACTOR_, string({ '\\', ch }));
+			if (ch == '=') {
+				items.emplace_back(DOUBLE_EQUAL_, "==");
 				s_in.get(ch);
 			}
 			else {
-				Trans(BACKWARD_SLASH_, "\\");
+				items.emplace_back(SINGLE_EQUAL_, "=");
+			}
+		}
+		else if (ch == '<') {
+			s_in.get(ch);
+			if (ch == '=') {
+				items.emplace_back(LESS_EQUAL_, "<=");
+				s_in.get(ch);
+			}
+			else {
+				items.emplace_back(LESS_, "<");
+			}
+		}
+		else if (ch == '>') {
+			s_in.get(ch);
+			if (ch == '=') {
+				items.emplace_back(GREATER_EQUAL_, ">=");
+				s_in.get(ch);
+			}
+			else {
+				items.emplace_back(GREATER_, ">");
+			}
+		}
+		else if (ch == '\\') {
+			s_in.get(ch);
+			if (isalpha(ch) || ch == '\'' || ch == '"') {
+				items.emplace_back(BACKWARD_SLASH_WITH_CHARACTOR_, string({ '\\', ch }));
+				s_in.get(ch);
+			}
+			else {
+				items.emplace_back(BACKWARD_SLASH_, "\\");
 			}
  		}
 		else if (ch == '&') {
 			s_in.get(ch);
 			if (ch == '&') {
-				Trans(LOGICAL_AND_, "&&");
+				items.emplace_back(LOGICAL_AND_, "&&");
 				s_in.get(ch);
 			}
 			else {
-				Trans(ARITHMATIC_AND_, "&");
+				items.emplace_back(ARITHMATIC_AND_, "&");
 			}
 		}
 		else if (ch == '|') {
 			s_in.get(ch);
 			if (ch == '|') {
-				Trans(LOGICAL_OR_, "||");
+				items.emplace_back(LOGICAL_OR_, "||");
 				s_in.get(ch);
 			}
 			else {
-				Trans(ARITHMATIC_OR_, "|");
+				items.emplace_back(ARITHMATIC_OR_, "|");
 			}
 		}
 		else if (ch == '/') {
 			s_in.get(ch);
 			if (ch == '*') {
-				Trans(LEFT_COMMENT_, "/*");
+				items.emplace_back(LEFT_COMMENT_, "/*");
 				s_in.get(ch);
 			}
 			else {
-				Trans(DIVIDE_, "/");
+				items.emplace_back(DIVIDE_, "/");
 			}
 		}
 		else if (ch == '*') {
 			s_in.get(ch);
 			if (ch == '/') {
-				Trans(RIGHT_COMMENT_, "*/");
+				items.emplace_back(RIGHT_COMMENT_, "*/");
 				s_in.get(ch);
 			} 
 			else {
-				Trans(MULTIPLY_, "*");
+				items.emplace_back(MULTIPLY_, "*");
 			}
 		}
 		else if (isdigit(ch)) {
@@ -147,30 +255,47 @@ void CppFileContent::pushBack(string s) {
 				s_in.get(ch);
 				while (isdigit(ch)) s_in.get(ch);
 			}
-			Trans(NUMBER_, "number");
+			items.emplace_back(NUMBER_, "number");
 		}
 		else if (isalpha(ch) || ch == '_') {
 			string symbo;
 			while (isalpha(ch) || ch == '_' || isdigit(ch)) symbo.push_back(ch), s_in.get(ch);
 			TOKEN tmp = getReserved(symbo);
-			Trans(tmp, symbo);
+			items.emplace_back(tmp, symbo);
 		}
 		else if (ch == EOF) break;
 		else {
-			db_err << "< " << ch << " > unknown char" << endl;
+			items.emplace_back(UNKNOWN_SYMBOL_, "< " + string(1, ch) + " >");
 			s_in.get(ch);
 		}
 	}
+	vts_cit it = items.cbegin();
+	for (auto item : items) db_err << item.second << endl;
+	Automan::File(it, items.cend(), name2class);
 }
 
-list<Class> CppFileContent::getClasses() {
-	list<Class> cls;
-	for (auto item : name2class) cls.push_back(item.second);
+const list<shared_ptr<Class>>& CppFileContent::getClasses() {
+	static list<shared_ptr<Class>> cls;
+	cls.clear();
+	for (const auto &item : name2class) cls.emplace_back(item.second);
 	db_out << cls.size() << endl;
 	for (auto item : cls) {
-		db_out << item.getName() << ": ";
-		for (auto sup : item.getSuperclasses())
+		db_out << item->getName() << ": " << endl;
+		db_out << "  super class : ";
+		for (auto sup : item->getSuperclasses())
 			db_out << sup << ", ";
+		db_out << endl;
+		db_out << "  attributes : ";
+		for (auto attr : item->getAttributes())
+			db_out << attr << ", ";
+		db_out << endl;
+		db_out << "  Components : ";
+		for (auto comp : item->getComponents())
+			db_out << comp << ", ";
+		db_out << endl;
+		db_out << "  Functions : ";
+		for (auto func : item->getFunctions())
+			db_out << func << ", ";
 		db_out << endl;
 	}
 	return cls;

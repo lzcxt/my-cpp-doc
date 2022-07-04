@@ -3,6 +3,7 @@
 #include <string>
 #include "common/common.h"
 #include <queue>
+#include <memory>
 #include <map>
 
 
@@ -25,25 +26,24 @@ enum TOKEN {
 	ARITHMATIC_AND_,
 	LOGICAL_OR_,
 	ARITHMATIC_OR_,
+	LESS_,
+	SINGLE_EQUAL_,
+	DOUBLE_EQUAL_,
+	LESS_EQUAL_,
+	LEFT_PARENTHESES_,
+	RIGHT_PARENTHESES_,
+	GREATER_,
+	GREATER_EQUAL_,
 	NUMBER_,
 	CLASS_,
 	STRUCT_,
 	PUBLIC_,
 	PRIVATE_,
 	PROTECTED_,
+	TEMPLATE_,
+	UNKNOWN_WORD_,
+	UNKNOWN_SYMBOL_,
 	EOF_,
-	UNKNOWN_,
-};
-
-enum STATE {
-	START_STATE,
-	SINGLE_QUOTE_STATE,
-	DOUBLE_QUOTE_STATE,
-	COMMENT_STATE,
-	CLASS_STATE_1,
-	CLASS_STATE_2,
-	CLASS_STATE_3,
-	CLASS_STATE_4
 };
 
 /**
@@ -51,12 +51,9 @@ enum STATE {
  */
 class CppFileContent {
 public:
-	CppFileContent() : cur_state(START_STATE) {}
+	CppFileContent() {}
 	void pushBack(std::string s);
-	std::list<Class> getClasses();
+	const std::list<shared_ptr<Class>>& getClasses();
 private:
-	void Trans(TOKEN t, std::string word);
-	std::map<std::string, Class> name2class;
-	STATE cur_state;
-	Class* cur_class;
+	std::map<std::string, shared_ptr<Class> > name2class;
 };

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "common/common.h"
+#include <memory>
 #include <set>
 
 class Translator {
 private:
-	Block classToBlock(const Class& c);
+	Block classToBlock(const shared_ptr<Class> c);
 public:
-	set<Block> toBlockSet(const list<Class>& lis);
+	set<Block> toBlockSet(const list<shared_ptr<Class>>& lis);
 };
