@@ -22,6 +22,12 @@ myCppDoc::myCppDoc(QWidget *parent)
 	FileMenu->addAction(FileLoadFolder);
 	connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
 
+	FileSaveAs = new QAction(QIcon("texture/save.bmp"), "Save as", this);
+	FileSaveAs->setShortcut(Qt::CTRL + Qt::Key_S);
+	FileMenu->addAction(FileSaveAs);
+	connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
+
+
 	HelpInfo = new QAction(QIcon("textures/info.png"), "Information", this);
 	HelpInfo->setShortcut(Qt::CTRL + Qt::Key_H);
 	HelpMenu->addAction(HelpInfo);
@@ -35,6 +41,9 @@ myCppDoc::myCppDoc(QWidget *parent)
 	Status->setSizeGripEnabled(1);
 	Status->showMessage("Hello, this is your cute status bar.");
 	setStatusBar(Status);
+
+	scroll = Q_NULLPTR;
+	draw = Q_NULLPTR;
 }
 
 myCppDoc::~myCppDoc() {

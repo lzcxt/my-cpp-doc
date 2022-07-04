@@ -7,11 +7,16 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QScrollArea>
 using namespace std;
 
 bool myCppDoc::FileLoadHovered() {
 	Status->showMessage("Load File(s)");
 	return 1;
+}
+
+void myCppDoc::mouseMoveEvent() {
+	//todo
 }
 
 bool myCppDoc::FileLoadManagement() {
@@ -21,9 +26,14 @@ bool myCppDoc::FileLoadManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	//drawArea* draw=new drawArea(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	//draw->resize(800, 1200);
-	//draw->show();
+	if (scroll != Q_NULLPTR) delete scroll;
+	scroll = new QScrollArea(this);
+	if (draw != Q_NULLPTR) delete draw;
+	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
+	draw->setGeometry(0, 0, 1200, 800);
+	scroll->setWidget(draw);
+	scroll->setGeometry(0, 65, 1000, 710);
+	scroll->show();
 	return 1;
 }
 
@@ -35,10 +45,25 @@ bool myCppDoc::FileLoadFolderManagement() {
 		if (!isProjectFileName(*i)) continue;
 		filelist.push_back(i->toStdString());
 	}
-	drawArea draw(0, Translator(QFont()).toBlockSet(Parser::parse(filelist)));
-	draw.resize(800, 1200);
-	draw.show();
+	if (scroll != Q_NULLPTR) delete scroll;
+	scroll = new QScrollArea(this);
+	if (draw != Q_NULLPTR) delete draw;
+	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
+	draw->setGeometry(0, 0, 1200, 800);
+	scroll->setWidget(draw);
+	scroll->setGeometry(0, 65, 1000, 710);
+	scroll->show();
 	return 1;
+}
+
+bool myCppDoc::FileSaveAsManagement() {
+	QString path = QFileDialog::getSaveFileName(this, "save as", "untitled.bmp", "Image(.bmp)");
+	if (path == "") return 1;
+	if (draw == Q_NULLPTR) throw m_Exception("No opened files.");
+	else {
+		QImage image = draw->grabFramebuffer();
+		image.save(path, "BMP");
+	}
 }
 
 bool myCppDoc::HelpInfoManagement() {
