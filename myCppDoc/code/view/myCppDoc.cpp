@@ -22,7 +22,7 @@ myCppDoc::myCppDoc(QWidget *parent)
 	FileMenu->addAction(FileLoadFolder);
 	connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
 
-	FileSaveAs = new QAction(QIcon("texture/save.bmp"), "Save as", this);
+	FileSaveAs = new QAction(QIcon("texture/save.png"), "Save as", this);
 	FileSaveAs->setShortcut(Qt::CTRL + Qt::Key_S);
 	FileMenu->addAction(FileSaveAs);
 	connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));

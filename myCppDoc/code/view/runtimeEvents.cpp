@@ -63,7 +63,9 @@ bool myCppDoc::FileSaveAsManagement() {
 	else {
 		QImage image = draw->grabFramebuffer();
 		image.save(path, "BMP");
+		return 1;
 	}
+	return 0;
 }
 
 bool myCppDoc::HelpInfoManagement() {
