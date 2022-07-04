@@ -25,7 +25,8 @@ void myCppDoc::mouseMoveEvent() {
 }
 
 bool myCppDoc::FileLoadManagement() {
-	QStringList path = QFileDialog::getOpenFileNames();
+	QStringList path = QFileDialog::getOpenFileNames(this,"open","","C++ Project files (*.cpp *.h *.c)");
+	if (path.size() == 0) return 1;
 	list<string> filelist;
 	for (auto i = path.begin();i != path.end();++i) {
 		if (!isProjectFileName(*i)) continue;
@@ -48,9 +49,9 @@ QStringList myCppDoc::getAllFiles(const QDir& dir) {
 	QStringList path = dir.entryList();
 	QStringList ret;
 	for (auto i = path.begin();i != path.end();++i) {
-		QString filepath = dir.absoluteFilePath(*i);
 		if (*i == ".") continue;
 		if (*i == "..") continue;
+		QString filepath = dir.absoluteFilePath(*i);
 		QFileInfo info(filepath);
 		if (info.isDir()) ret += getAllFiles(filepath);
 		else ret.push_back(dir.absoluteFilePath(*i));
@@ -59,7 +60,9 @@ QStringList myCppDoc::getAllFiles(const QDir& dir) {
 }
 
 bool myCppDoc::FileLoadFolderManagement() {
-	QDir directory(QFileDialog::getExistingDirectory());
+	QString getDir = QFileDialog::getExistingDirectory();
+	if (getDir == "") return 1;
+	QDir directory(getDir);
 	QStringList path = getAllFiles(directory);
 	list<string> filelist;
 	for (auto i = path.begin();i != path.end();++i) {
@@ -67,7 +70,7 @@ bool myCppDoc::FileLoadFolderManagement() {
 		filelist.push_back(directory.absoluteFilePath(*i).toStdString());
 	}
 	if (filelist.size() == 0) {
-		SendMsg("No valid file selected.");
+		SendMsg("No valid file found.");
 		return 1;
 	}
 	scroll = new QScrollArea(this);

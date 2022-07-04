@@ -25,14 +25,16 @@ Class Block::getThisClass() const {
 	return this_class;
 }
 
-bool isProjectFileName(QString s) {
-	if (s.contains(".cpp")) return 1;
-	if (s.contains(".h")) return 1;
-	if (s.contains(".c")) return 1;
+bool isProjectFileName(const QString& s) {
+	string str = s.toStdString();
+	int len = str.length();
+	if (str.substr(len - 4, len) == ".cpp") return 1;
+	if (str.substr(len - 2, len) == ".h") return 1;
+	if (str.substr(len - 2, len) == ".c") return 1;
 	return 0;
 }
 
-int SendMsg(string x) {
+int SendMsg(const string& x) {
 	QMessageBox msg;
 	msg.setWindowTitle("Message");
 	msg.setText(QString::fromStdString(x));
