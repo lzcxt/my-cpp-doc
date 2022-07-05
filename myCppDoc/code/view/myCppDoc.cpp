@@ -39,8 +39,8 @@ myCppDoc::myCppDoc(QWidget *parent)
 	connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
 	ToolBar->addAction(HelpInfo);
 
-	Status = new QStatusBar();
-	Status->setSizeGripEnabled(1);
+	Status = new QStatusBar(this);
+	Status->setSizeGripEnabled(0);
 	Status->showMessage("Hello, this is your cute status bar.");
 	setStatusBar(Status);
 

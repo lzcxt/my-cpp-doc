@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QScrollBar>
+#include <QCheckBox>
 using namespace std;
 
 bool myCppDoc::FileLoadHovered() {
@@ -21,13 +22,31 @@ bool myCppDoc::FileSaveAsHovered() {
 	return 1;
 }
 
+void myCppDoc::formSelect(const set<Block>& Blocks){
+	/*QLabel* label=new QLabel(this);
+	label->setText("Select displayed classes:");
+	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(), 200,
+		MenuBar->rect().height() + ToolBar->rect().height());
+	label->show();
+	int checkcnt = 0;
+	for (auto i = Blocks.begin();i != Blocks.end();++i) {
+		QCheckBox* check = new QCheckBox(this);
+		check->setText(QString::fromStdString(i->getThisClass().getName()));
+		check->setGeometry()
+		Select->addWidget(check);
+	}*/
+}
+
 void myCppDoc::showGraph(const list<string>& filelist) {
+	set<Block> Blocks = Translator().toBlockSet(Parser::parse(filelist));
+	formSelect(Blocks);
 	scroll = new scrollArea(this);
-	draw = new drawArea(this, Translator().toBlockSet(Parser::parse(filelist)));
-	draw->setGeometry(0, 0, 1200, 800);
+	draw = new drawArea(this, Blocks);
+	draw->setGeometry(0, 0, 1350, 900);
 	draw->setMinimumSize(1050, 700);
 	scroll->setWidget(draw);
-	scroll->setGeometry(0, 65, 1000, 710);
+	scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200, 
+		rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
 	scroll->show();
 }
 

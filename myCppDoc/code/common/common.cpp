@@ -5,7 +5,7 @@
 
 
 Block::Block(const int& w, const int& h, const Class& c)
-	:width(w),height(h),this_class(c){
+	:not_show(0),width(w),height(h),this_class(c){
 }
 
 
