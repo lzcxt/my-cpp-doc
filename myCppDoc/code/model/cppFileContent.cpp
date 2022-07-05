@@ -190,6 +190,7 @@ namespace Automan {
 				class_ptr->addSuperclasses(supp_name);
 				++cur;
 			}
+			else if (cur->first == DOUBLE_COLON_) ++cur;
 			else assert(0);
 		}
 	}
@@ -231,7 +232,14 @@ void CppFileContent::pushBack(string s) {
 	vts items;
 	while (1) {
 		while (isspace(ch)) s_in.get(ch);
-		if (ch == ':') items.emplace_back(COLON_, ":"), s_in.get(ch);
+		if (ch == ':') {
+			s_in.get(ch);
+			if (ch == ':') {
+				items.emplace_back(DOUBLE_COLON_, "::");
+				s_in.get(ch);
+			}
+			else items.emplace_back(COLON_, ":");
+		}
 		else if (ch == '\'') items.emplace_back(SINGLE_QUOTE_, "'"), s_in.get(ch);
 		else if (ch == '"') items.emplace_back(DOUBLE_QUOTE_, "\""), s_in.get(ch);
 		else if (ch == '{') items.emplace_back(LEFT_BRACE_, "{"), s_in.get(ch);
