@@ -7,35 +7,36 @@ using namespace std;
  */
 class A {
 public:
-    string A_method_1() {
+    string f1() {
         string s = "\"";  // This is a \" test
         return "class F : E {}";  // This is a defination in string
     }
-    void A_method_2() {
+    void f2() {
 
     }
-    void A_function_1() {
+    void f3() {
 
     }
 private:
-    int A_int;
-    double A_double;
+    void private_func();
+    int i;
+    double d;
 };
 
 class B : A {  // no discription
 public:
-    void B_method_1() {
+    void B1() {
 
     }
-    void B_method_2() {
+    void B2() {
 
     }
-    void B_function_1() {
+    void B3() {
 
     }
 private:
-    int B_int;
-    double B_double;
+    int x, y;
+    double d1, d2;
 };
 
 template<class T>

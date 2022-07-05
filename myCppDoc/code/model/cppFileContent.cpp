@@ -6,7 +6,8 @@
 using namespace std;
 
 TOKEN getReserved(string s) {
-	if (s == "class" || s == "struct") return CLASS_;  // templory
+	if (s == "class") return CLASS_;
+	else if (s == "struct") return STRUCT_;
 	else if (s == "public") return PUBLIC_;
 	else if (s == "private") return PRIVATE_;
 	else if (s == "protected") return PROTECTED_;
@@ -104,7 +105,7 @@ namespace Automan {
 		}
 		++cur;
 	}
-	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr) {
+	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr, bool is_public) {
 		string last_name;
 		int last_name_fid = -2;
 		string last_type;
@@ -112,17 +113,25 @@ namespace Automan {
 		int fid = 0;
 		while (cur->first != RIGHT_BRACE_) {
 			++fid;
-			if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
+			if (cur->first == PUBLIC_) {
+				is_public = 1;
+				++cur;
+			}
+			else if (cur->first == PROTECTED_ || cur->first == PRIVATE_) {
+				is_public = 0;
+				++cur;
+			}
 			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
 				if (last_name_fid + 1 == fid) {
-					string comp = "- " + last_name;
-					if (last_type_fid == fid - 2) comp += " " + last_type;
+					string comp = string(1, "-+"[is_public]) + " " + last_name;
+					if (last_type_fid == fid - 2) comp += " " + last_type, fid -= 2;
 					class_ptr->addComponents(comp);
 				}
 				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
-				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions("+ " + last_name + "()");
+				string func = string(1, "-+"[is_public]) + " " + last_name + "()";
+				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions(func);
 				++cur;
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
@@ -140,7 +149,7 @@ namespace Automan {
 		}
 		++cur;
 	}
-	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class) {
+	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class, bool is_default_public) {
 		/*
 		template <class T>
 		class UCPointer : public A {
@@ -154,14 +163,14 @@ namespace Automan {
 		++cur;
 		if (cur->first == SEMICOLON_) return class_ptr;
 		if (cur->first == LEFT_BRACE_) {
-			ClassBody(++cur, class_ptr);
+			ClassBody(++cur, class_ptr, is_default_public);
 			return class_ptr;
 		}
 		assert(cur->first == COLON_);
 		++cur;
 		while (1) {
 			if (cur->first == LEFT_BRACE_) {
-				ClassBody(++cur, class_ptr); 
+				ClassBody(++cur, class_ptr, is_default_public); 
 				return class_ptr;
 			}
 			else if (cur->first == LESS_) ReadAngleBrackets(++cur);
@@ -182,6 +191,7 @@ namespace Automan {
 		string template_disc;
 		int template_disc_id = -2;
 		int fid = 0;
+		bool class0struct1;
 		shared_ptr<Class> class_ptr;
 		while (cur != ed) {
 			++fid;
@@ -190,8 +200,10 @@ namespace Automan {
 			case DOUBLE_QUOTE_: DoubleQuote(++cur); break;
 			case LEFT_COMMENT_: last_comment = move(Comment(++cur)); last_comment_id = fid; break;
 			case TEMPLATE_: template_disc = move(TemplateDiscription(++(++cur))); template_disc_id = fid; break;
-			case CLASS_: 
-				class_ptr = ClassAll(++cur, name2class);
+			case CLASS_:
+			case STRUCT_:
+				class0struct1 = cur->first == STRUCT_;
+				class_ptr = ClassAll(++cur, name2class, class0struct1);
 				if (template_disc_id == fid - 1) class_ptr->addAttributes(class_ptr->getName() + template_disc);
 				if (last_comment_id + (template_disc_id == fid - 1) == fid - 1)
 					for (auto &str : last_comment) class_ptr->addAttributes(str);
