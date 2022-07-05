@@ -13,13 +13,7 @@ using namespace std;
 fstream db_err_v("View_ErrorLog.txt", fstream::out);
 
 //some used only in this file
-struct PointXY
-{
-	int x;
-	int y;
-	int w;
-	int h;
-};
+
 
 struct line
 {
@@ -29,7 +23,7 @@ struct line
 	double y2;
 };
 
-vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter);
+vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter, int & fw, int & fh);
 void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
@@ -57,84 +51,85 @@ void drawArea::resizeGL(int width, int height) {
 }
 
 void drawArea::paintGL() {
-
+	int fw = 0;
+	int fh = 0;
+	const int intervel = 20;
 	/*
 	test case:
 	
 	*/
-
-
-	//initialize
+	//initialize: set the white background
 	QPainter paint(this);
 	paint.setPen(Qt::NoPen);
 	paint.setBrush(Qt::white);
 	paint.drawRect(rect());
+	
+	//preparations
 	QFont font;
-	vector<PointXY> strategy = paint_strategy(blocks, paint);
-	vector<PointXY>::iterator s = strategy.begin();
+	rectangle = paint_strategy(blocks, paint, fw, fh);
+	vector<PointXY>::iterator s = rectangle.begin();
 	set<Block>::iterator b = blocks.begin();
 
 	//Paint the blocks
-	while(b!=blocks.end()&&s!=strategy.end())
+	while(b!=blocks.end()&&s!=rectangle.end())
 	{
 		//Paint the Rectangle
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
-		paint.drawRect(s->x,s->y,b->getWidth(), b->getHeight());
-		int tmp_x = s->x;
-		int tmp_y = s->y+2;
-		//paint.drawLine(s->x, tmp_y, s->x + b->getWidth(), tmp_y);
+		paint.drawRect(s->x,s->y,fw, fh);
+
 		//Text the names
 		SetNameFont(font);
 		paint.setFont(font); 
 		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
-		paint.drawText(s->x+ b->getWidth()/2-Metrics.width(tmp_name)/2,tmp_y+Metrics.height(),tmp_name);
-		tmp_x += b->getWidth() / 1.3*0.15;
-		tmp_y +=  Metrics.height()+2;
+		paint.drawText(s->x+ fw/2-Metrics.width(tmp_name)/2,s->y+Metrics.height()+intervel,tmp_name);
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
-		paint.drawLine(s->x,tmp_y,s->x+b->getWidth(),tmp_y);
+		int tmp_y = s->y + Metrics.height() + 2*intervel;
+		paint.drawLine(s->x, tmp_y, s->x+fw,tmp_y);
+
+		int tmp_x = s->x+ fw / 6;
 		//Text the components
 		SetAttributeFont(font);
 		paint.setFont(font);
 		paint.setPen(QPen(Qt::black, 0.5));
 		vector<string> tmp_v = b->getThisClass().getComponents();
 		vector<string>::iterator a = tmp_v.begin();
-		if (a == tmp_v.end())tmp_y += 5;
+		if (a == tmp_v.end())tmp_y += intervel;
 		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
 		{
-			tmp_y += Metrics.height()+2;
+			tmp_y += Metrics.height()+intervel;
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
-		tmp_y += 4;
+		tmp_y += intervel;
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
-		paint.drawLine(s->x, tmp_y, s->x + b->getWidth(), tmp_y);
+		paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
 		//Text the functions
 		SetAttributeFont(font);
 		paint.setFont(font);
 		paint.setPen(QPen(Qt::black, 0.5));
 		tmp_v = b->getThisClass().getFunctions();
 		a = tmp_v.begin();
-		if (a == tmp_v.end())tmp_y += 5;
 		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
 		{
-			tmp_y += Metrics.height() + 2;
+			tmp_y += Metrics.height() + intervel;
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
-		
 		//next one
 		b++; s++;
 	}
 
 	//Paint the relations
 	//Paint the SuperClasses
+	
+	/*
 	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 1));
-	b = blocks.begin(); s = strategy.begin();
-	while (b != blocks.end() && s != strategy.end())
+	b = blocks.begin(); s = rectangle.begin();
+	while (b != blocks.end() && s != rectangle.end())
 	{
 		vector<string> SuperClass = b->getThisClass().getSuperclasses();
 		vector<string>::iterator sc = SuperClass.begin();
@@ -142,61 +137,60 @@ void drawArea::paintGL() {
 		while (sc != SuperClass.end())
 		{
 			db_err_v <<*sc<<endl;
-			vector<PointXY>::iterator s2 = strategy.begin();
+			vector<PointXY>::iterator s2 = rectangle.begin();
 			set<Block>::iterator b2 = blocks.begin();
-			while (b2 != blocks.end() && s2 != strategy.end())
+			while (b2 != blocks.end() && s2 != rectangle.end())
 			{
 				string tmp_name = b2->getThisClass().getName();
 				if (tmp_name.compare(*sc)==0)break;
 				b2++; s2++;
 			}
 			paint.setPen(QPen(Qt::darkGreen,0.3));
-			DrawArrow(paint, *s, *s2,strategy);
+			DrawArrow(paint, *s, *s2,rectangle);
 			sc++;
 		}
 		b++; s++;
 	}
-	//Paint the Components
+	*/
+	//Paint the Attributes
 	
 }
 
 
 
-vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
+vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter,int & fw, int & fh)
 {
+	//unifie the width and the height
+	set<Block>::iterator b;
+	for (b = blocks.begin(); b != blocks.end(); b++)
+	{
+		if (b->getHeight() > fh)fh = b->getHeight();
+		if (b->getWidth() > fw)fw = b->getWidth();
+	}
 	vector<PointXY> p;
 	//initial strategy: sequential
 	//arrange the start positions of the blocks and the Window
-	const int width_intervel = 17;
-	const int height_intervel = 17;
-	int max_width = 0;
-	int max_height = height_intervel;
-	set<Block>::iterator b = blocks.begin();
-	for (; b != blocks.end(); b++)
+	const int width_intervel = fw/4;
+	const int height_intervel = fh/4;
+	int i=0;
+	for (b = blocks.begin(); b != blocks.end(); b++,i++)
 	{
 		struct PointXY tmp;
-		int width = b->getWidth();
-		int height = b->getHeight();
-		tmp = {width_intervel,max_height,width,height};
+		tmp = {width_intervel,height_intervel+i*(fh+height_intervel),fw,fh};
 		p.push_back(tmp);
 		b++; 
 		if (b == blocks.end())
 		{
-			max_width = max_width > width ? max_width : width;
-			max_height += (height + height_intervel);
+			i++;
 			break;
 		}
-		tmp = { 2 * width_intervel + width,max_height,b->getWidth(),b->getHeight() };
+		tmp = { 2 * width_intervel + fw,height_intervel + i * (fh + height_intervel),fw,fh };
 		p.push_back(tmp);
-		width+= b->getWidth();
-		height = height > b->getHeight() ? height : b->getHeight();
-		max_width = max_width > width ? max_width : width;
-		max_height += (height + height_intervel);
 	}
-	max_width += 3*width_intervel;
-	painter.setWindow(0,0,max_width,max_height);
+	painter.setWindow(0,0, 3 * width_intervel + 2 * fw, height_intervel + i * (fh + height_intervel));
 	return p;
 	//the optimized strategy
+
 }
 
 void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<struct PointXY>&distribution)

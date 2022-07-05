@@ -6,6 +6,7 @@
 #include <QFontMetrics>
 
 Block Translator::classToBlock(const shared_ptr<Class> c) {
+	const int intervel = 20;
 	QFont font;
 	SetNameFont(font);
 	QFontMetrics Metrics(font);
@@ -14,23 +15,23 @@ Block Translator::classToBlock(const shared_ptr<Class> c) {
 	vector<string> func = c->getFunctions();
 	SetAttributeFont(font);
 	Metrics = QFontMetrics(font);
-	height += 4;
-	if (attr.size() == 0)height += 5;
+	//the interval around the name
+	height += 2 * intervel;
+	//
 	for (int i = 0;i < attr.size();++i) {
 		//width is the longest string width of the attributes
 		width = max(width, Metrics.width(QString::fromStdString(attr[i])));
-		height += Metrics.height()+2;
+		height += Metrics.height()+ intervel;
 	}
-	height += 4;
-	if (func.size() == 0)height += 5;
+	height += intervel;
+	//
 	for (int i = 0; i < func.size(); ++i) {
 		//width is the longest string width of the attributes
 		width = max(width, Metrics.width(QString::fromStdString(func[i])));
-		height += Metrics.height() + 2;
+		height += Metrics.height() + intervel;
 	}
-	height += 4;
-	if (attr.size() == 0)width*=2;
-	return Block(width*1.3, height, *c);
+	height += intervel;
+	return Block(width*1.6, height, *c);
 }
 
 set<Block> Translator::toBlockSet(const list<shared_ptr <Class>>& lis) {
