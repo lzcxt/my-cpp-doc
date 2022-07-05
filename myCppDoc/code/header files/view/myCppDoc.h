@@ -40,6 +40,7 @@ private:
 
 	QStringList getAllFiles(const QDir& dir);
 
+	void formSelect(const set<Block>& Blocks);
 	void showGraph(const list<string>& lis);
 
 public slots:

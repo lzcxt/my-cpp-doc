@@ -53,6 +53,7 @@ public:
 };
 
 class Block {
+	bool not_show;
 	int width, height;
 	Class this_class;
 
