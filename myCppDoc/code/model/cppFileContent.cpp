@@ -94,6 +94,10 @@ namespace Automan {
 		while ((cur++)->first != GREATER_);
 	}
 
+	void ReadUntil(vts_cit &cur, TOKEN ed) {
+		while ((cur++)->first != ed);
+	}
+
 	/* read { ... } */
 	void ReadBraceBody(vts_cit &cur) {
 		while (cur->first != RIGHT_BRACE_) {
@@ -136,7 +140,7 @@ namespace Automan {
 			else if (cur->first == LEFT_PARENTHESES_) {
 				string func = string(1, "-#+"[pri0pro1pub2]) + " " + last_name + "()";
 				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions(func);
-				++cur;
+				ReadUntil(++cur, RIGHT_PARENTHESES_);
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
 			else if (cur->first == UNKNOWN_WORD_) {
