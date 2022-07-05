@@ -63,6 +63,7 @@ void drawArea::paintGL() {
 	paint.setPen(Qt::NoPen);
 	paint.setBrush(Qt::white);
 	paint.drawRect(rect());
+	paint.setPen(Qt::SolidLine);
 	
 	//preparations
 	QFont font;
@@ -74,17 +75,17 @@ void drawArea::paintGL() {
 	while(b!=blocks.end()&&s!=rectangle.end())
 	{
 		//Paint the Rectangle
-		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
 		paint.drawRect(s->x,s->y,fw, fh);
 
 		//Text the names
 		SetNameFont(font);
 		paint.setFont(font); 
-		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
+		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 1));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
 		paint.drawText(s->x+ fw/2-Metrics.width(tmp_name)/2,s->y+Metrics.height()+intervel,tmp_name);
-		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
 		int tmp_y = s->y + Metrics.height() + 2*intervel;
 		paint.drawLine(s->x, tmp_y, s->x+fw,tmp_y);
 
@@ -92,7 +93,7 @@ void drawArea::paintGL() {
 		//Text the components
 		SetAttributeFont(font);
 		paint.setFont(font);
-		paint.setPen(QPen(Qt::black, 0.5));
+		paint.setPen(QPen(Qt::black, 1));
 		vector<string> tmp_v = b->getThisClass().getComponents();
 		vector<string>::iterator a = tmp_v.begin();
 		if (a == tmp_v.end())tmp_y += intervel;
@@ -104,12 +105,12 @@ void drawArea::paintGL() {
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
 		tmp_y += intervel;
-		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
 		paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
 		//Text the functions
 		SetAttributeFont(font);
 		paint.setFont(font);
-		paint.setPen(QPen(Qt::black, 0.5));
+		paint.setPen(QPen(Qt::black, 1));
 		tmp_v = b->getThisClass().getFunctions();
 		a = tmp_v.begin();
 		Metrics = QFontMetrics(font);
@@ -126,8 +127,8 @@ void drawArea::paintGL() {
 	//Paint the relations
 	//Paint the SuperClasses
 	
-	/*
-	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 1));
+	
+	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 2));
 	b = blocks.begin(); s = rectangle.begin();
 	while (b != blocks.end() && s != rectangle.end())
 	{
@@ -145,13 +146,13 @@ void drawArea::paintGL() {
 				if (tmp_name.compare(*sc)==0)break;
 				b2++; s2++;
 			}
-			paint.setPen(QPen(Qt::darkGreen,0.3));
+			paint.setPen(QPen(Qt::darkGreen,2));
 			DrawArrow(paint, *s, *s2,rectangle);
 			sc++;
 		}
 		b++; s++;
 	}
-	*/
+	
 	//Paint the Attributes
 	
 }
@@ -380,8 +381,8 @@ void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<
 		lines.append(QLineF(i->x1, i->y1, i->x2, i->y2));
 	}
 	//add the arrow
-	const int length1 = 1;
-	const int length2 = 2;
+	const int length1 = 15;
+	const int length2 = 30;
 	switch (flag2)
 	{
 		case 1:

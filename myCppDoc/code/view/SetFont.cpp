@@ -3,13 +3,13 @@ void SetNameFont(QFont &font)
 {
 	font.setFamily("·ÂËÎ");
 	font.setUnderline(false);
-	font.setPointSize(8);
+	font.setPointSize(20);
 	font.setItalic(false);
 }
 void SetAttributeFont(QFont &font)
 {
 	font.setFamily("·ÂËÎ");
 	font.setUnderline(false);
-	font.setPointSize(6);
+	font.setPointSize(15);
 	font.setItalic(false);
 }
