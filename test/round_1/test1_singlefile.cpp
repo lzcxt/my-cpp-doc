@@ -6,6 +6,7 @@ using namespace std;
  * class A : B {}  <- this is a defination in comment
  */
 class A {
+    void f0();
 public:
     string f1() {
         string s = "\"";  // This is a \" test
@@ -17,6 +18,8 @@ public:
     void f3() {
 
     }
+protected:
+    void protected_func();
 private:
     void private_func();
     int i;
