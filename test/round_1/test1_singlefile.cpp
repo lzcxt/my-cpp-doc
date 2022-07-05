@@ -38,6 +38,7 @@ private:
     double B_double;
 };
 
+template<class T>
 class C{
 
 };
@@ -46,6 +47,7 @@ class D: public A, private B{
 
 };
 
+template<class T, class T2>
 class E{}
 
 class F;

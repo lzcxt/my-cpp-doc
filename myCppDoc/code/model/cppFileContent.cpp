@@ -10,6 +10,8 @@ TOKEN getReserved(string s) {
 	else if (s == "private") return PRIVATE_;
 	else if (s == "protected") return PROTECTED_;
 	else if (s == "template") return TEMPLATE_;
+	else if (s == "const") return CONST_;
+	else if (s == "operator") return OPERATOR_;
 	else return UNKNOWN_WORD_;
 }
 
@@ -19,6 +21,15 @@ fstream db_out("Model_Output.txt", fstream::out);
 using vts = vector<pair<TOKEN, string> >;
 using vts_cit = vts::const_iterator;
 
+static bool isOverloadable(char ch) {
+	switch (ch) {
+	case '+': case '-': case '*': case '/': case '%':
+	case '|': case '&': case '~':
+	case '^': case '<': case '>': case '=': case '!':
+	return 1;
+	}
+	return 0;
+}
 namespace Automan {
 	void SingleQuote(vts_cit &cur) {
 		while ((cur++)->first != SINGLE_QUOTE_);
@@ -44,13 +55,18 @@ namespace Automan {
 		return vec;
 	}
 	string& TemplateDiscription(vts_cit &cur) {
-		static string st; st = "< ";
+		/*
+		template<class T, int N> class A 
+		=>
+		A<class T, int N>
+		*/
+		static string st; st = "<";
 		while (cur->first != GREATER_) {
-			if (cur->first == COMMA_) st += cur->second + " ";
-			else st += (++cur)->second, ++cur;
+			if (cur->first == COMMA_) st.pop_back();
+			st += (cur++)->second + " ";
 		}
 		++cur;
-		st += " >";
+		st.back() = '>';
 		return st;
 	}
 	/* read < ... > */
@@ -81,7 +97,7 @@ namespace Automan {
 				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
-				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name);
+				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name + "()");
 				++cur;
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
@@ -146,7 +162,7 @@ namespace Automan {
 			case TEMPLATE_: template_disc = move(TemplateDiscription(++(++cur))); template_disc_id = fid; break;
 			case CLASS_: 
 				class_ptr = ClassAll(++cur, name2class);
-				if (template_disc_id == fid - 1) class_ptr->addAttributes(template_disc);
+				if (template_disc_id == fid - 1) class_ptr->addAttributes(class_ptr->getName() + template_disc);
 				if (last_comment_id + (template_disc_id == fid - 1) == fid - 1)
 					for (auto &str : last_comment) class_ptr->addAttributes(str);
 				break;
@@ -270,6 +286,15 @@ void CppFileContent::pushBack(string s) {
 			string symbo;
 			while (isalpha(ch) || ch == '_' || isdigit(ch)) symbo.push_back(ch), s_in.get(ch);
 			TOKEN tmp = getReserved(symbo);
+			if (tmp == OPERATOR_) {
+				if (ch == '(') {
+					s_in.get(ch); s_in.get(ch);
+					symbo.push_back('(');
+					symbo.push_back(')');
+				}
+				while (isOverloadable(ch)) symbo.push_back(ch), s_in.get(ch);
+				tmp = UNKNOWN_WORD_;
+			}
 			items.emplace_back(tmp, symbo);
 		}
 		else if (ch == EOF) break;

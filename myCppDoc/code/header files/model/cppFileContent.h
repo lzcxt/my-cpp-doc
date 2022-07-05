@@ -47,6 +47,8 @@ enum TOKEN {
 	UNKNOWN_WORD_,
 	UNKNOWN_SYMBOL_,
 	EOF_,
+	CONST_,
+	OPERATOR_,
 };
 
 /**
