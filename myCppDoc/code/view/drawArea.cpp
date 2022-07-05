@@ -75,13 +75,13 @@ void drawArea::paintGL() {
 	while(b!=blocks.end()&&s!=rectangle.end())
 	{
 		//Paint the Rectangle
-		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
 		paint.drawRect(s->x,s->y,fw, fh);
 
 		//Text the names
 		SetNameFont(font);
 		paint.setFont(font); 
-		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 1));
+		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 2));
 		QFontMetrics Metrics(font);
 		QString tmp_name(b->getThisClass().getName().c_str());
 		paint.drawText(s->x+ fw/2-Metrics.width(tmp_name)/2,s->y+Metrics.height()+intervel,tmp_name);
@@ -93,7 +93,7 @@ void drawArea::paintGL() {
 		//Text the components
 		SetAttributeFont(font);
 		paint.setFont(font);
-		paint.setPen(QPen(Qt::black, 1));
+		paint.setPen(QPen(Qt::black, 2));
 		vector<string> tmp_v = b->getThisClass().getComponents();
 		vector<string>::iterator a = tmp_v.begin();
 		if (a == tmp_v.end())tmp_y += intervel;
@@ -105,12 +105,12 @@ void drawArea::paintGL() {
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
 		tmp_y += intervel;
-		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
+		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
 		paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
 		//Text the functions
 		SetAttributeFont(font);
 		paint.setFont(font);
-		paint.setPen(QPen(Qt::black, 1));
+		paint.setPen(QPen(Qt::black, 2));
 		tmp_v = b->getThisClass().getFunctions();
 		a = tmp_v.begin();
 		Metrics = QFontMetrics(font);
