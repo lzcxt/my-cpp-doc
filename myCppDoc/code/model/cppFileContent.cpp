@@ -105,7 +105,7 @@ namespace Automan {
 		}
 		++cur;
 	}
-	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr, bool is_public) {
+	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr, int pri0pro1pub2) {
 		string last_name;
 		int last_name_fid = -2;
 		string last_type;
@@ -113,24 +113,28 @@ namespace Automan {
 		int fid = 0;
 		while (cur->first != RIGHT_BRACE_) {
 			++fid;
-			if (cur->first == PUBLIC_) {
-				is_public = 1;
+			if (cur->first == PRIVATE_) {
+				pri0pro1pub2 = 0;
 				++cur;
 			}
-			else if (cur->first == PROTECTED_ || cur->first == PRIVATE_) {
-				is_public = 0;
+			if (cur->first == PROTECTED_) {
+				pri0pro1pub2 = 1;
+				++cur;
+			}
+			if (cur->first == PUBLIC_) {
+				pri0pro1pub2 = 2;
 				++cur;
 			}
 			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
 				if (last_name_fid + 1 == fid) {
-					string comp = string(1, "-+"[is_public]) + " " + last_name;
+					string comp = string(1, "-#+"[pri0pro1pub2]) + " " + last_name;
 					if (last_type_fid == fid - 2) comp += " " + last_type, fid -= 2;
 					class_ptr->addComponents(comp);
 				}
 				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
-				string func = string(1, "-+"[is_public]) + " " + last_name + "()";
+				string func = string(1, "-#+"[pri0pro1pub2]) + " " + last_name + "()";
 				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions(func);
 				++cur;
 			}
@@ -163,14 +167,14 @@ namespace Automan {
 		++cur;
 		if (cur->first == SEMICOLON_) return class_ptr;
 		if (cur->first == LEFT_BRACE_) {
-			ClassBody(++cur, class_ptr, is_default_public);
+			ClassBody(++cur, class_ptr, is_default_public ? 2 : 0);
 			return class_ptr;
 		}
 		assert(cur->first == COLON_);
 		++cur;
 		while (1) {
 			if (cur->first == LEFT_BRACE_) {
-				ClassBody(++cur, class_ptr, is_default_public); 
+				ClassBody(++cur, class_ptr, is_default_public ? 2 : 0); 
 				return class_ptr;
 			}
 			else if (cur->first == LESS_) ReadAngleBrackets(++cur);
