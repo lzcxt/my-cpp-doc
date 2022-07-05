@@ -4,6 +4,7 @@
 #include <vector>
 #include "common/cmFunctions.h"
 using namespace std;
+
 TOKEN getReserved(string s) {
 	if (s == "class" || s == "struct") return CLASS_;  // templory
 	else if (s == "public") return PUBLIC_;
@@ -12,8 +13,17 @@ TOKEN getReserved(string s) {
 	else if (s == "template") return TEMPLATE_;
 	else if (s == "const") return CONST_;
 	else if (s == "operator") return OPERATOR_;
+	else if (s == "int") return TYPE_INT_;
+	else if (s == "double") return TYPE_DOUBLE_;
+	else if (s == "float") return TYPE_FLOAT_;
+	else if (s == "char") return TYPE_CHAR_;
+	else if (s == "void") return TYPE_VOID_;
+	else if (s == "unsigned") return TYPE_UNSIGNED_;
+	else if (s == "long") return TYPE_LONG_;
+	else if (s == "string") return TYPE_STRING_;
 	else return UNKNOWN_WORD_;
 }
+
 
 fstream db_err("Model_ErrorLog.txt", fstream::out);
 fstream db_out("Model_Output.txt", fstream::out);
@@ -26,7 +36,16 @@ static bool isOverloadable(char ch) {
 	case '+': case '-': case '*': case '/': case '%':
 	case '|': case '&': case '~':
 	case '^': case '<': case '>': case '=': case '!':
-	return 1;
+		return 1;
+	}
+	return 0;
+}
+
+static bool isType(TOKEN  t) {
+	switch (t) {
+	case TYPE_INT_: case TYPE_CHAR_: case TYPE_VOID_: case TYPE_FLOAT_: case TYPE_DOUBLE_:
+	case TYPE_UNSIGNED_: case TYPE_LONG_: case TYPE_STRING_:
+		return 1;
 	}
 	return 0;
 }
@@ -88,22 +107,33 @@ namespace Automan {
 	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr) {
 		string last_name;
 		int last_name_fid = -2;
+		string last_type;
+		int last_type_fid = -3;
 		int fid = 0;
 		while (cur->first != RIGHT_BRACE_) {
 			++fid;
 			if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
 			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
-				if (last_name_fid + 1 == fid) class_ptr->addComponents(last_name);
+				if (last_name_fid + 1 == fid) {
+					string comp = "- " + last_name;
+					if (last_type_fid == fid - 2) comp += " " + last_type;
+					class_ptr->addComponents(comp);
+				}
 				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
-				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name + "()");
+				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions("+ " + last_name + "()");
 				++cur;
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
 			else if (cur->first == UNKNOWN_WORD_) {
 				last_name = cur->second;
 				last_name_fid = fid;
+				++cur;
+			}
+			else if (isType(cur->first)) {
+				last_type = cur->second;
+				last_type_fid = fid;
 				++cur;
 			}
 			else ++cur;
