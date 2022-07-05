@@ -63,8 +63,7 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	Class getThisClass() const;
-	void Block::setWidth(int w);
-	void Block::setHeight(int h);
+	bool get_show() const;
 };
 
 

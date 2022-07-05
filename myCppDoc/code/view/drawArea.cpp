@@ -74,6 +74,11 @@ void drawArea::paintGL() {
 	//Paint the blocks
 	while(b!=blocks.end()&&s!=rectangle.end())
 	{
+		if (b->get_show())
+		{
+			b++; s++;
+			continue;
+		}
 		//Paint the Rectangle
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
 		paint.drawRect(s->x,s->y,fw, fh);
@@ -106,7 +111,9 @@ void drawArea::paintGL() {
 		}
 		tmp_y += intervel;
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
-		paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
+		if(b->getThisClass().getComponents().empty()&& b->getThisClass().getFunctions().empty())
+			paint.drawLine(s->x, s->y + s->h / 2, s->x + fw, s->y + s->h / 2);
+		else paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
 		//Text the functions
 		SetAttributeFont(font);
 		paint.setFont(font);
@@ -132,6 +139,11 @@ void drawArea::paintGL() {
 	b = blocks.begin(); s = rectangle.begin();
 	while (b != blocks.end() && s != rectangle.end())
 	{
+		if (b->get_show())
+		{
+			b++; s++;
+			continue;
+		}
 		vector<string> SuperClass = b->getThisClass().getSuperclasses();
 		vector<string>::iterator sc = SuperClass.begin();
 		db_err_v << b->getThisClass().getName()<<":"<<endl;
@@ -188,7 +200,11 @@ vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter,int & fw, i
 		tmp = { 2 * width_intervel + fw,height_intervel + i * (fh + height_intervel),fw,fh };
 		p.push_back(tmp);
 	}
-	painter.setWindow(0,0, 3 * width_intervel + 2 * fw, height_intervel + i * (fh + height_intervel));
+	double final_width = 3 * width_intervel + 2 * fw;
+	double final_height = height_intervel + i * (fh + height_intervel);
+	if (final_width * 3 > final_height * 4) final_height = final_width * 3 / 4;
+	else final_width = final_height * 4 / 3;
+	painter.setWindow(0,0, final_width, final_height);
 	return p;
 	//the optimized strategy
 

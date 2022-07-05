@@ -23,18 +23,21 @@ bool myCppDoc::FileSaveAsHovered() {
 }
 
 void myCppDoc::formSelect(const set<Block>& Blocks){
-	/*QLabel* label=new QLabel(this);
+	QLabel* label=new QLabel(this);
 	label->setText("Select displayed classes:");
 	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(), 200,
 		MenuBar->rect().height() + ToolBar->rect().height());
 	label->show();
-	int checkcnt = 0;
+	int checkcnt = 0, checkheight=40;
 	for (auto i = Blocks.begin();i != Blocks.end();++i) {
 		QCheckBox* check = new QCheckBox(this);
 		check->setText(QString::fromStdString(i->getThisClass().getName()));
-		check->setGeometry()
-		Select->addWidget(check);
-	}*/
+		check->setGeometry(rect().width() - 200,
+			MenuBar->rect().height() + ToolBar->rect().height() + label->rect().height() + checkcnt * checkheight,
+			200, checkheight);
+		++checkcnt;
+		check->show();
+	}
 }
 
 void myCppDoc::showGraph(const list<string>& filelist) {
