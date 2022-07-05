@@ -29,15 +29,15 @@ void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
 	: QOpenGLWidget(parent), blocks(setOfBlocks), zoom(45) {
 }
-const int drawArea::base_width = 30;
-const int drawArea::base_height = 20;
+const int drawArea::base_width = 40;
+const int drawArea::base_height = 30;
 void drawArea::mouseMoveEvent(QMouseEvent* event) {
 
 }
 
 void drawArea::wheelEvent(QWheelEvent* event) {
 	zoom += event->delta() / 120;
-	if (zoom < 35) zoom = 35;
+	if (zoom < 30) zoom = 30;
 	resize(base_width*zoom, base_height*zoom);
 	update();
 }
