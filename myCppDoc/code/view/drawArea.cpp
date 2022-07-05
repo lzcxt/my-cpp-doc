@@ -108,7 +108,7 @@ void drawArea::paintGL() {
 			QString tmp_attribute(a->c_str());
 			paint.drawText(tmp_x, tmp_y, tmp_attribute);
 		}
-		tmp_y += 2;
+		tmp_y += 4;
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 0.5));
 		paint.drawLine(s->x, tmp_y, s->x + b->getWidth(), tmp_y);
 		//Text the functions
@@ -132,7 +132,7 @@ void drawArea::paintGL() {
 
 	//Paint the relations
 	//Paint the SuperClasses
-	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 0.5));
+	paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 1));
 	b = blocks.begin(); s = strategy.begin();
 	while (b != blocks.end() && s != strategy.end())
 	{
@@ -167,8 +167,8 @@ vector<PointXY> paint_strategy(const set<Block> &blocks, QPainter &painter)
 	vector<PointXY> p;
 	//initial strategy: sequential
 	//arrange the start positions of the blocks and the Window
-	const int width_intervel = 10;
-	const int height_intervel = 10;
+	const int width_intervel = 17;
+	const int height_intervel = 17;
 	int max_width = 0;
 	int max_height = height_intervel;
 	set<Block>::iterator b = blocks.begin();

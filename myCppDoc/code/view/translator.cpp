@@ -10,7 +10,7 @@ Block Translator::classToBlock(const shared_ptr<Class> c) {
 	SetNameFont(font);
 	QFontMetrics Metrics(font);
 	int width = Metrics.width(QString::fromStdString(c->getName())), height = Metrics.height();
-	vector<string> attr = c->getAttributes();
+	vector<string> attr = c->getComponents();
 	vector<string> func = c->getFunctions();
 	SetAttributeFont(font);
 	Metrics = QFontMetrics(font);
@@ -28,6 +28,8 @@ Block Translator::classToBlock(const shared_ptr<Class> c) {
 		width = max(width, Metrics.width(QString::fromStdString(func[i])));
 		height += Metrics.height() + 2;
 	}
+	height += 4;
+	if (attr.size() == 0)width*=2;
 	return Block(width*1.3, height, *c);
 }
 
