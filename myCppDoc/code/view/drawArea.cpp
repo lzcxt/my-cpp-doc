@@ -74,6 +74,11 @@ void drawArea::paintGL() {
 	//Paint the blocks
 	while(b!=blocks.end()&&s!=rectangle.end())
 	{
+		if (b->get_show())
+		{
+			b++; s++;
+			continue;
+		}
 		//Paint the Rectangle
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
 		paint.drawRect(s->x,s->y,fw, fh);
@@ -134,6 +139,11 @@ void drawArea::paintGL() {
 	b = blocks.begin(); s = rectangle.begin();
 	while (b != blocks.end() && s != rectangle.end())
 	{
+		if (b->get_show())
+		{
+			b++; s++;
+			continue;
+		}
 		vector<string> SuperClass = b->getThisClass().getSuperclasses();
 		vector<string>::iterator sc = SuperClass.begin();
 		db_err_v << b->getThisClass().getName()<<":"<<endl;

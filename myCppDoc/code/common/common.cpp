@@ -21,12 +21,9 @@ int Block::getHeight() const {
 	return height;
 }
 
-void Block::setWidth(int w){
-	width = w;
-}
-
-void Block::setHeight(int h){
-	height = h;
+bool Block::get_show() const
+{
+	return not_show;
 }
 
 Class Block::getThisClass() const {
