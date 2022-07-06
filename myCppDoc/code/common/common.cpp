@@ -21,6 +21,11 @@ int Block::getHeight() const {
 	return height;
 }
 
+bool Block::get_show() const
+{
+	return not_show;
+}
+
 Class Block::getThisClass() const {
 	return this_class;
 }

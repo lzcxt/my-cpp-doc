@@ -64,6 +64,7 @@ public:
 	int getHeight() const;
 	void setShow(const bool& nshow);
 	Class getThisClass() const;
+	bool get_show() const;
 };
 
 

@@ -6,6 +6,14 @@
 #include<set>
 using namespace std;
 
+struct PointXY
+{
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
 class drawArea : public QOpenGLWidget {
 	Q_OBJECT
 public:
@@ -23,4 +31,5 @@ private:
 	const static int base_height;
 	int zoom;
 	set<Block> blocks;
+	vector<struct PointXY> rectangle;
 };

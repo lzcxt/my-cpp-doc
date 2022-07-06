@@ -4,14 +4,27 @@
 #include <vector>
 #include "common/cmFunctions.h"
 using namespace std;
+
 TOKEN getReserved(string s) {
-	if (s == "class" || s == "struct") return CLASS_;  // templory
+	if (s == "class") return CLASS_;
+	else if (s == "struct") return STRUCT_;
 	else if (s == "public") return PUBLIC_;
 	else if (s == "private") return PRIVATE_;
 	else if (s == "protected") return PROTECTED_;
 	else if (s == "template") return TEMPLATE_;
+	else if (s == "const") return CONST_;
+	else if (s == "operator") return OPERATOR_;
+	else if (s == "int") return TYPE_INT_;
+	else if (s == "double") return TYPE_DOUBLE_;
+	else if (s == "float") return TYPE_FLOAT_;
+	else if (s == "char") return TYPE_CHAR_;
+	else if (s == "void") return TYPE_VOID_;
+	else if (s == "unsigned") return TYPE_UNSIGNED_;
+	else if (s == "long") return TYPE_LONG_;
+	else if (s == "string") return TYPE_STRING_;
 	else return UNKNOWN_WORD_;
 }
+
 
 fstream db_err("Model_ErrorLog.txt", fstream::out);
 fstream db_out("Model_Output.txt", fstream::out);
@@ -19,6 +32,24 @@ fstream db_out("Model_Output.txt", fstream::out);
 using vts = vector<pair<TOKEN, string> >;
 using vts_cit = vts::const_iterator;
 
+static bool isOverloadable(char ch) {
+	switch (ch) {
+	case '+': case '-': case '*': case '/': case '%':
+	case '|': case '&': case '~':
+	case '^': case '<': case '>': case '=': case '!':
+		return 1;
+	}
+	return 0;
+}
+
+static bool isType(TOKEN  t) {
+	switch (t) {
+	case TYPE_INT_: case TYPE_CHAR_: case TYPE_VOID_: case TYPE_FLOAT_: case TYPE_DOUBLE_:
+	case TYPE_UNSIGNED_: case TYPE_LONG_: case TYPE_STRING_:
+		return 1;
+	}
+	return 0;
+}
 namespace Automan {
 	void SingleQuote(vts_cit &cur) {
 		while ((cur++)->first != SINGLE_QUOTE_);
@@ -44,18 +75,27 @@ namespace Automan {
 		return vec;
 	}
 	string& TemplateDiscription(vts_cit &cur) {
-		static string st; st = "< ";
+		/*
+		template<class T, int N> class A 
+		=>
+		A<class T, int N>
+		*/
+		static string st; st = "<";
 		while (cur->first != GREATER_) {
-			if (cur->first == COMMA_) st += cur->second + " ";
-			else st += (++cur)->second, ++cur;
+			if (cur->first == COMMA_) st.pop_back();
+			st += (cur++)->second + " ";
 		}
 		++cur;
-		st += " >";
+		st.back() = '>';
 		return st;
 	}
 	/* read < ... > */
 	void ReadAngleBrackets(vts_cit &cur) {
 		while ((cur++)->first != GREATER_);
+	}
+
+	void ReadUntil(vts_cit &cur, TOKEN ed) {
+		while ((cur++)->first != ed);
 	}
 
 	/* read { ... } */
@@ -69,20 +109,38 @@ namespace Automan {
 		}
 		++cur;
 	}
-	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr) {
+	void ClassBody(vts_cit &cur, shared_ptr<Class> class_ptr, int pri0pro1pub2) {
 		string last_name;
 		int last_name_fid = -2;
+		string last_type;
+		int last_type_fid = -3;
 		int fid = 0;
 		while (cur->first != RIGHT_BRACE_) {
 			++fid;
-			if (cur->first == PUBLIC_ || cur->first == PROTECTED_ || cur->first == PRIVATE_) ++cur;
+			if (cur->first == PRIVATE_) {
+				pri0pro1pub2 = 0;
+				++cur;
+			}
+			if (cur->first == PROTECTED_) {
+				pri0pro1pub2 = 1;
+				++cur;
+			}
+			if (cur->first == PUBLIC_) {
+				pri0pro1pub2 = 2;
+				++cur;
+			}
 			else if (cur->first == COMMA_ || cur->first == SEMICOLON_) {
-				if (last_name_fid + 1 == fid) class_ptr->addComponents(last_name);
+				if (last_name_fid + 1 == fid) {
+					string comp = string(1, "-#+"[pri0pro1pub2]) + " " + last_name;
+					if (last_type_fid == fid - 2) comp += " " + last_type, fid -= 2;
+					class_ptr->addComponents(comp);
+				}
 				++cur;
 			}
 			else if (cur->first == LEFT_PARENTHESES_) {
-				if (last_name_fid + 1 == fid) class_ptr->addFucntions(last_name);
-				++cur;
+				string func = string(1, "-#+"[pri0pro1pub2]) + " " + last_name + "()";
+				if (last_name_fid + 1 == fid && last_name != class_ptr->getName()) class_ptr->addFucntions(func);
+				ReadUntil(++cur, RIGHT_PARENTHESES_);
 			}
 			else if (cur->first == LEFT_BRACE_) ReadBraceBody(++cur);
 			else if (cur->first == UNKNOWN_WORD_) {
@@ -90,11 +148,16 @@ namespace Automan {
 				last_name_fid = fid;
 				++cur;
 			}
+			else if (isType(cur->first)) {
+				last_type = cur->second;
+				last_type_fid = fid;
+				++cur;
+			}
 			else ++cur;
 		}
 		++cur;
 	}
-	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class) {
+	shared_ptr<Class> ClassAll(vts_cit &cur, map<string, shared_ptr<Class> > &name2class, bool is_default_public) {
 		/*
 		template <class T>
 		class UCPointer : public A {
@@ -108,14 +171,14 @@ namespace Automan {
 		++cur;
 		if (cur->first == SEMICOLON_) return class_ptr;
 		if (cur->first == LEFT_BRACE_) {
-			ClassBody(++cur, class_ptr);
+			ClassBody(++cur, class_ptr, is_default_public ? 2 : 0);
 			return class_ptr;
 		}
 		assert(cur->first == COLON_);
 		++cur;
 		while (1) {
 			if (cur->first == LEFT_BRACE_) {
-				ClassBody(++cur, class_ptr); 
+				ClassBody(++cur, class_ptr, is_default_public ? 2 : 0); 
 				return class_ptr;
 			}
 			else if (cur->first == LESS_) ReadAngleBrackets(++cur);
@@ -127,6 +190,7 @@ namespace Automan {
 				class_ptr->addSuperclasses(supp_name);
 				++cur;
 			}
+			else if (cur->first == DOUBLE_COLON_) ++cur;
 			else assert(0);
 		}
 	}
@@ -136,6 +200,7 @@ namespace Automan {
 		string template_disc;
 		int template_disc_id = -2;
 		int fid = 0;
+		bool class0struct1;
 		shared_ptr<Class> class_ptr;
 		while (cur != ed) {
 			++fid;
@@ -144,9 +209,11 @@ namespace Automan {
 			case DOUBLE_QUOTE_: DoubleQuote(++cur); break;
 			case LEFT_COMMENT_: last_comment = move(Comment(++cur)); last_comment_id = fid; break;
 			case TEMPLATE_: template_disc = move(TemplateDiscription(++(++cur))); template_disc_id = fid; break;
-			case CLASS_: 
-				class_ptr = ClassAll(++cur, name2class);
-				if (template_disc_id == fid - 1) class_ptr->addAttributes(template_disc);
+			case CLASS_:
+			case STRUCT_:
+				class0struct1 = cur->first == STRUCT_;
+				class_ptr = ClassAll(++cur, name2class, class0struct1);
+				if (template_disc_id == fid - 1) class_ptr->addAttributes(class_ptr->getName() + template_disc);
 				if (last_comment_id + (template_disc_id == fid - 1) == fid - 1)
 					for (auto &str : last_comment) class_ptr->addAttributes(str);
 				break;
@@ -165,7 +232,14 @@ void CppFileContent::pushBack(string s) {
 	vts items;
 	while (1) {
 		while (isspace(ch)) s_in.get(ch);
-		if (ch == ':') items.emplace_back(COLON_, ":"), s_in.get(ch);
+		if (ch == ':') {
+			s_in.get(ch);
+			if (ch == ':') {
+				items.emplace_back(DOUBLE_COLON_, "::");
+				s_in.get(ch);
+			}
+			else items.emplace_back(COLON_, ":");
+		}
 		else if (ch == '\'') items.emplace_back(SINGLE_QUOTE_, "'"), s_in.get(ch);
 		else if (ch == '"') items.emplace_back(DOUBLE_QUOTE_, "\""), s_in.get(ch);
 		else if (ch == '{') items.emplace_back(LEFT_BRACE_, "{"), s_in.get(ch);
@@ -270,6 +344,15 @@ void CppFileContent::pushBack(string s) {
 			string symbo;
 			while (isalpha(ch) || ch == '_' || isdigit(ch)) symbo.push_back(ch), s_in.get(ch);
 			TOKEN tmp = getReserved(symbo);
+			if (tmp == OPERATOR_) {
+				if (ch == '(') {
+					s_in.get(ch); s_in.get(ch);
+					symbo.push_back('(');
+					symbo.push_back(')');
+				}
+				while (isOverloadable(ch)) symbo.push_back(ch), s_in.get(ch);
+				tmp = UNKNOWN_WORD_;
+			}
 			items.emplace_back(tmp, symbo);
 		}
 		else if (ch == EOF) break;
