@@ -25,6 +25,10 @@ Class Block::getThisClass() const {
 	return this_class;
 }
 
+void Block::setShow(const bool& nshow) {
+	not_show = nshow;
+}
+
 bool isProjectFileName(const QString& s) {
 	string str = s.toStdString();
 	int len = str.length();

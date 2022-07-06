@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common.h"
 #include "drawArea.h"
 
 #include <QDir>
@@ -12,6 +13,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QScrollArea>
+#include <QCheckBox>
 
 class myCppDoc : public QMainWindow {
     Q_OBJECT
@@ -38,6 +40,11 @@ private:
 	QScrollArea* scroll;
 	drawArea* draw;
 
+	set<Block> Blocks;
+
+	vector<QCheckBox*> Checks;
+	vector<string> BlockNames;
+
 	QStringList getAllFiles(const QDir& dir);
 
 	void formSelect(const set<Block>& Blocks);
@@ -51,4 +58,6 @@ public slots:
 	bool FileLoadFolderManagement();
 	bool FileSaveAsManagement();
 	bool HelpInfoManagement();
+
+	bool StateSwitchManagement();
 };

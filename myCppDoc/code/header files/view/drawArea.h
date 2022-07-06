@@ -10,6 +10,7 @@ class drawArea : public QOpenGLWidget {
 	Q_OBJECT
 public:
 	drawArea(QWidget* parent, const set<Block>& setOfBlocks);
+	void setBlockVisual(const string& BlockName, const bool& nvisual);
 protected:
 	void mouseMoveEvent(QMouseEvent* event);
 	void wheelEvent(QWheelEvent* event);

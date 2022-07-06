@@ -23,27 +23,38 @@ bool myCppDoc::FileSaveAsHovered() {
 }
 
 void myCppDoc::formSelect(const set<Block>& Blocks){
-	/*QLabel* label=new QLabel(this);
-	label->setText("Select displayed classes:");
+	QLabel* label=new QLabel(this);
+	label->setText("Select omitted classes:");
 	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(), 200,
 		MenuBar->rect().height() + ToolBar->rect().height());
 	label->show();
-	int checkcnt = 0;
+	int checkcnt = 0, checkheight = 40;
+	/*for (int i = 0;i < Checks.size();++i) {
+		Checks[i]->~QCheckBox();
+	}*/
+	Checks.clear();
+	BlockNames.clear();
 	for (auto i = Blocks.begin();i != Blocks.end();++i) {
 		QCheckBox* check = new QCheckBox(this);
 		check->setText(QString::fromStdString(i->getThisClass().getName()));
-		check->setGeometry()
-		Select->addWidget(check);
-	}*/
+		Checks.push_back(check);
+		BlockNames.push_back(i->getThisClass().getName());
+		check->setGeometry(rect().width() - 200,
+			MenuBar->rect().height() + ToolBar->rect().height() + label->rect().height() + checkcnt * checkheight,
+			200, checkheight);
+		++checkcnt;
+		connect(check, SIGNAL(stateChanged(int)), this, SLOT(StateSwitchManagement()));
+		check->show();
+	}
 }
 
 void myCppDoc::showGraph(const list<string>& filelist) {
-	set<Block> Blocks = Translator().toBlockSet(Parser::parse(filelist));
+	Blocks = Translator().toBlockSet(Parser::parse(filelist));
 	formSelect(Blocks);
 	scroll = new scrollArea(this);
 	draw = new drawArea(this, Blocks);
-	draw->setGeometry(0, 0, 1350, 900);
-	draw->setMinimumSize(1050, 700);
+	draw->setGeometry(0, 0, 1600, 1200);
+	draw->setMinimumSize(1200, 900);
 	scroll->setWidget(draw);
 	scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200, 
 		rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
@@ -111,5 +122,17 @@ bool myCppDoc::FileSaveAsManagement() {
 
 bool myCppDoc::HelpInfoManagement() {
 	SendMsg("MyCppDoc v0.1");
+	return 1;
+}
+
+bool myCppDoc::StateSwitchManagement() {
+	for (int i = 0;i < Checks.size();++i) {
+		auto itr = Blocks.find(Block(0, 0, Class(BlockNames[i])));
+		Block b = *itr;
+		b.setShow(Checks[i]->isChecked());
+		Blocks.erase(itr);
+		Blocks.insert(b);
+	}
+	draw->update();
 	return 1;
 }

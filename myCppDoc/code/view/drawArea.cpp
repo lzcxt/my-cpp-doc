@@ -38,6 +38,15 @@ void drawArea::wheelEvent(QWheelEvent* event) {
 	update();
 }
 
+void drawArea::setBlockVisual(const string& BlockName, const bool& nvisual) {
+	Block b(0, 0, Class(BlockName));
+	auto i=blocks.find(b);
+	b = *i;
+	blocks.erase(i);
+	b.setShow(nvisual);
+	blocks.insert(b);
+}
+
 void drawArea::initializeGL() {
 
 }

@@ -62,6 +62,7 @@ public:
 	bool operator<(const Block& np) const;
 	int getWidth() const;
 	int getHeight() const;
+	void setShow(const bool& nshow);
 	Class getThisClass() const;
 };
 
