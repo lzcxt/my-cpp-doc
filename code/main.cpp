@@ -1,4 +1,4 @@
-#include "myCppDoc.h"
+#include "windows/myCppDoc.h"
 #include <QtWidgets/QApplication>
 
 

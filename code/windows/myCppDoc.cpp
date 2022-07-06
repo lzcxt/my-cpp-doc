@@ -12,20 +12,20 @@ myCppDoc::myCppDoc(QWidget *parent)
 	OperationMenu = MenuBar->addMenu("Operation");
 	HelpMenu = MenuBar->addMenu("Help");
 
-	FileLoad = new QAction(QIcon("textures/open.png"), "Load File", this);
+    FileLoad = new QAction(QIcon(":/myCppDoc/open.png"), "Load File", this);
 	FileLoad->setShortcut(Qt::CTRL + Qt::Key_I);
 	FileMenu->addAction(FileLoad);
 
-	FileLoadFolder = new QAction(QIcon("textures/open.png"), "Load Folder", this);
+    FileLoadFolder = new QAction(QIcon(":/myCppDoc/open.png"), "Load Folder", this);
 	FileLoadFolder->setShortcut(Qt::CTRL + Qt::Key_O);
 	FileMenu->addAction(FileLoadFolder);
 
-	FileSaveAs = new QAction(QIcon("textures/save.png"), "Save as", this);
+    FileSaveAs = new QAction(QIcon(":/myCppDoc/save.png"), "Save as", this);
 	FileSaveAs->setShortcut(Qt::CTRL + Qt::Key_S);
 	FileMenu->addAction(FileSaveAs);
 
 
-	HelpInfo = new QAction(QIcon("textures/info.png"), "Information", this);
+    HelpInfo = new QAction(QIcon(":/myCppDoc/info.png"), "Information", this);
 	HelpInfo->setShortcut(Qt::CTRL + Qt::Key_H);
 	HelpMenu->addAction(HelpInfo);
 
