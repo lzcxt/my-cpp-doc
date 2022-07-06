@@ -25,13 +25,13 @@ bool myCppDoc::FileSaveAsHovered() {
 void myCppDoc::formSelect(const set<Block>& Blocks){
 	QLabel* label=new QLabel(this);
 	label->setText("Select omitted classes:");
-	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(), 200,
-		MenuBar->rect().height() + ToolBar->rect().height());
+	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(),
+		200, 40);
 	label->show();
-	int checkcnt = 0, checkheight = 40;
-	/*for (int i = 0;i < Checks.size();++i) {
+	int checkcnt = 0, checkheight = 30;
+	for (int i = 0;i < Checks.size();++i) {
 		Checks[i]->~QCheckBox();
-	}*/
+	}
 	Checks.clear();
 	BlockNames.clear();
 	for (auto i = Blocks.begin();i != Blocks.end();++i) {
@@ -51,6 +51,7 @@ void myCppDoc::formSelect(const set<Block>& Blocks){
 void myCppDoc::showGraph(const list<string>& filelist) {
 	Blocks = Translator().toBlockSet(Parser::parse(filelist));
 	formSelect(Blocks);
+	if (scroll) scroll->~QScrollArea();
 	scroll = new scrollArea(this);
 	draw = new drawArea(this, Blocks);
 	draw->setGeometry(0, 0, 1600, 1200);
@@ -133,11 +134,11 @@ bool myCppDoc::StateSwitchManagement() {
 		Blocks.erase(itr);
 		Blocks.insert(b);
 	}
-	//draw->update();
 	scroll = new scrollArea(this);
 	draw = new drawArea(this, Blocks);
 	draw->setGeometry(0, 0, 1600, 1200);
 	draw->setMinimumSize(1200, 900);
+	if (scroll) scroll->~QScrollArea();
 	scroll->setWidget(draw);
 	scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
 		rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
