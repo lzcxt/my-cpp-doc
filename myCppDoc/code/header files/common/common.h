@@ -52,21 +52,10 @@ public:
 	}
 };
 
-class Block {
-	bool not_show;
-	int width, height;
-	Class this_class;
-
+class InfoClass {
 public:
-	Block(const int& w, const int& h, const Class& c);
-	bool operator<(const Block& np) const;
-	int getWidth() const;
-	int getHeight() const;
-	void setShow(const bool& nshow);
-	Class getThisClass() const;
-	bool get_show() const;
+	list<shared_ptr<Class>> ptr_to_listClass;
 };
-
 
 /**
  * @brief this exception must be catched, and then use 'e.Information()' 

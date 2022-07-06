@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "drawArea.h"
+#include "parser.h"
 
 #include <QDir>
 #include <QVariant>
@@ -37,6 +38,8 @@ private:
 
 	QStatusBar* Status;
 
+	Parser* parser;
+	
 	QScrollArea* scroll;
 	drawArea* draw;
 
@@ -45,10 +48,16 @@ private:
 	vector<QCheckBox*> Checks;
 	vector<string> BlockNames;
 
+	void Binding();
+	
 	QStringList getAllFiles(const QDir& dir);
 
 	void formSelect(const set<Block>& Blocks);
-	void showGraph(const list<string>& lis);
+	void showGraph(const list<string>& filelist);
+
+private:
+	void signalReadFinished() {};
+	void signalParse() {};
 
 public slots:
 	bool FileLoadHovered();

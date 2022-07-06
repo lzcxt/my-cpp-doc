@@ -1,8 +1,8 @@
-#include "model/cppFileContent.h"
+#include "cppFileContent.h"
 #include <sstream>
 #include <assert.h>
 #include <vector>
-#include "common/cmFunctions.h"
+#include <fstream>
 using namespace std;
 
 TOKEN getReserved(string s) {

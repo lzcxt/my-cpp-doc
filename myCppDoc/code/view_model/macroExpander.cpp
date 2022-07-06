@@ -1,4 +1,4 @@
-#include "model/macroExpander.h"
+#include "macroExpander.h"
 using namespace std;
 
 string MacroExpander::process(fstream &f) {

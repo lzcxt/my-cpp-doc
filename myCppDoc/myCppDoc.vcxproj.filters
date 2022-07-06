@@ -21,14 +21,8 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Source Files\Model">
-      <UniqueIdentifier>{a67205fc-2947-4b80-b33e-b264e07ae80a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\View">
       <UniqueIdentifier>{d8964061-4819-430b-af2a-c1480f338b45}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Model">
-      <UniqueIdentifier>{1ebaa07a-99c4-4365-9df3-a446f6841433}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\View">
       <UniqueIdentifier>{f0e126aa-12d2-47e8-a0ed-11f67821c1dc}</UniqueIdentifier>
@@ -39,21 +33,15 @@
     <Filter Include="Source Files\ViewModel">
       <UniqueIdentifier>{72db0ad0-13e0-48c5-91b6-c6251a7134cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\App">
+      <UniqueIdentifier>{6360d690-53c5-4997-8f53-4188cd1daa52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\App">
+      <UniqueIdentifier>{431f4e09-eba8-4cb9-b57c-75c196705d6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\view\myCppDoc.cpp">
-      <Filter>Source Files\View</Filter>
-    </ClCompile>
     <ClCompile Include="code\view\drawArea.cpp">
-      <Filter>Source Files\View</Filter>
-    </ClCompile>
-    <ClCompile Include="code\model\cppFileContent.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="code\model\macroExpander.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="code\view\runtimeEvents.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
     <ClCompile Include="code\view_model\parser.cpp">
@@ -62,17 +50,29 @@
     <ClCompile Include="code\view\translator.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
-    <ClCompile Include="code\view\main.cpp">
-      <Filter>Source Files\View</Filter>
-    </ClCompile>
     <ClCompile Include="code\view\SetFont.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
-    <ClCompile Include="code\common\common.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="code\view_model\macroExpander.cpp">
+      <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
-    <ClCompile Include="code\view\scrollArea.cpp">
+    <ClCompile Include="code\view_model\cppFileContent.cpp">
+      <Filter>Source Files\ViewModel</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\viewCmFunctions.cpp">
       <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\app\appBinding.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\windows\myCppDoc.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\windows\scrollArea.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="code\view\windows\main.cpp">
+      <Filter>Source Files\App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,12 +86,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\header files\model\cppFileContent.h">
-      <Filter>Header Files\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="code\header files\model\macroExpander.h">
-      <Filter>Header Files\Model</Filter>
-    </ClInclude>
     <ClInclude Include="code\header files\view\translator.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
@@ -101,22 +95,31 @@
     <ClInclude Include="code\header files\view\SetFont.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
-    <ClInclude Include="code\header files\common\cmFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="code\header files\common\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\header files\scrollArea.h">
+    <ClInclude Include="code\header files\view_model\cppFileContent.h">
+      <Filter>Header Files\ViewModel</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view_model\macroExpander.h">
+      <Filter>Header Files\ViewModel</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view\viewCmFunctions.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view\viewTypes.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="code\header files\view\windows\scrollArea.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="code\header files\view\myCppDoc.h">
-      <Filter>Header Files\View</Filter>
-    </QtMoc>
     <QtMoc Include="code\header files\view\drawArea.h">
       <Filter>Header Files\View</Filter>
+    </QtMoc>
+    <QtMoc Include="code\header files\view\windows\myCppDoc.h">
+      <Filter>Header Files\App</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

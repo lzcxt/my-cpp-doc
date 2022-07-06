@@ -2,7 +2,6 @@
 #include "parser.h"
 #include "macroExpander.h"
 #include "cppFileContent.h"
-#include "cmFunctions.h"
 #include <fstream>
 using namespace std;
 

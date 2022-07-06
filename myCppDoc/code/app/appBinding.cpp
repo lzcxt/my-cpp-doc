@@ -1,6 +1,7 @@
 #include "myCppDoc.h"
+#include "common.h"
 #include "parser.h"
-#include "cmFunctions.h"
+#include "viewCmFunctions.h"
 #include "translator.h"
 #include "scrollArea.h"
 
@@ -12,6 +13,31 @@
 #include <QCheckBox>
 using namespace std;
 
+InfoClass Info;
+
+void myCppDoc::Binding() {
+	connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
+	connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
+	connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
+	connect(HelpInfo, SIGNAL(triggered()), this, SLOT(HelpInfoManagement()));
+	connect(FileLoad, SIGNAL(hovered()), this, SLOT(FileLoadHovered()));
+	connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
+}
+
+void myCppDoc::showGraph(const list<string>& filelist) {
+	Blocks = Translator().toBlockSet(Parser::parse(filelist));
+	formSelect(Blocks);
+	if (scroll) scroll->~QScrollArea();
+	scroll = new scrollArea(this);
+	draw = new drawArea(this, Blocks);
+	draw->setGeometry(0, 0, 1600, 1200);
+	draw->setMinimumSize(1200, 900);
+	scroll->setWidget(draw);
+	scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
+		rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
+	scroll->show();
+}
+
 bool myCppDoc::FileLoadHovered() {
 	Status->showMessage("Load file(s)");
 	return 1;
@@ -22,11 +48,11 @@ bool myCppDoc::FileSaveAsHovered() {
 	return 1;
 }
 
-void myCppDoc::formSelect(const set<Block>& Blocks){
-	QLabel* label=new QLabel(this);
+void myCppDoc::formSelect(const set<Block>& Blocks) {
+	QLabel* label = new QLabel(this);
 	label->setText("Select omitted classes:");
-	label->setGeometry(rect().width() - 200, MenuBar->rect().height() + ToolBar->rect().height(),
-		200, 40);
+	label->setGeometry(rect().width() - 200,
+		MenuBar->rect().height() + ToolBar->rect().height(), 200, 40);
 	label->show();
 	int checkcnt = 0, checkheight = 30;
 	for (int i = 0;i < Checks.size();++i) {
@@ -48,22 +74,8 @@ void myCppDoc::formSelect(const set<Block>& Blocks){
 	}
 }
 
-void myCppDoc::showGraph(const list<string>& filelist) {
-	Blocks = Translator().toBlockSet(Parser::parse(filelist));
-	formSelect(Blocks);
-	if (scroll) scroll->~QScrollArea();
-	scroll = new scrollArea(this);
-	draw = new drawArea(this, Blocks);
-	draw->setGeometry(0, 0, 1600, 1200);
-	draw->setMinimumSize(1200, 900);
-	scroll->setWidget(draw);
-	scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200, 
-		rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
-	scroll->show();
-}
-
 bool myCppDoc::FileLoadManagement() {
-	QStringList path = QFileDialog::getOpenFileNames(this,"open","","C++ Project files (*.cpp *.h *.c)");
+	QStringList path = QFileDialog::getOpenFileNames(this, "open", "", "C++ Project files (*.cpp *.h *.c)");
 	if (path.size() == 0) return 1;
 	list<string> filelist;
 	for (auto i = path.begin();i != path.end();++i) {
@@ -113,7 +125,7 @@ bool myCppDoc::FileLoadFolderManagement() {
 bool myCppDoc::FileSaveAsManagement() {
 	if (draw == Q_NULLPTR) return 1;
 	QString path = QFileDialog::getSaveFileName(this, "save as", "untitled.bmp", "Image(.bmp)");
-	if (path != ""){
+	if (path != "") {
 		QImage image = draw->grabFramebuffer();
 		image.save(path, "BMP");
 		return 1;
