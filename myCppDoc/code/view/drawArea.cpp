@@ -167,6 +167,10 @@ void drawArea::paintGL() {
 				if (tmp_name.compare(*sc)==0)break;
 				b2++; s2++;
 			}
+			if (b2->get_show())
+			{
+				sc++;continue;
+			}
 			paint.setPen(QPen(Qt::darkGreen,2));
 			DrawArrow(paint, *s, *s2,rectangle);
 			sc++;
