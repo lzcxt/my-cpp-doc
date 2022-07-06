@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.h"
-#include "drawArea.h"
-#include "parser.h"
+#include "../common/common.h"
+#include "../view/drawArea.h"
+#include "../view_model/parser.h"
 
 #include <QDir>
 #include <QVariant>

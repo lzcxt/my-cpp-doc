@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "common/common.h"
+#include "../common/common.h"
 #include <queue>
 #include <memory>
 #include <map>

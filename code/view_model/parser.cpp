@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../common/common.h"
 #include "parser.h"
 #include "macroExpander.h"
 #include "cppFileContent.h"

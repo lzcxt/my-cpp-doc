@@ -1,4 +1,4 @@
-#include "common/common.h"
+#include "../common/common.h"
 #include "viewCmFunctions.h"
 #include <QString>
 #include <QMessageBox>

@@ -32,13 +32,8 @@
 *.out
 *.app
 
-# Debug file
-myCppDoc/Model_ErrorLog.txt
-myCppDoc/Model_Output.txt
-
 # Directory
-/.vs/
-/Debug/
-/myCppDoc/Debug/
-/.vscode/
-/x64/
+*.vscode/
+
+# others
+CMakeLists.txt.user

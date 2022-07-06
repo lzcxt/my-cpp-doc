@@ -1,9 +1,9 @@
-#include "myCppDoc.h"
-#include "common.h"
-#include "parser.h"
-#include "viewCmFunctions.h"
-#include "translator.h"
-#include "scrollArea.h"
+#include "../windows/myCppDoc.h"
+#include "../common/common.h"
+#include "../view_model/parser.h"
+#include "../view/viewCmFunctions.h"
+#include "../view/translator.h"
+#include "../windows/scrollArea.h"
 
 #include <list>
 
