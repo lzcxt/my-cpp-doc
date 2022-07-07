@@ -2,7 +2,8 @@
 using namespace std;
 
 myCppDoc::myCppDoc() {
-    m_mainWindow.attach_fileProcessor(m_parser.get_fileProcessor());
+    // TODO do the binding
+
 }
 
 void myCppDoc::show() {

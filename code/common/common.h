@@ -1,12 +1,8 @@
 #pragma once
-
 #include <list>
 #include <vector>
 #include <iostream>
 #include <exception>
-#include <memory>
-#include <functional>
-
 using namespace std;
 
 /**
@@ -35,8 +31,6 @@ public:
     const vector<string>& getAttributes() const { return attributes; }
     const vector<string>& getFunctions() const { return functions; }
 };
-
-using fileProcessor = function<const list<shared_ptr<Class>>&(list<string>)>;
 
 /**
  * @brief this exception must be catched, and then use 'e.Information()' 
