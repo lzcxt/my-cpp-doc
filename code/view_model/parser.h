@@ -5,6 +5,6 @@
 #include <memory>
 class Parser {
 public:
-    static const std::list<shared_ptr<Class>>& parse(std::list<std::string> file_names);
+    const std::list<shared_ptr<Class>>& parse(std::list<std::string> file_names);
 private:
 };

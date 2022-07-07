@@ -44,11 +44,7 @@ mainWindow::mainWindow(QWidget *parent)
     scroll = Q_NULLPTR;
     draw = Q_NULLPTR;
 
-    Binding();
-}
 
-
-void mainWindow::Binding() {
     connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
     connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
     connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
@@ -57,8 +53,22 @@ void mainWindow::Binding() {
     connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
 }
 
+
+void mainWindow::BindFileLoadManagement(function<bool()>&& cf) {
+    connect(FileLoad, SIGNAL(triggered()), this, SLOT(cf));
+}
+void mainWindow::BindFileLoadFolderManagement(function<bool()>&& cf) {
+    connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(cf));
+}
+void mainWindow::BindFileLoad(function<bool()>&& cf) {
+    connect(FileLoad, SIGNAL(triggered()), this, SLOT(cf));
+}
+void mainWindow::BindFileSaveAs(function<bool()>&& cf) {
+    connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(cf));
+}
+
 void mainWindow::showGraph(const list<string>& filelist) {
-    Blocks = Translator().toBlockSet(Parser::parse(filelist));
+    Blocks = Translator().toBlockSet(parser->parse(filelist));
     formSelect(Blocks);
     if (scroll) scroll->~QScrollArea();
     scroll = new scrollArea(this);
@@ -188,7 +198,4 @@ bool mainWindow::StateSwitchManagement() {
         rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
     scroll->show();
     return 1;
-}
-
-mainWindow::~mainWindow() {
 }

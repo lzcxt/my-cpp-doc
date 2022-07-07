@@ -3,6 +3,7 @@ using namespace std;
 
 myCppDoc::myCppDoc() {
     // TODO do the binding
+
 }
 
 void myCppDoc::show() {

@@ -29,7 +29,21 @@ class mainWindow : public QMainWindow {
 
 public:
     mainWindow(QWidget *parent = nullptr);
-    ~mainWindow();
+    ~mainWindow() {}
+
+    /*
+    connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
+    connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
+    connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
+    connect(HelpInfo, SIGNAL(triggered()), this, SLOT(HelpInfoManagement()));
+    connect(FileLoad, SIGNAL(hovered()), this, SLOT(FileLoadHovered()));
+    connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
+     */
+    void BindFileLoadManagement(function<bool()>&& cf);
+    void BindFileLoadFolderManagement(function<bool()>&& cf);
+    void BindFileSaveAsManagement(function<bool()>&& cf);
+    void BindFileLoad(function<bool()>&& cf);
+    void BindFileSaveAs(function<bool()>&& cf);
 
 private:
     QMenuBar* MenuBar;
@@ -55,8 +69,6 @@ private:
 
     vector<QCheckBox*> Checks;
     vector<string> BlockNames;
-
-    void Binding();
 
     QStringList getAllFiles(const QDir& dir);
 
