@@ -31,12 +31,12 @@ Block Translator::classToBlock(const shared_ptr<Class> c) {
 		height += Metrics.height() + intervel;
 	}
 	height += intervel;
-	return Block(width*1.6, height, *c);
+    return Block(width*1.6, height, c);
 }
 
-set<Block> Translator::toBlockSet(const list<shared_ptr <Class>>& lis) {
+set<Block> Translator::toBlockSet(const list<shared_ptr <Class>>* lis) {
 	set<Block> res;
-	for (auto i = lis.begin();i != lis.end();++i) {
+    for (auto i = lis->begin();i != lis->end();++i) {
 		res.insert(classToBlock(*i));
 	}
 	return res;

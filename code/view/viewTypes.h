@@ -4,15 +4,15 @@
 class Block {
 	bool not_show;
 	int width, height;
-	Class this_class;
+    shared_ptr<Class> this_class;
 
 public:
-	Block(const int& w, const int& h, const Class& c)
+    Block(const int& w, const int& h, shared_ptr<Class> c)
 		:not_show(0), width(w), height(h), this_class(c) {
 	}
 
 	bool operator<(const Block& np) const {
-		return this_class.getName() < np.getThisClass().getName();
+        return this_class->getName() < np.getThisClass()->getName();
 	}
 
 	int getWidth() const {
@@ -27,7 +27,7 @@ public:
 		return not_show;
 	}
 
-	Class getThisClass() const {
+    shared_ptr<Class> getThisClass() const {
 	   return this_class;
 	}
 

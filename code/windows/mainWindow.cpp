@@ -50,18 +50,25 @@ mainWindow::mainWindow(QWidget *parent)
     connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
 }
 
+Notifier mainWindow::get_finishParseNotifier() {
+    return [this]() {
+        cout << "fuck" << endl;
+        cerr << "finish reading and start to draw" << endl;
+        Blocks = Translator().toBlockSet(list_classes);
+        formSelect(Blocks);
+        if (scroll) scroll->~QScrollArea();
+        scroll = new scrollArea(this);
+        draw = new drawArea(this, Blocks);
+        draw->setGeometry(0, 0, 1600, 1200);
+        draw->setMinimumSize(1200, 900);
+        scroll->setWidget(draw);
+        scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
+            rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
+        scroll->show();
+    };
+}
 void mainWindow::showGraph(const list<string>& filelist) {
-    Blocks = Translator().toBlockSet(m_file_processor(filelist));
-    formSelect(Blocks);
-    if (scroll) scroll->~QScrollArea();
-    scroll = new scrollArea(this);
-    draw = new drawArea(this, Blocks);
-    draw->setGeometry(0, 0, 1600, 1200);
-    draw->setMinimumSize(1200, 900);
-    scroll->setWidget(draw);
-    scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
-        rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
-    scroll->show();
+
 }
 
 bool mainWindow::FileLoadHovered() {
@@ -88,9 +95,9 @@ void mainWindow::formSelect(const set<Block>& Blocks) {
     BlockNames.clear();
     for (auto i = Blocks.begin();i != Blocks.end();++i) {
         QCheckBox* check = new QCheckBox(this);
-        check->setText(QString::fromStdString(i->getThisClass().getName()));
+        check->setText(QString::fromStdString(i->getThisClass()->getName()));
         Checks.push_back(check);
-        BlockNames.push_back(i->getThisClass().getName());
+        BlockNames.push_back(i->getThisClass()->getName());
         check->setGeometry(rect().width() - 200,
             MenuBar->rect().height() + ToolBar->rect().height() + label->rect().height() + checkcnt * checkheight,
             200, checkheight);
@@ -112,7 +119,7 @@ bool mainWindow::FileLoadManagement() {
         SendMsg("No valid file selected.");
         return 1;
     }
-    showGraph(filelist);
+    m_file_processor(filelist);
     return 1;
 }
 
@@ -144,7 +151,7 @@ bool mainWindow::FileLoadFolderManagement() {
         SendMsg("No valid file found.");
         return 1;
     }
-    showGraph(filelist);
+    m_file_processor(filelist);
     return 1;
 }
 
@@ -166,7 +173,7 @@ bool mainWindow::HelpInfoManagement() {
 
 bool mainWindow::StateSwitchManagement() {
     for (int i = 0; i < Checks.size();++i) {
-        auto itr = Blocks.find(Block(0, 0, Class(BlockNames[i])));
+        auto itr = Blocks.find(Block(0, 0, make_shared<Class>(BlockNames[i])));
         Block b = *itr;
         b.setShow(Checks[i]->isChecked());
         Blocks.erase(itr);

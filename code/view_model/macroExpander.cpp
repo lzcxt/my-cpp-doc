@@ -17,3 +17,5 @@ string MacroExpander::process(fstream &f) {
 	}
 	return str;
 }
+
+void MacroExpander::Init() { }

@@ -10,6 +10,7 @@
 class MacroExpander {
 public:
 	std::string process(std::fstream &f);
+    void Init();
 private:
 
 };

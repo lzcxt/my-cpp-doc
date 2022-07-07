@@ -6,7 +6,7 @@
 
 class Translator {
 private:
-	Block classToBlock(const shared_ptr<Class> c);
+    Block classToBlock(const shared_ptr<Class> c);
 public:
-	set<Block> toBlockSet(const list<shared_ptr<Class>>& lis);
+    set<Block> toBlockSet(const list<shared_ptr<Class>>* lis);
 };

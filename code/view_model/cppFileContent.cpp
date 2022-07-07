@@ -5,6 +5,10 @@
 #include <fstream>
 using namespace std;
 
+void CppFileContent::Init() {
+    name2class.clear();
+}
+
 enum TOKEN {
     COLON_,
     DOUBLE_COLON_,
@@ -424,7 +428,8 @@ void CppFileContent::pushBack(string file_content) {
 	Automan::File(it, items.cend(), name2class);
 }
 
-void CppFileContent::getClasses(list<shared_ptr<Class>>& classes) {
+
+void CppFileContent::toClasses(list<shared_ptr<Class>>& classes) {
     classes.clear();
     for (const auto &item : name2class) classes.emplace_back(item.second);
     db_out << classes.size() << endl;

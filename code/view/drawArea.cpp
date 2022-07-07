@@ -24,7 +24,7 @@ vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter, int & fw, 
 void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
 
 drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
-	: QOpenGLWidget(parent), blocks(setOfBlocks), zoom(45) {
+    : QOpenGLWidget(parent), zoom(45), blocks(setOfBlocks) {
 }
 const int drawArea::base_width = 40;
 const int drawArea::base_height = 30;
@@ -39,7 +39,7 @@ void drawArea::wheelEvent(QWheelEvent* event) {
 }
 
 void drawArea::setBlockVisual(const string& BlockName, const bool& nvisual) {
-	Block b(0, 0, Class(BlockName));
+    Block b(0, 0, make_shared<Class>(BlockName));
 	auto i=blocks.find(b);
 	b = *i;
 	blocks.erase(i);
@@ -89,7 +89,7 @@ void drawArea::paintGL() {
 		paint.setFont(font); 
 		paint.setPen(QPen(QColor(0x75, 0x75, 0x75), 2));
 		QFontMetrics Metrics(font);
-		QString tmp_name(b->getThisClass().getName().c_str());
+        QString tmp_name(b->getThisClass()->getName().c_str());
 		paint.drawText(s->x+ fw/2-Metrics.width(tmp_name)/2,s->y+Metrics.height()+intervel,tmp_name);
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 1.25));
 		int tmp_y = s->y + Metrics.height() + 2*intervel;
@@ -100,7 +100,7 @@ void drawArea::paintGL() {
 		SetAttributeFont(font);
 		paint.setFont(font);
 		paint.setPen(QPen(Qt::black, 2));
-		vector<string> tmp_v = b->getThisClass().getComponents();
+        vector<string> tmp_v = b->getThisClass()->getComponents();
 		vector<string>::iterator a = tmp_v.begin();
 		if (a == tmp_v.end())tmp_y += intervel;
 		Metrics = QFontMetrics(font);
@@ -112,14 +112,14 @@ void drawArea::paintGL() {
 		}
 		tmp_y += intervel;
 		paint.setPen(QPen(QColor(0x7f, 0xb5, 0xa7), 2));
-		if(b->getThisClass().getComponents().empty()&& b->getThisClass().getFunctions().empty())
+        if(b->getThisClass()->getComponents().empty()&& b->getThisClass()->getFunctions().empty())
 			paint.drawLine(s->x, s->y + s->h / 2, s->x + fw, s->y + s->h / 2);
 		else paint.drawLine(s->x, tmp_y, s->x + fw, tmp_y);
 		//Text the functions
 		SetAttributeFont(font);
 		paint.setFont(font);
 		paint.setPen(QPen(Qt::black, 2));
-		tmp_v = b->getThisClass().getFunctions();
+        tmp_v = b->getThisClass()->getFunctions();
 		a = tmp_v.begin();
 		Metrics = QFontMetrics(font);
 		for (; a != tmp_v.end(); a++)
@@ -145,9 +145,9 @@ void drawArea::paintGL() {
 			b++; s++;
 			continue;
 		}
-		vector<string> SuperClass = b->getThisClass().getSuperclasses();
+        vector<string> SuperClass = b->getThisClass()->getSuperclasses();
 		vector<string>::iterator sc = SuperClass.begin();
-		db_err_v << b->getThisClass().getName()<<":"<<endl;
+        db_err_v << b->getThisClass()->getName()<<":"<<endl;
 		while (sc != SuperClass.end())
 		{
 			db_err_v <<*sc<<endl;
@@ -155,7 +155,7 @@ void drawArea::paintGL() {
 			set<Block>::iterator b2 = blocks.begin();
 			while (b2 != blocks.end() && s2 != rectangle.end())
 			{
-				string tmp_name = b2->getThisClass().getName();
+                string tmp_name = b2->getThisClass()->getName();
 				if (tmp_name.compare(*sc)==0)break;
 				b2++; s2++;
 			}
