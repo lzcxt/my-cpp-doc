@@ -8,6 +8,7 @@
 #include "../view/viewCmFunctions.h"
 #include "../view_model/parser.h"
 
+#include <memory>
 #include <QFileDialog>
 #include <QString>
 #include <QDir>
@@ -23,6 +24,7 @@
 #include <QCheckBox>
 #include <QScrollArea>
 
+using namespace std;
 
 class mainWindow : public QMainWindow {
     Q_OBJECT
@@ -30,20 +32,6 @@ class mainWindow : public QMainWindow {
 public:
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow() {}
-
-    /*
-    connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
-    connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
-    connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
-    connect(HelpInfo, SIGNAL(triggered()), this, SLOT(HelpInfoManagement()));
-    connect(FileLoad, SIGNAL(hovered()), this, SLOT(FileLoadHovered()));
-    connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
-     */
-    void BindFileLoadManagement(function<bool()>&& cf);
-    void BindFileLoadFolderManagement(function<bool()>&& cf);
-    void BindFileSaveAsManagement(function<bool()>&& cf);
-    void BindFileLoad(function<bool()>&& cf);
-    void BindFileSaveAs(function<bool()>&& cf);
 
 private:
     QMenuBar* MenuBar;

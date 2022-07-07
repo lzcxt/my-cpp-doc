@@ -6,69 +6,14 @@
 #include <memory>
 #include <map>
 
-
-enum TOKEN {
-	COLON_,
-	DOUBLE_COLON_,
-	SEMICOLON_,
-	COMMA_,
-	BACKWARD_SLASH_,
-	BACKWARD_SLASH_WITH_CHARACTOR_,
-	DIVIDE_,
-	MULTIPLY_,
-	SINGLE_QUOTE_,
-	DOUBLE_QUOTE_,
-	LEFT_BRACE_,
-	RIGHT_BRACE_,
-	QUESTION_MARK_,
-	LEFT_COMMENT_,
-	RIGHT_COMMENT_,
-	LOGICAL_AND_,
-	ARITHMATIC_AND_,
-	LOGICAL_OR_,
-	ARITHMATIC_OR_,
-	LESS_,
-	SINGLE_EQUAL_,
-	DOUBLE_EQUAL_,
-	LESS_EQUAL_,
-	LEFT_PARENTHESES_,
-	RIGHT_PARENTHESES_,
-	GREATER_,
-	GREATER_EQUAL_,
-	ADD_SIGN_,
-	MINUS_SIGN_,
-	AT_SIGN_,
-	NUMBER_,
-	CLASS_,
-	STRUCT_,
-	PUBLIC_,
-	PRIVATE_,
-	PROTECTED_,
-    TEMPLATE_,
-	EOF_,
-	CONST_,
-	OPERATOR_,
-    THROW_,
-	TYPE_INT_,
-	TYPE_DOUBLE_,
-	TYPE_FLOAT_,
-	TYPE_CHAR_,
-	TYPE_VOID_,
-	TYPE_UNSIGNED_,
-	TYPE_LONG_,
-	TYPE_STRING_,
-    UNKNOWN_WORD_,
-    UNKNOWN_SYMBOL_,
-};
-
 /**
  * this class use to seperate the cpp file into word
  */
 class CppFileContent {
 public:
 	CppFileContent() {}
-	void pushBack(std::string s);
-	const std::list<shared_ptr<Class>>& getClasses();
+    void pushBack(std::string file_content);
+    void getClasses(std::list<shared_ptr<Class>>& classes);
 private:
 	std::map<std::string, shared_ptr<Class> > name2class;
 };

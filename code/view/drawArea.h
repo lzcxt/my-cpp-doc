@@ -3,16 +3,12 @@
 #include "../common/common.h"
 #include "../view/viewTypes.h"
 #include <QOpenGLWidget>
-
 #include<set>
+
 using namespace std;
 
-struct PointXY
-{
-	int x;
-	int y;
-	int w;
-	int h;
+struct PointXY {
+    int x, y, w, h;
 };
 
 class drawArea : public QOpenGLWidget {

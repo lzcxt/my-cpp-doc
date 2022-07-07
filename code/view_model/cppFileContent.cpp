@@ -5,6 +5,61 @@
 #include <fstream>
 using namespace std;
 
+enum TOKEN {
+    COLON_,
+    DOUBLE_COLON_,
+    SEMICOLON_,
+    COMMA_,
+    BACKWARD_SLASH_,
+    BACKWARD_SLASH_WITH_CHARACTOR_,
+    DIVIDE_,
+    MULTIPLY_,
+    SINGLE_QUOTE_,
+    DOUBLE_QUOTE_,
+    LEFT_BRACE_,
+    RIGHT_BRACE_,
+    QUESTION_MARK_,
+    LEFT_COMMENT_,
+    RIGHT_COMMENT_,
+    LOGICAL_AND_,
+    ARITHMATIC_AND_,
+    LOGICAL_OR_,
+    ARITHMATIC_OR_,
+    LESS_,
+    SINGLE_EQUAL_,
+    DOUBLE_EQUAL_,
+    LESS_EQUAL_,
+    LEFT_PARENTHESES_,
+    RIGHT_PARENTHESES_,
+    GREATER_,
+    GREATER_EQUAL_,
+    ADD_SIGN_,
+    MINUS_SIGN_,
+    AT_SIGN_,
+    NUMBER_,
+    CLASS_,
+    STRUCT_,
+    PUBLIC_,
+    PRIVATE_,
+    PROTECTED_,
+    TEMPLATE_,
+    EOF_,
+    CONST_,
+    OPERATOR_,
+    THROW_,
+    TYPE_INT_,
+    TYPE_DOUBLE_,
+    TYPE_FLOAT_,
+    TYPE_CHAR_,
+    TYPE_VOID_,
+    TYPE_UNSIGNED_,
+    TYPE_LONG_,
+    TYPE_STRING_,
+    UNKNOWN_WORD_,
+    UNKNOWN_SYMBOL_,
+};
+
+
 TOKEN getReserved(string s) {
 	if (s == "class") return CLASS_;
 	else if (s == "struct") return STRUCT_;
@@ -227,8 +282,8 @@ namespace Automan {
 	}
 }
 
-void CppFileContent::pushBack(string s) {
-	stringstream s_in(s + string(1, EOF), ios_base::in);
+void CppFileContent::pushBack(string file_content) {
+    stringstream s_in(file_content + string(1, EOF), ios_base::in);
 	char ch;
 	s_in.get(ch);
 	db_err << "---- Init CppFileContent::pushBack ----" << endl;
@@ -369,12 +424,11 @@ void CppFileContent::pushBack(string s) {
 	Automan::File(it, items.cend(), name2class);
 }
 
-const list<shared_ptr<Class>>& CppFileContent::getClasses() {
-	static list<shared_ptr<Class>> cls;
-	cls.clear();
-	for (const auto &item : name2class) cls.emplace_back(item.second);
-	db_out << cls.size() << endl;
-	for (auto item : cls) {
+void CppFileContent::getClasses(list<shared_ptr<Class>>& classes) {
+    classes.clear();
+    for (const auto &item : name2class) classes.emplace_back(item.second);
+    db_out << classes.size() << endl;
+    for (auto item : classes) {
 		db_out << item->getName() << ": " << endl;
 		db_out << "  super class : ";
 		for (auto sup : item->getSuperclasses())
@@ -392,6 +446,5 @@ const list<shared_ptr<Class>>& CppFileContent::getClasses() {
 		for (auto func : item->getFunctions())
 			db_out << func << ", ";
 		db_out << endl;
-	}
-	return cls;
+    }
 }

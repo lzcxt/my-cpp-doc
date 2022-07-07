@@ -39,8 +39,6 @@ mainWindow::mainWindow(QWidget *parent)
     Status->showMessage("Hello, this is your cute status bar.");
     setStatusBar(Status);
 
-    parser = new Parser();
-
     scroll = Q_NULLPTR;
     draw = Q_NULLPTR;
 
@@ -53,22 +51,9 @@ mainWindow::mainWindow(QWidget *parent)
     connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
 }
 
-
-void mainWindow::BindFileLoadManagement(function<bool()>&& cf) {
-    connect(FileLoad, SIGNAL(triggered()), this, SLOT(cf));
-}
-void mainWindow::BindFileLoadFolderManagement(function<bool()>&& cf) {
-    connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(cf));
-}
-void mainWindow::BindFileLoad(function<bool()>&& cf) {
-    connect(FileLoad, SIGNAL(triggered()), this, SLOT(cf));
-}
-void mainWindow::BindFileSaveAs(function<bool()>&& cf) {
-    connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(cf));
-}
-
 void mainWindow::showGraph(const list<string>& filelist) {
-    Blocks = Translator().toBlockSet(parser->parse(filelist));
+    Parser tmp_parser;
+    Blocks = Translator().toBlockSet(tmp_parser.parse(filelist));
     formSelect(Blocks);
     if (scroll) scroll->~QScrollArea();
     scroll = new scrollArea(this);

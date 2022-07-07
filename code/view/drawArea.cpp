@@ -12,9 +12,6 @@
 using namespace std;
 fstream db_err_v("View_ErrorLog.txt", fstream::out);
 
-//some used only in this file
-
-
 struct line
 {
 	double x1;
