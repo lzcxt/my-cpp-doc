@@ -1,5 +1,5 @@
 #include "../common/common.h"
-#include "viewCmFunctions.h"
+#include "../view/viewCmFunctions.h"
 #include <QString>
 #include <QMessageBox>
 

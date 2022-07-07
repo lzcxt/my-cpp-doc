@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/common.h"
-#include "viewTypes.h"
+#include "../view/viewTypes.h"
 #include <QOpenGLWidget>
 
 #include<set>

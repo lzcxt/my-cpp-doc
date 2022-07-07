@@ -1,5 +1,5 @@
-#include "drawArea.h"
-#include "SetFont.h"
+#include "../view/drawArea.h"
+#include "../view/SetFont.h"
 #include <fstream>
 #include <vector>
 #include <QPainter>
@@ -62,11 +62,7 @@ void drawArea::resizeGL(int width, int height) {
 void drawArea::paintGL() {
 	int fw = 0;
 	int fh = 0;
-	const int intervel = 20;
-	/*
-	test case:
-	
-	*/
+    const int intervel = 20;
 	//initialize: set the white background
 	QPainter paint(this);
 	paint.setPen(Qt::NoPen);

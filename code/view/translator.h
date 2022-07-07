@@ -1,6 +1,6 @@
 #pragma once
 
-#include "viewTypes.h"
+#include "../view/viewTypes.h"
 #include <memory>
 #include <set>
 

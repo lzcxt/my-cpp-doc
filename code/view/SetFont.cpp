@@ -1,4 +1,4 @@
-#include "SetFont.h"
+#include "../view/SetFont.h"
 void SetNameFont(QFont &font)
 {
 	font.setFamily("·ÂËÎ");

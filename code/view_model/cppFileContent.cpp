@@ -1,4 +1,4 @@
-#include "cppFileContent.h"
+#include "../view_model/cppFileContent.h"
 #include <sstream>
 #include <assert.h>
 #include <vector>

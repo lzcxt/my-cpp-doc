@@ -20,41 +20,16 @@ class Class {
 
 public:
 	Class(string name = "Not_Defined") : name(name) {}
-	void setName(string name_) {
-		name = name_;
-	}
-	void addFucntions(string func) {
-		functions.push_back(func);
-	}
-	void addAttributes(string attr) {
-		attributes.push_back(attr);
-	}
-	void addSuperclasses(string sup) {
-		superclasses.push_back(sup);
-	}
-	void addComponents(string com) {
-		components.push_back(com);
-	}
-	const string& getName() const {
-		return name;
-	}
-	const vector<string>& getSuperclasses() const {
-		return superclasses;
-	}
-	const vector<string>& getComponents() const {
-		return components;
-	}
-	const vector<string>& getAttributes() const {
-		return attributes;
-	}
-	const vector<string>& getFunctions() const {
-		return functions;
-	}
-};
-
-class InfoClass {
-public:
-	list<shared_ptr<Class>> ptr_to_listClass;
+    void setName(string name_) { name = name_; }
+    void addFucntions(string func) { functions.push_back(func); }
+    void addAttributes(string attr) { attributes.push_back(attr); }
+    void addSuperclasses(string sup) { superclasses.push_back(sup); }
+    void addComponents(string com) { components.push_back(com); }
+    const string& getName() const { return name; }
+    const vector<string>& getSuperclasses() const { return superclasses; }
+    const vector<string>& getComponents() const { return components; }
+    const vector<string>& getAttributes() const { return attributes; }
+    const vector<string>& getFunctions() const { return functions; }
 };
 
 /**
@@ -65,7 +40,7 @@ class m_Exception : public std::exception {
 public:
 	m_Exception() {};
 	m_Exception(string info_) : info(info_) {}
-	virtual const char* what() { return " [ exception ] "; }
+    virtual const char* what() const { return " [ exception ] "; }
 	string Information() { return info; }
 private:
 	string info;
