@@ -23,3 +23,20 @@ int SendMsg(const string& x) {
 	}
 	return 0;
 }
+
+void SetNameFont(QFont &font)
+{
+    font.setFamily("仿宋");
+    font.setUnderline(false);
+    font.setPointSize(20);
+    font.setItalic(false);
+}
+
+void SetAttributeFont(QFont &font)
+{
+    font.setFamily("仿宋");
+    font.setUnderline(false);
+    font.setPointSize(15);
+    font.setItalic(false);
+}
+

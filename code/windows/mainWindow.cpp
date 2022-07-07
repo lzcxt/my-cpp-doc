@@ -42,7 +42,6 @@ mainWindow::mainWindow(QWidget *parent)
     scroll = Q_NULLPTR;
     draw = Q_NULLPTR;
 
-
     connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
     connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
     connect(FileSaveAs, SIGNAL(triggered()), this, SLOT(FileSaveAsManagement()));
@@ -52,8 +51,7 @@ mainWindow::mainWindow(QWidget *parent)
 }
 
 void mainWindow::showGraph(const list<string>& filelist) {
-    Parser tmp_parser;
-    Blocks = Translator().toBlockSet(tmp_parser.parse(filelist));
+    Blocks = Translator().toBlockSet(m_file_processor(filelist));
     formSelect(Blocks);
     if (scroll) scroll->~QScrollArea();
     scroll = new scrollArea(this);
@@ -167,7 +165,7 @@ bool mainWindow::HelpInfoManagement() {
 }
 
 bool mainWindow::StateSwitchManagement() {
-    for (int i = 0;i < Checks.size();++i) {
+    for (int i = 0; i < Checks.size();++i) {
         auto itr = Blocks.find(Block(0, 0, Class(BlockNames[i])));
         Block b = *itr;
         b.setShow(Checks[i]->isChecked());
