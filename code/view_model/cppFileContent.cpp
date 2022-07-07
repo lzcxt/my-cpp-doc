@@ -22,7 +22,8 @@ TOKEN getReserved(string s) {
 	else if (s == "unsigned") return TYPE_UNSIGNED_;
 	else if (s == "long") return TYPE_LONG_;
 	else if (s == "string") return TYPE_STRING_;
-	else return UNKNOWN_WORD_;
+    else if (s == "throw") return THROW_;
+    else return UNKNOWN_WORD_;
 }
 
 

@@ -5,10 +5,10 @@
 
 bool isProjectFileName(const QString& s) {
 	string str = s.toStdString();
-	int len = str.length();
-	if (str.substr(len - 4, len) == ".cpp") return 1;
-	if (str.substr(len - 2, len) == ".h") return 1;
-	if (str.substr(len - 2, len) == ".c") return 1;
+    size_t len = str.length();
+    if (len >= 4 && str.substr(len - 4, len) == ".cpp") return 1;
+    if (len >= 2 && str.substr(len - 2, len) == ".h") return 1;
+    if (len >= 2 && str.substr(len - 2, len) == ".c") return 1;
 	return 0;
 }
 
