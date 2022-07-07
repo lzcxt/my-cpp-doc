@@ -39,8 +39,9 @@ static bool isOverloadable(char ch) {
 	case '|': case '&': case '~':
 	case '^': case '<': case '>': case '=': case '!':
 		return 1;
-	}
-	return 0;
+    default:
+        return 0;
+    }
 }
 
 static bool isType(TOKEN  t) {
@@ -48,8 +49,9 @@ static bool isType(TOKEN  t) {
 	case TYPE_INT_: case TYPE_CHAR_: case TYPE_VOID_: case TYPE_FLOAT_: case TYPE_DOUBLE_:
 	case TYPE_UNSIGNED_: case TYPE_LONG_: case TYPE_STRING_:
 		return 1;
-	}
-	return 0;
+    default:
+        return 0;
+    }
 }
 namespace Automan {
 	void SingleQuote(vts_cit &cur) {
