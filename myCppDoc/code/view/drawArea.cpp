@@ -199,22 +199,25 @@ vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter,int & fw, i
 	const int width_intervel = fw/4;
 	const int height_intervel = fh/4;
 	int i=0;
-	for (b = blocks.begin(); b != blocks.end(); b++,i++)
+    int size=blocks.size();
+    int w=(int)pow(size,4.0/7)+1;
+    int h=(int)size/w+1;
+    for (b = blocks.begin(); b != blocks.end(); i++)
 	{
-		struct PointXY tmp;
-		tmp = {width_intervel,height_intervel+i*(fh+height_intervel),fw,fh};
-		p.push_back(tmp);
-		b++; 
-		if (b == blocks.end())
-		{
-			i++;
-			break;
-		}
-		tmp = { 2 * width_intervel + fw,height_intervel + i * (fh + height_intervel),fw,fh };
-		p.push_back(tmp);
+        for(int j=0;j<w;j++)
+        {
+            if (b == blocks.end())
+            {
+                break;
+            }
+            struct PointXY tmp;
+            tmp = {width_intervel+j*(width_intervel+fw),height_intervel+i*(fh+height_intervel),fw,fh};
+            p.push_back(tmp);
+            b++;
+        }
 	}
-	double final_width = 3 * width_intervel + 2 * fw;
-	double final_height = height_intervel + i * (fh + height_intervel);
+    double final_width = (w+1) * width_intervel + w * fw;
+    double final_height = height_intervel + h * (fh + height_intervel);
 	if (final_width * 3 > final_height * 4) final_height = final_width * 3 / 4;
 	else final_width = final_height * 4 / 3;
 	painter.setWindow(0,0, final_width, final_height);
