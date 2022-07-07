@@ -52,8 +52,6 @@ mainWindow::mainWindow(QWidget *parent)
 
 Notifier mainWindow::get_finishParseNotifier() {
     return [this]() {
-        cout << "fuck" << endl;
-        cerr << "finish reading and start to draw" << endl;
         Blocks = Translator().toBlockSet(list_classes);
         formSelect(Blocks);
         if (scroll) scroll->~QScrollArea();
