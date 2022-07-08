@@ -52,6 +52,21 @@ mainWindow::mainWindow(QWidget *parent)
     connect(FileSaveAs, SIGNAL(hovered()), this, SLOT(FileSaveAsHovered()));
 }
 
+Notifier mainWindow::get_finishParseNotifier() {
+    return [this]() {
+        Blocks = Translator().toBlockSet(list_classes);
+        formSelect(Blocks);
+        if (scroll) delete scroll;
+        scroll = new scrollArea(this);
+        draw = new drawArea(this, Blocks);
+        draw->setGeometry(0, 0, 1600, 1200);
+        draw->setMinimumSize(1200, 900);
+        scroll->setWidget(draw);
+        scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
+            rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
+        scroll->show();
+    };
+}
 void mainWindow::showGraph(const list<string>& filelist) {
     Parser tmp_parser;
     Blocks = Translator().toBlockSet(tmp_parser.parse(filelist));
