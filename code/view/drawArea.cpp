@@ -21,7 +21,7 @@ struct line
 };
 
 vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter, int & fw, int & fh);
-void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
+void DrawArrow(QPainter &painter, PointXY& sp, PointXY& ep, vector<PointXY>&distribution);
 
 drawArea::drawArea(QWidget *parent)
     : QOpenGLWidget(parent), zoom(45), blocks() {
@@ -199,7 +199,7 @@ vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter,int & fw, i
 	int i=0;
 	for (b = blocks.begin(); b != blocks.end(); b++,i++)
 	{
-		struct PointXY tmp;
+        PointXY tmp;
 		tmp = {width_intervel,height_intervel+i*(fh+height_intervel),fw,fh};
 		p.push_back(tmp);
 		b++; 
@@ -221,7 +221,7 @@ vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter,int & fw, i
 
 }
 
-void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<struct PointXY>&distribution)
+void DrawArrow(QPainter &painter, PointXY& sp, PointXY& ep,vector<PointXY>&distribution)
 {
 	QVector<QLineF> lines;
 	double x1 = sp.x + sp.w / 2.0;
@@ -304,9 +304,9 @@ void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<
 		}
 	}
 	
-	vector<struct line> tmplines;
+    vector<line> tmplines;
 	
-	struct line tmpl;
+    line tmpl;
 	if ((flag1 == 1 && flag2 == 2)||(flag1 == 2 && flag2 == 1))
 	{
 		if (x1==x2)
@@ -346,11 +346,11 @@ void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<
 	while(judge)
 	{
 		judge = false;
-		for (vector<struct line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
+        for (vector<line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
 		{
 			if (i->x1 == i->x2)
 			{
-				vector<struct PointXY>::iterator d;
+                vector<PointXY>::iterator d;
 				int c=0;
 				for (d = distribution.begin(); d != distribution.end(); d++)
 				{
@@ -403,7 +403,7 @@ void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep,vector<
 	}
 	*/
 	//add the lines
-	for (vector<struct line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
+    for (vector<line>::iterator i = tmplines.begin(); i != tmplines.end(); i++)
 	{
 		lines.append(QLineF(i->x1, i->y1, i->x2, i->y2));
 	}
