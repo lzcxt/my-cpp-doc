@@ -41,6 +41,7 @@ mainWindow::mainWindow(QWidget *parent)
 
     scroll = Q_NULLPTR;
     draw = Q_NULLPTR;
+    label= Q_NULLPTR;
 
     connect(FileLoad, SIGNAL(triggered()), this, SLOT(FileLoadManagement()));
     connect(FileLoadFolder, SIGNAL(triggered()), this, SLOT(FileLoadFolderManagement()));
@@ -54,7 +55,8 @@ Notifier mainWindow::get_finishParseNotifier() {
     return [this]() {
         Blocks = Translator().toBlockSet(list_classes);
         formSelect(Blocks);
-        if (scroll) scroll->~QScrollArea();
+        if (scroll) delete scroll;
+        if (draw) delete draw;
         scroll = new scrollArea(this);
         draw = new drawArea(this, Blocks);
         draw->setGeometry(0, 0, 1600, 1200);
@@ -80,14 +82,15 @@ bool mainWindow::FileSaveAsHovered() {
 }
 
 void mainWindow::formSelect(const set<Block>& Blocks) {
-    QLabel* label = new QLabel(this);
+    if(label!=Q_NULLPTR) delete label;
+    label = new QLabel(this);
     label->setText("Select omitted classes:");
     label->setGeometry(rect().width() - 200,
         MenuBar->rect().height() + ToolBar->rect().height(), 200, 40);
     label->show();
     int checkcnt = 0, checkheight = 30;
     for (int i = 0;i < Checks.size();++i) {
-        Checks[i]->~QCheckBox();
+        delete Checks[i];
     }
     Checks.clear();
     BlockNames.clear();
@@ -177,6 +180,8 @@ bool mainWindow::StateSwitchManagement() {
         Blocks.erase(itr);
         Blocks.insert(b);
     }
+    if (scroll) delete scroll;
+    if (draw) delete draw;
     scroll = new scrollArea(this);
     draw = new drawArea(this, Blocks);
     draw->setGeometry(0, 0, 1600, 1200);

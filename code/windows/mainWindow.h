@@ -24,6 +24,13 @@
 
 using namespace std;
 
+class scrollArea : public QScrollArea {
+protected:
+    void wheelEvent(QWheelEvent* event) { }
+public:
+    scrollArea(QWidget* w) : QScrollArea(w) { }
+};
+
 class mainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -47,8 +54,9 @@ private:
     QAction* HelpInfo;
 
     QStatusBar* Status;
-    QScrollArea* scroll;
+    scrollArea* scroll;
     drawArea* draw;
+    QLabel* label;
     set<Block> Blocks;
     vector<QCheckBox*> Checks;
     vector<string> BlockNames;
@@ -70,13 +78,6 @@ private slots:
     bool HelpInfoManagement();
 
     bool StateSwitchManagement();
-};
-
-class scrollArea : public QScrollArea {
-protected:
-    void wheelEvent(QWheelEvent* event) { }
-public:
-    scrollArea(QWidget* w) : QScrollArea(w) { }
 };
 
 #endif // MAINWINDOW_H
