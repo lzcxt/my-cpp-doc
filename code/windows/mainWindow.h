@@ -4,9 +4,7 @@
 #include "../common/common.h"
 #include "../view/drawArea.h"
 #include "../view/translator.h"
-#include "../view_model/parser.h"
 #include "../view/viewCmFunctions.h"
-#include "../view_model/parser.h"
 
 #include <memory>
 #include <QFileDialog>
@@ -31,9 +29,9 @@ class mainWindow : public QMainWindow {
 public:
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow() {}
-    void attach_fileProcessor(fileProcessor && fp) {
-        m_file_processor = std::move(fp);
-    }
+    void attach_fileProcessor(FileProcessor && fp) { m_file_processor = std::move(fp); }
+    Notifier get_finishParseNotifier();
+    void attach_list_classes(list<shared_ptr<Class>>* lc) { list_classes = lc; }
 
 private:
     QMenuBar* MenuBar;
@@ -54,14 +52,13 @@ private:
     set<Block> Blocks;
     vector<QCheckBox*> Checks;
     vector<string> BlockNames;
+    list<shared_ptr<Class>>* list_classes;
 
-    fileProcessor m_file_processor;
+    FileProcessor m_file_processor;
 
     QStringList getAllFiles(const QDir& dir);
     void formSelect(const set<Block>& Blocks);
     void showGraph(const list<string>& filelist);
-    void signalReadFinished() {};
-    void signalParse() {};
 
 private slots:
     bool FileLoadHovered();

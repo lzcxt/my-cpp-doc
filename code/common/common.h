@@ -9,6 +9,9 @@
 
 using namespace std;
 
+using FileProcessor = function<bool(list<string>)>;
+using Notifier = function<void()>;
+
 /**
  * name : class's name
  * attributes : discription of the function
@@ -35,8 +38,6 @@ public:
     const vector<string>& getAttributes() const { return attributes; }
     const vector<string>& getFunctions() const { return functions; }
 };
-
-using fileProcessor = function<const list<shared_ptr<Class>>&(list<string>)>;
 
 /**
  * @brief this exception must be catched, and then use 'e.Information()' 
