@@ -1,5 +1,5 @@
 #include "../view/translator.h"
-#include "../view/SetFont.h"
+#include "../view/viewCmFunctions.h"
 
 #include <QFont>
 #include <QPainter>

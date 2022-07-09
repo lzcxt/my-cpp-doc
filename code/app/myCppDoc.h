@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../windows/mainWindow.h"
 #include "../view_model/parser.h"
 #include <QMessageBox>

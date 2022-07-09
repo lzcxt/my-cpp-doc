@@ -32,7 +32,6 @@
 *.app
 
 # Directory
-/.vs/
 *.vscode/
 
 # others

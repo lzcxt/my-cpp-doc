@@ -26,19 +26,14 @@
 
 using namespace std;
 
-class scrollArea : public QScrollArea {
-protected:
-    void wheelEvent(QWheelEvent* event) { }
-public:
-    scrollArea(QWidget* w) : QScrollArea(w) { }
-};
-
 class mainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow() {}
+    void attach_fileProcessor(fileProcessor && fp) {
+        m_file_processor = std::move(fp);
+    }
 
 private:
     QMenuBar* MenuBar;
@@ -54,28 +49,21 @@ private:
     QAction* HelpInfo;
 
     QStatusBar* Status;
-
-    Parser* parser;
-
-    QLabel* label;
-    scrollArea* scroll;
+    QScrollArea* scroll;
     drawArea* draw;
-
     set<Block> Blocks;
-
     vector<QCheckBox*> Checks;
     vector<string> BlockNames;
 
-    QStringList getAllFiles(const QDir& dir);
+    fileProcessor m_file_processor;
 
+    QStringList getAllFiles(const QDir& dir);
     void formSelect(const set<Block>& Blocks);
     void showGraph(const list<string>& filelist);
-
-private:
     void signalReadFinished() {};
     void signalParse() {};
 
-public slots:
+private slots:
     bool FileLoadHovered();
     bool FileSaveAsHovered();
 
@@ -85,6 +73,13 @@ public slots:
     bool HelpInfoManagement();
 
     bool StateSwitchManagement();
+};
+
+class scrollArea : public QScrollArea {
+protected:
+    void wheelEvent(QWheelEvent* event) { }
+public:
+    scrollArea(QWidget* w) : QScrollArea(w) { }
 };
 
 #endif // MAINWINDOW_H

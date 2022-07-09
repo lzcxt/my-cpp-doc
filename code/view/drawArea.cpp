@@ -1,5 +1,5 @@
 #include "../view/drawArea.h"
-#include "../view/SetFont.h"
+#include "../view/viewCmFunctions.h"
 #include <fstream>
 #include <vector>
 #include <QPainter>
@@ -31,12 +31,11 @@ const int drawArea::base_height = 30;
 void drawArea::mouseMoveEvent(QMouseEvent* event) {
 
 }
-
 void drawArea::wheelEvent(QWheelEvent* event) {
 	zoom += event->delta() / 120;
 	if (zoom < 30) zoom = 30;
 	resize(base_width*zoom, base_height*zoom);
-	update();
+    update();
 }
 
 void drawArea::setBlockVisual(const string& BlockName, const bool& nvisual) {
