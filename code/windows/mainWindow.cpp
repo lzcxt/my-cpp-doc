@@ -60,6 +60,7 @@ Notifier mainWindow::get_finishParseNotifier() {
         draw->setBlocks(Blocks);
         draw->setGeometry(0, 0, 1600, 1200);
         draw->setMinimumSize(1200, 900);
+        draw->update();
         scroll->setWidget(draw);
         scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
             rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
@@ -184,6 +185,7 @@ bool mainWindow::StateSwitchManagement() {
     draw->setBlocks(Blocks);
     draw->setGeometry(0, 0, 1600, 1200);
     draw->setMinimumSize(1200, 900);
+    draw->update();
     scroll->setWidget(draw);
     scroll->setGeometry(0, MenuBar->rect().height() + ToolBar->rect().height(), rect().width() - 200,
         rect().height() - Status->rect().height() - MenuBar->rect().height() - ToolBar->rect().height());
