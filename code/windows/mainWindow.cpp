@@ -55,10 +55,9 @@ Notifier mainWindow::get_finishParseNotifier() {
     return [this]() {
         Blocks = Translator().toBlockSet(list_classes);
         formSelect(Blocks);
-        if (draw) delete draw;
-        if (scroll) delete scroll;
-        scroll = new scrollArea(this);
-        draw = new drawArea(this, Blocks);
+        if (draw==Q_NULLPTR) draw = new drawArea(this);
+        if (scroll==Q_NULLPTR) scroll = new scrollArea(this);
+        draw->setBlocks(Blocks);
         draw->setGeometry(0, 0, 1600, 1200);
         draw->setMinimumSize(1200, 900);
         scroll->setWidget(draw);
@@ -180,10 +179,9 @@ bool mainWindow::StateSwitchManagement() {
         Blocks.erase(itr);
         Blocks.insert(b);
     }
-    if (draw) delete draw;
-    if (scroll) delete scroll;
-    scroll = new scrollArea(this);
-    draw = new drawArea(this, Blocks);
+    if (draw==Q_NULLPTR) draw = new drawArea(this);
+    if (scroll==Q_NULLPTR) scroll = new scrollArea(this);
+    draw->setBlocks(Blocks);
     draw->setGeometry(0, 0, 1600, 1200);
     draw->setMinimumSize(1200, 900);
     scroll->setWidget(draw);

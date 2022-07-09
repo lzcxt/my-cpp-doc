@@ -23,11 +23,17 @@ struct line
 vector<PointXY> paint_strategy(set<Block> &blocks, QPainter &painter, int & fw, int & fh);
 void DrawArrow(QPainter &painter, struct PointXY& sp, struct PointXY& ep, vector<struct PointXY>&distribution);
 
-drawArea::drawArea(QWidget *parent, const set<Block>& setOfBlocks)
-    : QOpenGLWidget(parent), zoom(45), blocks(setOfBlocks) {
+drawArea::drawArea(QWidget *parent)
+    : QOpenGLWidget(parent), zoom(45), blocks() {
 }
+
 const int drawArea::base_width = 40;
 const int drawArea::base_height = 30;
+
+void drawArea::setBlocks(const set<Block> &B){
+    blocks=B;
+}
+
 void drawArea::mouseMoveEvent(QMouseEvent* event) {
 
 }

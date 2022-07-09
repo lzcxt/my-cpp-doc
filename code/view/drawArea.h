@@ -14,7 +14,8 @@ struct PointXY {
 class drawArea : public QOpenGLWidget {
 	Q_OBJECT
 public:
-	drawArea(QWidget* parent, const set<Block>& setOfBlocks);
+    drawArea(QWidget* parent);
+    void setBlocks(const set<Block>& B);
 	void setBlockVisual(const string& BlockName, const bool& nvisual);
 protected:
 	void mouseMoveEvent(QMouseEvent* event);
